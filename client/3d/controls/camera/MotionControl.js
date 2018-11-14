@@ -103,7 +103,7 @@ export class MotionControl {
     }
     return motionVector
   }
-  movePlayer(motionVector, speed = 100.167) {
+  movePlayer(motionVector, speed = 15) {
     this.yawObject.translateOnAxis(motionVector, speed)
   }
 }

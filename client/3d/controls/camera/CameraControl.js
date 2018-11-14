@@ -28,6 +28,10 @@ export const CameraControl = function(_camera, _domElement) {
       -Math.PI / 2,
       Math.min(Math.PI / 2, pitchObject.rotation.x)
     )
+    // var vector = new THREE.Vector3();
+    // // console.log(yawObject.getWorldDirection(vector))
+    // console.log('yawobject rotation', yawObject)
+    // console.log('pitchOBject rorat', pitchObject.rotation)
   }
 
   function dispose() {
@@ -39,6 +43,13 @@ export const CameraControl = function(_camera, _domElement) {
   // API
   this.getObject = function() {
     return yawObject
+  }
+
+  this.getRotationXY = function() {
+    return {
+      x: yawObject.rotation.y,
+      y: pitchObject.rotation.x
+    }
   }
   this.enabled = true
 
