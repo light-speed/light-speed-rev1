@@ -1,4 +1,5 @@
 // import * as THREE from 'three'
+import PL from '../../../utilities/PointerLock.js/pointerlock.js'
 
 export const CameraControl = function(_camera, _domElement) {
   let pitchObject = new THREE.Object3D()
@@ -7,6 +8,11 @@ export const CameraControl = function(_camera, _domElement) {
   let yawObject = new THREE.Object3D()
   yawObject.add(pitchObject)
 
+  function onError(error) {
+    console.log(error)
+  }
+
+
   function activate() {
     _domElement.addEventListener('mousemove', onMouseMove, false)
   }
@@ -14,6 +20,8 @@ export const CameraControl = function(_camera, _domElement) {
   function deactivate() {
     _domElement.removeEventListener('mousemove', onMouseMove, false)
   }
+
+
 
   function onMouseMove(event) {
     event.preventDefault()
@@ -37,6 +45,9 @@ export const CameraControl = function(_camera, _domElement) {
   function dispose() {
     deactivate()
   }
+
+  // PL.requestPointerLock(document.body, activate(), deactivate(), onError())
+
 
   activate()
 
