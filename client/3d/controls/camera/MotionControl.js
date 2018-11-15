@@ -59,12 +59,7 @@ export class MotionControl {
         break
     }
   }
-  updatePlayerPosition() {
-    if (this.isMoving()) {
-      const motionVector = this.getVectorPlayerShouldMoveIn()
-      this.movePlayer(motionVector)
-    }
-  }
+
   isMoving() {
     return (
       this.movingForward ||
@@ -103,7 +98,14 @@ export class MotionControl {
     }
     return motionVector
   }
-  movePlayer(motionVector, speed = 100.167) {
+  movePlayer(motionVector, speed = 10) {
     this.yawObject.translateOnAxis(motionVector, speed)
+  }
+
+  updatePlayerPosition() {
+    if (this.isMoving()) {
+      const motionVector = this.getVectorPlayerShouldMoveIn()
+      this.movePlayer(motionVector)
+    }
   }
 }
