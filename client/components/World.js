@@ -31,8 +31,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   const cameraControl = new CameraControl(camera, renderer.domElement)
   scene.add(cameraControl.getObject())
 
-
-
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
       =======>>>>>
@@ -40,36 +38,34 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   //this.mesh = new THREE.Mesh(new THREE.SphereGeometry(3, 16, 16), shotMaterial);
 
-
   //Load Skybox
 
   var Skybox = function() {
     var skyboxObject = new THREE.Object3D()
 
     var imagePrefix = 'images/dawnmountain-'
-    var directions = ['ypos', 'yneg', 'zpos', 'zneg','xpos', 'xneg']
+    var directions = ['ypos', 'yneg', 'zpos', 'zneg', 'xpos', 'xneg']
     var imageSuffix = '.png'
     var skyGeometry = new THREE.CubeGeometry(10000, 10000, 10000)
     var loader = new THREE.TextureLoader()
 
     let materialArray = []
-    let link
+    let link = 'images/space-box-bright.png'
     for (var i = 0; i < 6; i++) {
-      link = imagePrefix + directions[i] + imageSuffix
-      loader.load(
-        link,
-        function(texture) {
-          materialArray.push(
-            new THREE.MeshBasicMaterial({
-              map: texture,
-              side: THREE.DoubleSide
-            })
-          )
-          console.log('skybox added?')
-        }
-      )
+      // link = imagePrefix + directions[i] + imageSuffix
+      loader.load(link, function(texture) {
+        materialArray.push(
+          new THREE.MeshBasicMaterial({
+            map: texture,
+            side: THREE.DoubleSide
+          })
+        )
+        console.log('skybox added?')
+      })
       console.log(materialArray)
     }
+
+
 
     // var skyMaterial = new THREE.MeshFaceMaterial(materialArray)
     var skyboxMesh = new THREE.Mesh(skyGeometry, materialArray)
@@ -83,7 +79,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   }
   var skybox = new Skybox()
   scene.add(skybox.getMesh())
-
 
   //Load Tunnel
   // renderer.setClearColor('#000022')
@@ -183,21 +178,19 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
           )
       })
 
-      this.getMesh = function() {
-        return playerObj
-      }
+    this.getMesh = function() {
+      return playerObj
+    }
     return this
   }
 
   const player = new Player()
 
   scene.add(player.getMesh())
-  cameraControl.getObject().position.set(0, 20, 50); // <-- this is relative to the player's position
+  cameraControl.getObject().position.set(0, 20, 50) // <-- this is relative to the player's position
 
-  player.getMesh().add(cameraControl.getObject());
-  var controls = new THREE.FlyControls( player.getMesh(), renderer.domElement );
-
-
+  player.getMesh().add(cameraControl.getObject())
+  var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
 
   //Load Asteroids
   var loader = new THREE.OBJLoader()
@@ -283,15 +276,21 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   })
 
   const Shot = function(initialPos) {
-    // this.mesh = new THREE.Mesh(
-    //   new THREE.SphereGeometry(3, 16, 16),
-    //   shotMaterial
-    // )
-
     this.mesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(1, 4, 15, 19, 1),
+      new THREE.SphereGeometry(3, 16, 16),
       shotMaterial
     )
+
+    // var geometry = new THREE.CylinderGeometry(7.47, 9.63, 48.57, 23, 50, false)
+    // var material = new THREE.MeshBasicMaterial({
+    //   shading: THREE.FlatShading,
+    //   color: 0xeb1d1d
+    // })
+
+    // this.mesh = new THREE.Mesh(geometry, material)
+
+    // this.mesh.rotation.x = 10
+    // this.mesh.scale.x = this.mesh.scale.y = this.mesh.scale.z = 0.0027;
 
     this.mesh.position.copy(initialPos)
 
@@ -375,10 +374,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     cameraControl.getObject().position.z -= 0
     tunnel.update(cameraControl.getObject().position.z)
 
-    var clock = new THREE.Clock();
-    var delta = clock.getDelta();
-    controls.update( delta )
-
+    var clock = new THREE.Clock()
+    var delta = clock.getDelta()
+    controls.update(delta)
 
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
       asteroids[i].update(cameraControl.getObject().position.z)
@@ -399,9 +397,10 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     render()
   }
 
-  window.addEventListener('keyup', function(e) {
+  window.addEventListener('keydown', function(e) {
     switch (e.keyCode) {
       case 32: // Space
+        e.preventDefault()
         var playerPos = player.getMesh().position.clone()
         // playerPos.sub(new THREE.Vector3(0, 0, -15))
         var shot = new Shot(playerPos)
@@ -409,6 +408,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         scene.add(shot.getMesh())
         console.log('adding a shot to the shot array')
         break
+      default:
+        console.log('press space!')
     }
   })
 
