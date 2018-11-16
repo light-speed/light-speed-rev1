@@ -5,7 +5,7 @@ export function configureRenderer() {
   const renderer = new THREE.WebGLRenderer()
   const color = new THREE.Color(0x0d2135)
   //sets the world background color
-  renderer.setClearColor(color)
+  // renderer.setClearColor(color)
   //sets the resolution of the view
   renderer.setSize(window.innerWidth, window.innerHeight)
 
@@ -14,7 +14,7 @@ export function configureRenderer() {
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    1000
+    10000
   )
   // camera.controls = attachCameraControls(camera, renderer.domElement)
 

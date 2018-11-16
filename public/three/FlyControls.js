@@ -37,29 +37,69 @@ THREE.FlyControls = function ( object, domElement ) {
 
 		}
 
-		//event.preventDefault();
+
 
 		switch ( event.keyCode ) {
 
-			case 16: /* shift */ this.movementSpeedMultiplier = .1; break;
+			case 16: /* shift */
+			this.movementSpeedMultiplier = .1
+			event.preventDefault();
+			break;
 
-			case 87: /*W*/ this.moveState.forward = 1; break;
-			case 83: /*S*/ this.moveState.back = 1; break;
+			case 87: /*W*/
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
 
-			case 65: /*A*/ this.moveState.left = 1; break;
-			case 68: /*D*/ this.moveState.right = 1; break;
+			case 83: /*S*/ this.moveState.back = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
 
-			case 82: /*R*/ this.moveState.up = 1; break;
-			case 70: /*F*/ this.moveState.down = 1; break;
+			case 65: /*A*/ this.moveState.left = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
+			case 68: /*D*/ this.moveState.right = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
 
-			case 38: /*up*/ this.moveState.pitchUp = 1; break;
-			case 40: /*down*/ this.moveState.pitchDown = 1; break;
+			// case 82: /*R*/ this.moveState.up = 1;
+			// this.moveState.forward = 1
+			// event.preventDefault();
+			// break;
+			// case 70: /*F*/ this.moveState.down = 1;
+			// this.moveState.forward = 1
+			// event.preventDefault();
+			// break;
 
-			case 37: /*left*/ this.moveState.yawLeft = 1; break;
-			case 39: /*right*/ this.moveState.yawRight = 1; break;
+			case 38: /*up*/ this.moveState.pitchUp = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
+			case 40: /*down*/ this.moveState.pitchDown = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
 
-			case 81: /*Q*/ this.moveState.rollLeft = 1; break;
-			case 69: /*E*/ this.moveState.rollRight = 1; break;
+			case 37: /*left*/ this.moveState.yawLeft = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
+			case 39: /*right*/ this.moveState.yawRight = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
+
+			case 81: /*Q*/ this.moveState.rollLeft = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
+			case 69: /*E*/ this.moveState.rollRight = 1;
+			this.moveState.forward = 1
+			event.preventDefault();
+			break;
 
 
 		}
@@ -103,7 +143,7 @@ THREE.FlyControls = function ( object, domElement ) {
 	this.mousedown = function ( event ) {
 
 		if ( this.domElement !== document ) {
-			console.log('mousedown')
+			// console.log('mousedown')
 			this.domElement.focus();
 
 		}
@@ -205,13 +245,13 @@ THREE.FlyControls = function ( object, domElement ) {
 		this.moveVector.x = ( - this.moveState.left + this.moveState.right );
 		this.moveVector.y = ( - this.moveState.down + this.moveState.up );
 		this.moveVector.z = ( - forward + this.moveState.back );
-		console.log('move state', this.moveState)
-		console.log( 'move vectors:', this.moveVector );
+		// console.log('move state', this.moveState)
+		// console.log( 'move vectors:', this.moveVector );
 
 	};
 
 	this.updateRotationVector = function () {
-		console.log(object)
+		// console.log(object)
 		this.rotationVector.x = ( - this.moveState.pitchDown + this.moveState.pitchUp );
 		this.rotationVector.y = ( - this.moveState.yawRight + this.moveState.yawLeft );
 		this.rotationVector.z = ( - this.moveState.rollRight + this.moveState.rollLeft );
