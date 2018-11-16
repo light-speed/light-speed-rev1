@@ -11,10 +11,10 @@ export function configureRenderer() {
 
   //create a perspective camera (field-of-view, aspect ratio, min distance, max distance)
   const camera = new THREE.PerspectiveCamera(
-    75,
+    50,
     window.innerWidth / window.innerHeight,
     0.1,
-    10000
+    30000
   )
   // camera.controls = attachCameraControls(camera, renderer.domElement)
 
