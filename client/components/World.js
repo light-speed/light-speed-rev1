@@ -31,7 +31,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   const cameraControl = new CameraControl(camera, renderer.domElement)
   scene.add(cameraControl.getObject())
 
-  const motionControl = new MotionControl(cameraControl.getObject())
+
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -40,8 +40,53 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   //this.mesh = new THREE.Mesh(new THREE.SphereGeometry(3, 16, 16), shotMaterial);
 
+
+  //Load Skybox
+
+  var Skybox = function() {
+    var skyboxObject = new THREE.Object3D()
+
+    var imagePrefix = 'images/dawnmountain-'
+    var directions = ['ypos', 'yneg', 'zpos', 'zneg','xpos', 'xneg']
+    var imageSuffix = '.png'
+    var skyGeometry = new THREE.CubeGeometry(10000, 10000, 10000)
+    var loader = new THREE.TextureLoader()
+
+    let materialArray = []
+    let link
+    for (var i = 0; i < 6; i++) {
+      link = imagePrefix + directions[i] + imageSuffix
+      loader.load(
+        link,
+        function(texture) {
+          materialArray.push(
+            new THREE.MeshBasicMaterial({
+              map: texture,
+              side: THREE.DoubleSide
+            })
+          )
+          console.log('skybox added?')
+        }
+      )
+      console.log(materialArray)
+    }
+
+    // var skyMaterial = new THREE.MeshFaceMaterial(materialArray)
+    var skyboxMesh = new THREE.Mesh(skyGeometry, materialArray)
+    // skyBox.rotation.x = Math.PI / 2
+    skyboxObject.add(skyboxMesh)
+    console.log('scene', scene)
+
+    this.getMesh = function() {
+      return skyboxObject
+    }
+  }
+  var skybox = new Skybox()
+  scene.add(skybox.getMesh())
+
+
   //Load Tunnel
-  renderer.setClearColor('#000022')
+  // renderer.setClearColor('#000022')
   renderer.setSize(window.innerWidth, window.innerHeight)
 
   var Tunnel = function() {
@@ -89,13 +134,14 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   }
 
   var tunnel = new Tunnel()
-  scene.add(tunnel.getMesh())
-  scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
+  // scene.add(tunnel.getMesh())
+  // scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
 
   //Load Player Ship
   let spaceship = null
 
-  var Player = function(parent) {
+  var Player = function() {
+    var playerObj = new THREE.Object3D()
     this.loaded = false
     const self = this
     this.hitbox = new THREE.Box3()
@@ -129,16 +175,29 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
               spaceship = mesh
               spaceship.position.set(0, -10, -20)
               self.player = spaceship
-              parent.add(self.player)
+              playerObj.add(self.player)
               self.loaded = true
             },
             onProgress,
             onError
           )
       })
+
+      this.getMesh = function() {
+        return playerObj
+      }
+    return this
   }
-  const player = new Player(camera)
-  // scene.add(camera);
+
+  const player = new Player()
+
+  scene.add(player.getMesh())
+  cameraControl.getObject().position.set(0, 20, 50); // <-- this is relative to the player's position
+
+  player.getMesh().add(cameraControl.getObject());
+  var controls = new THREE.FlyControls( player.getMesh(), renderer.domElement );
+
+
 
   //Load Asteroids
   var loader = new THREE.OBJLoader()
@@ -224,8 +283,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   })
 
   const Shot = function(initialPos) {
+    // this.mesh = new THREE.Mesh(
+    //   new THREE.SphereGeometry(3, 16, 16),
+    //   shotMaterial
+    // )
+
     this.mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(3, 16, 16),
+      new THREE.CylinderGeometry(1, 4, 15, 19, 1),
       shotMaterial
     )
 
@@ -235,19 +299,15 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       return this.mesh
     }
 
-    // const shotVector = cameraControl.getRotationXY()
-    // console.log(shotVector)
-    // var vector = new THREE.Vector3(shotVector.x, shotVector.y, 0)
-
-    var vector = new THREE.Vector3()
-    cameraControl.getObject().getWorldDirection(vector)
+    var shotVector = new THREE.Vector3()
+    player.getMesh().getWorldDirection(shotVector)
 
     this.update = function(z) {
       // this.mesh.position.x -= 15;
       // this.mesh.position.y -= 15;
       // this.mesh.position.z -= 15;
       // vector.normalize()
-      this.mesh.translateOnAxis(vector, -30)
+      this.mesh.translateOnAxis(shotVector, -30)
 
       if (Math.abs(this.mesh.position.z - z) > 1000) {
         return false
@@ -255,7 +315,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       }
       return true
     }
-
     return this
   }
 
@@ -311,17 +370,22 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   const shots = []
   function render() {
-    motionControl.updatePlayerPosition()
+    // motionControl.updatePlayerPosition()
     player.update()
-    cameraControl.getObject().position.z -= 0;
+    cameraControl.getObject().position.z -= 0
     tunnel.update(cameraControl.getObject().position.z)
+
+    var clock = new THREE.Clock();
+    var delta = clock.getDelta();
+    controls.update( delta )
+
 
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
       asteroids[i].update(cameraControl.getObject().position.z)
     }
 
     for (let i = 0; i < shots.length; i++) {
-      if (!shots[i].update(cameraControl.getObject().position.z)) {
+      if (!shots[i].update(player.getMesh().position.z)) {
         // if (!shots[i].update(camera.position.z)) {
         scene.remove(shots[i].getMesh())
         shots.splice(i, 1)
@@ -338,13 +402,12 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   window.addEventListener('keyup', function(e) {
     switch (e.keyCode) {
       case 32: // Space
-        var cameraPos = cameraControl.getObject().position.clone()
-        console.log('cameraPos', cameraPos)
-        // cameraPos.sub(new THREE.Vector3(0,18,70));
-        cameraPos.sub(new THREE.Vector3(0, 0, 0))
-        var shot = new Shot(cameraPos)
+        var playerPos = player.getMesh().position.clone()
+        // playerPos.sub(new THREE.Vector3(0, 0, -15))
+        var shot = new Shot(playerPos)
         shots.push(shot)
         scene.add(shot.getMesh())
+        console.log('adding a shot to the shot array')
         break
     }
   })
@@ -436,8 +499,7 @@ class World extends Component {
   render() {
     return (
       <div id="world" className="no-cursor">
-
-      <div id="blocker">
+        <div id="blocker">
           <div id="pause-screen">
             <h1>Paused</h1>
           </div>
