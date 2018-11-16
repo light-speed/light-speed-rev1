@@ -31,8 +31,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   const cameraControl = new CameraControl(camera, renderer.domElement)
   scene.add(cameraControl.getObject())
 
-  const motionControl = new MotionControl(cameraControl.getObject())
-
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
       =======>>>>>
@@ -95,7 +93,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //Load Player Ship
   let spaceship = null
 
-  var Player = function(parent) {
+  var Player = function() {
+    var playerObj = new THREE.Object3D()
     this.loaded = false
     const self = this
     this.hitbox = new THREE.Box3()
@@ -129,16 +128,27 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
               spaceship = mesh
               spaceship.position.set(0, -10, -20)
               self.player = spaceship
-              parent.add(self.player)
+              playerObj.add(self.player)
               self.loaded = true
             },
             onProgress,
             onError
           )
       })
+
+      this.getMesh = function() {
+        return playerObj
+      }
+    return this
   }
-  const player = new Player(camera)
-  // scene.add(camera);
+  const player = new Player()
+  scene.add(player.getMesh())
+  cameraControl.getObject().position.z = 50; // <-- this is relative to the player's position
+  player.getMesh().add(camera);
+
+  var controls = new THREE.FlyControls( player.getMesh(), renderer.domElement );
+
+
 
   //Load Asteroids
   var loader = new THREE.OBJLoader()
@@ -311,10 +321,15 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   const shots = []
   function render() {
-    motionControl.updatePlayerPosition()
+    // motionControl.updatePlayerPosition()
     player.update()
-    cameraControl.getObject().position.z -= 0;
+    cameraControl.getObject().position.z -= 0
     tunnel.update(cameraControl.getObject().position.z)
+
+    var clock = new THREE.Clock();
+    var delta = clock.getDelta();
+    controls.update( delta )
+
 
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
       asteroids[i].update(cameraControl.getObject().position.z)
@@ -436,8 +451,7 @@ class World extends Component {
   render() {
     return (
       <div id="world" className="no-cursor">
-
-      <div id="blocker">
+        <div id="blocker">
           <div id="pause-screen">
             <h1>Paused</h1>
           </div>
