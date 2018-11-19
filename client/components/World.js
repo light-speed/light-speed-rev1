@@ -32,15 +32,17 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
 
-  var control = new THREE.PointerLockControls( camera )
+  var control = new THREE.PointerLockControls(camera)
   scene.add(control.getObject())
 
-
-  window.addEventListener( 'click', function () {
-
-    console.log(control)
-    control.lock();
-}, false );
+  window.addEventListener(
+    'click',
+    function() {
+      console.log(control)
+      control.lock()
+    },
+    false
+  )
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -203,6 +205,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     )
     keyLight.position.set(-100, 0, 100)
 
+    var light = new THREE.AmbientLight(0x404040) // soft white light
+    scene.add(light)
+
     var fillLight = new THREE.DirectionalLight(
       new THREE.Color('hsl(240, 100%, 75%)'),
       0.75
@@ -296,23 +301,23 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         }
       })
 
-      obj.scale.set(20, 20, 20)
+      obj.scale.set(40, 40, 40)
 
       mesh.add(obj)
       mesh.position.set(
-        -150 + Math.random() * 300,
-        -150 + Math.random() * 300,
-        -1500 - Math.random() * 1500
+        -300 + Math.random() * 600,
+        -300 + Math.random() * 600,
+        -2000 - Math.random() * 2000
       )
       self.loaded = true
     })
 
     this.reset = function(z) {
-      mesh.velocity = Math.random() * 2 + 2
+      mesh.velocity = Math.random() * 4 + 4
       mesh.position.set(
-        -50 + Math.random() * 100,
-        -50 + Math.random() * 100,
-        z - 1500 - Math.random() * 1500
+        -500 + Math.random() * 1000,
+        -500 + Math.random() * 1000,
+        z - 3000 - Math.random() * 3000
       )
     }
 
@@ -336,7 +341,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  let NUM_ASTEROIDS = 10
+  let NUM_ASTEROIDS = 50
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
@@ -419,7 +424,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     planetObj.rotation.y = 0
     planetObj.rotation.z = 0.41
 
-    planetObj.position.set(4000, -1000, -8000)
+    planetObj.position.set(5000, -1000, -8000)
 
     this.getMesh = function() {
       return planetObj
@@ -431,16 +436,20 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   scene.add(earth.getMesh())
 
   //Add clouds to earth
-  var materialClouds = new THREE.MeshLambertMaterial( {
-    map: new THREE.TextureLoader().load("textures/planets/earth_clouds_1024.png" ),
+  var materialClouds = new THREE.MeshLambertMaterial({
+    map: new THREE.TextureLoader().load(
+      'textures/planets/earth_clouds_1024.png'
+    ),
     transparent: true
-  } );
-  var meshClouds = new THREE.Mesh( new THREE.SphereBufferGeometry( 4000, 100, 50 ), materialClouds );
-  meshClouds.scale.set( 1.005, 1.005, 1.005 );
-  meshClouds.position.set(4000, -1000, -8000)
-  meshClouds.rotation.z = 0.41;
-  scene.add( meshClouds );
-
+  })
+  var meshClouds = new THREE.Mesh(
+    new THREE.SphereBufferGeometry(4000, 100, 50),
+    materialClouds
+  )
+  meshClouds.scale.set(1.005, 1.005, 1.005)
+  meshClouds.position.set(5000, -1000, -8000)
+  meshClouds.rotation.z = 0.41
+  scene.add(meshClouds)
 
   /*********************************
    * Render To Screen
@@ -452,7 +461,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     skybox.getMesh.position = camera.position
 
-
     var delta = clock.getDelta()
     controls.update(delta)
 
@@ -460,10 +468,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       asteroids[i].update(camera.position.z)
     }
 
-    var rotationSpeed = 0.01;
+    var rotationSpeed = 0.01
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
-
 
     for (var index = 0; index < shots.length; index += 1) {
       if (shots[index] === undefined) continue
