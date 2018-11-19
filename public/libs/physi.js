@@ -29,7 +29,10 @@ window.Physijs = (function() {
     VEHICLEREPORT_ITEMSIZE = 9,
     CONSTRAINTREPORT_ITEMSIZE = 6
 
-  Physijs.scripts = {}
+  Physijs.scripts = {
+    worker: './libs/physijs_worker.js',
+    ammo: 'ammo.js'
+  }
 
   Eventable = function() {
     this._eventListeners = {}
@@ -505,8 +508,7 @@ window.Physijs = (function() {
     Eventable.call(this)
     THREE.Scene.call(this)
 
-    // this._worker = new Worker(Physijs.scripts.worker || 'physijs_worker.js')
-    this._worker = new Worker('./libs/physijs_worker.js')
+    this._worker = new Worker(Physijs.scripts.worker)
     this._worker.transferableMessage =
       this._worker.webkitPostMessage || this._worker.postMessage
     this._materials_ref_counts = {}
@@ -594,7 +596,7 @@ window.Physijs = (function() {
     }
 
     params = params || {}
-    params.ammo = Physijs.scripts.ammo || './ammo.js'
+    params.ammo = Physijs.scripts.ammo
     params.fixedTimeStep = params.fixedTimeStep || 1 / 60
     params.rateLimit = params.rateLimit || true
     this.execute('init', params)

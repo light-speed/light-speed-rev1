@@ -129,20 +129,21 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  var stoneGeom = new THREE.BoxGeometry(0.6, 6, 2)
-  var stone = new Physijs.BoxMesh(
-    stoneGeom,
-    Physijs.createMaterial(
-      new THREE.MeshStandardMaterial({
-        color: '#42f483',
-        transparent: true,
-        opacity: 0.8
-      })
-    )
-  )
-  scene.add(stone)
+  // var stoneGeom = new THREE.BoxGeometry(0.6, 6, 2)
+  // var stone = new Physijs.BoxMesh(
+  //   stoneGeom,
+  //   Physijs.createMaterial(
+  //     new THREE.MeshStandardMaterial({
+  //       color: '#42f483',
+  //       transparent: true,
+  //       opacity: 0.8
+  //     })
+  //   )
+  // )
+  // stone.position.set(0, 50, 0)
+  // scene.add(stone)
 
-  var tunnel = new Tunnel()
+  // var tunnel = new Tunnel()
   // scene.add(tunnel.getMesh())
   // scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
 
@@ -155,6 +156,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     const self = this
     this.hitbox = new THREE.Box3()
 
+    // var playerCollision = new Physijs.BoxMesh(new THREE.BoxGeometry(1,1,1))
+    
     this.update = function() {
       if (!spaceship) return
       this.hitbox.setFromObject(spaceship)
@@ -187,8 +190,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     scene.add(fillLight)
     scene.add(backLight)
 
-    // let shipCollision = Physijs.BoxMesh(2, 2, 2)
-
     new THREE.MTLLoader()
       // .setPath('../public/models/')
       .load('models/DevShip.mtl', function(materials) {
@@ -207,7 +208,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
               self.player = spaceship
 
               playerObj.add(self.player)
-              // shipCollision.add(playerObj)
+              // playerObj.add(playerCollision)
               self.loaded = true
             },
             onProgress,
@@ -408,6 +409,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   const shots = []
   function render() {
     // motionControl.updatePlayerPosition()
+    // scene.simulate(); 
     player.update()
     // cameraControl.getObject().position.z -= 0
     // tunnel.update(cameraControl.getObject().position.z)

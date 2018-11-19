@@ -19,6 +19,7 @@ export function configureRenderer() {
   // camera.controls = attachCameraControls(camera, renderer.domElement)
 
   //create a new scene
+  // const scene = new THREE.Scene()
   const scene = new Physijs.Scene()
 
   window.addEventListener('resize', handleResize)
