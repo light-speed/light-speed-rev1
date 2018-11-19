@@ -11,15 +11,6 @@ THREE.FlyControls = function(object, domElement) {
 
   // API
 
-<<<<<<< HEAD
-  	this.speed = 1
-    this.acceleration = 0
-    this.maxSpeed = 40
-    this.rollSpeed = 0.01
-    this.pitchDamper = 0.9
-    this.yawDamper = 0.7
-    this.rollDamper = 0.6
-=======
 	this.speed = 1
 	this.acceleration = 0
 	this.maxSpeed = 8
@@ -28,7 +19,6 @@ THREE.FlyControls = function(object, domElement) {
 	this.yawDamper = 1
 	this.rollDamper = 1
 
->>>>>>> f/space-box
 
   this.dragToLook = true
   this.autoForward = false
