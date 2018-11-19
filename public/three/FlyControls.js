@@ -165,7 +165,7 @@ THREE.FlyControls = function(object, domElement) {
 				break
 			default:
     }
-		console.log(this.moveState)
+		// console.log(this.moveState)
     this.updateMovementVector()
     this.updateRotationVector()
   }

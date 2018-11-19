@@ -27,11 +27,17 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // const cubesToBeMoved = {}
 
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
+  const handleCollision = function( collided_with, linearVelocity, angularVelocity ) {
+    return console.log('collision pls')
+  }
+
 
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
 
   scene.add(camera)
+
+
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -129,19 +135,24 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  // var stoneGeom = new THREE.BoxGeometry(0.6, 6, 2)
-  // var stone = new Physijs.BoxMesh(
-  //   stoneGeom,
-  //   Physijs.createMaterial(
-  //     new THREE.MeshStandardMaterial({
-  //       color: '#42f483',
-  //       transparent: true,
-  //       opacity: 0.8
-  //     })
-  //   )
-  // )
-  // stone.position.set(0, 50, 0)
-  // scene.add(stone)
+  var stoneGeom = new THREE.BoxGeometry(10, 10, 2)
+  var stone = new Physijs.BoxMesh(
+    stoneGeom,
+    Physijs.createMaterial(
+      new THREE.MeshStandardMaterial({
+        color: '#343f63',
+        transparent: false,
+        opacity: 0.8
+      }),
+      .8, .2
+    ),
+    1,
+    {restitution: 0.2, friction: 0.8}
+  )
+  stone.position.set(0, 50, 0)
+  stone.collisions = 0
+  stone.addEventListener('collision', handleCollision)
+  scene.add(stone)
 
   // var tunnel = new Tunnel()
   // scene.add(tunnel.getMesh())
@@ -156,7 +167,19 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     const self = this
     this.hitbox = new THREE.Box3()
 
-    // var playerCollision = new Physijs.BoxMesh(new THREE.BoxGeometry(1,1,1))
+    var collisionMat = Physijs.createMaterial(
+      new THREE.MeshStandardMaterial({
+        color: '#42f483',
+        transparent: false,
+        opacity: 0.8
+      }),
+      .8, .2
+    )
+    var playerCollision = new Physijs.BoxMesh(new THREE.BoxGeometry(1,1,1), collisionMat, 1,
+    {restitution: 0.2, friction: 0.8})
+    playerCollision.collisions = 0
+    playerCollision.addEventListener('collision', handleCollision)
+    console.log('pcoll', playerCollision)
     
     this.update = function() {
       if (!spaceship) return
@@ -206,9 +229,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
               spaceship = mesh
               spaceship.position.set(0, -7.5, -20)
               self.player = spaceship
-
               playerObj.add(self.player)
-              // playerObj.add(playerCollision)
+              playerObj.add(playerCollision)
               self.loaded = true
             },
             onProgress,
@@ -409,49 +431,49 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   const shots = []
   function render() {
     // motionControl.updatePlayerPosition()
-    // scene.simulate(); 
     player.update()
     // cameraControl.getObject().position.z -= 0
     // tunnel.update(cameraControl.getObject().position.z)
-
+    
     var clock = new THREE.Clock()
     var delta = clock.getDelta()
     controls.update(delta)
-
+    
     // controls.update()
-
+    
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
       asteroids[i].update(camera.position.z)
     }
-
+    
     for (let i = 0; i < shots.length; i++) {
       if (!shots[i].update(player.getMesh().position.z)) {
         // if (!shots[i].update(camera.position.z)) {
-        scene.remove(shots[i].getMesh())
-        shots.splice(i, 1)
+          scene.remove(shots[i].getMesh())
+          shots.splice(i, 1)
+        }
+        // shots[i].position.add(shots[i].velocity)
       }
-      // shots[i].position.add(shots[i].velocity)
-    }
     renderer.render(scene, camera)
+    scene.simulate(); 
   }
-  function animate() {
-    if (isPaused) return
-    requestAnimationFrame(animate)
-    render()
-  }
+    function animate() {
+      if (isPaused) return
+      requestAnimationFrame(animate)
+      render()
+    }
 
   window.addEventListener('keydown', function(e) {
     switch (e.keyCode) {
       case 32: // Space
-        console.log('scene', player.getMesh().position)
+        // console.log('scene', player.getMesh().position)
         e.preventDefault()
         var playerPos = player.getMesh().position.clone()
         // playerPos.sub(new THREE.Vector3(0, 0, 0))
         var shot = new Shot(playerPos)
         shots.push(shot)
         scene.add(shot.getMesh())
-        console.log('p', player.getMesh())
-        console.log('s', shot.getMesh().position)
+        // console.log('p', player.getMesh())
+        // console.log('s', shot.getMesh().position)
         // console.log('adding a shot to the shot array')
         break
       default:
