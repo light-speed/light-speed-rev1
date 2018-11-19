@@ -36,8 +36,6 @@ export const CameraControl = function(_camera, _domElement) {
 
     yawObject.rotation.y -= 0
     pitchObject.rotation.x -= 0
-
-
   }
 
   function dispose() {
