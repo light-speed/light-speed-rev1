@@ -232,7 +232,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
           .load(
             'models/DevShipT.obj',
             function(mesh) {
-              // mesh.scale.set(0.7, 0.7, 0.7)
+              mesh.scale.set(3, 3, 3)
               mesh.rotation.set(0, Math.PI, 0)
               // mesh.position.set(0, -5, 0);
               spaceship = mesh
@@ -261,10 +261,10 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // player.getMesh().add(cameraControl.getObject())
   // var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
 
-  control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
-  // camera.position.set(0, 5, 30) // <-- this is relative to the player's position
-  // player.getMesh().add(camera)
-  player.getMesh().add(control.getObject())
+  // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
+  camera.position.set(0, 30, 70) // <-- this is relative to the player's position
+  player.getMesh().add(camera)
+  // player.getMesh().add(control.getObject())
 
   // camera.lookAt(player.getMesh.position);
 
