@@ -14,7 +14,7 @@ export function configureRenderer() {
     75,
     window.innerWidth / window.innerHeight,
     1,
-    50000
+    60000
   )
   // camera.controls = attachCameraControls(camera, renderer.domElement)
 
