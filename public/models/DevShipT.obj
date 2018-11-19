@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'DevShip.blend'
 # www.blender.org
-mtllib DevShipT.mtl
+mtllib DevShip.mtl
 o Cube
 v 1.010169 -0.347344 -1.988752
 v 1.010169 -0.347344 -0.477953
@@ -629,8 +629,8 @@ vn 0.2866 0.9565 0.0551
 vn 0.2009 0.9431 0.2649
 vn -0.2752 -0.9611 -0.0230
 vn -0.1787 -0.8228 -0.5395
-g Cube_Cube_Material.001
-usemtl Material.001
+g Cube_Cube_Material.002
+usemtl Material.002
 s off
 f 53/1/1 10/2/1 4/3/1 2/4/1
 f 7/5/2 5/6/2 78/7/2 80/8/2
