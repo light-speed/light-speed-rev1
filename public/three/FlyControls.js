@@ -2,6 +2,7 @@
  * @author James Baicoianu / http://www.baicoianu.com/
  */
 
+
 THREE.FlyControls = function(object, domElement) {
   this.object = object
 
@@ -10,14 +11,13 @@ THREE.FlyControls = function(object, domElement) {
 
   // API
 
-	this.speed = 1
-	this.acceleration = 0
-	this.maxSpeed = 8
-	this.rollSpeed = 0.01
-	this.pitchDamper = 0.4
-	this.yawDamper = 0.2
-	this.rollDamper = 0.47
-
+  	this.speed = 1
+    this.acceleration = 0
+    this.maxSpeed = 40
+    this.rollSpeed = 0.01
+    this.pitchDamper = 0.9
+    this.yawDamper = 0.7
+    this.rollDamper = 0.6
 
   this.dragToLook = true
   this.autoForward = false
@@ -169,6 +169,88 @@ THREE.FlyControls = function(object, domElement) {
     this.updateMovementVector()
     this.updateRotationVector()
   }
+
+
+
+
+
+
+  window.addEventListener("mousemove", onmousemove, false);
+    
+  var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0); // it's up to you how you will create THREE.Plane(), there are several methods
+  var raycaster = new THREE.Raycaster(); //for reuse
+  var mouse = new THREE.Vector2(); //for reuse
+  var intersectPoint = new THREE.Vector3(); //for reuse
+  
+
+  
+  this.mousemove = function(event) {
+	//   get mouse coordinates
+	//   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+	//   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+	//   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+	//   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+	var container = this.getContainerDimensions();
+	var halfWidth = container.size[ 0 ] / 2;
+	var halfHeight = container.size[ 1 ] / 2;
+	
+	  
+	// this.moveState.yawLeft = - ( ( event.pageX - container.offset[ 0 ] ) - halfWidth ) / halfWidth;
+	// this.moveState.pitchDown = ( ( event.pageY - container.offset[ 1 ] ) - halfHeight ) / halfHeight;
+
+	// console.log('ms', this.moveState.yawLeft, this.moveState.pitchDown)
+	// console.log('event', event.pageX, event.pageY)
+	// console.log('container', container.offset)
+	// console.log('e.movement', event.movementX, event.movementY)
+
+
+	  // raycaster.setFromCamera(mouse, camera);//set raycaster
+	  // raycaster.ray.intersectPlane(plane, intersectPoint); // find the point of intersection
+	//   obj.position.set(0, 0, -20)
+	//   camera.add(obj).lookAt(intersectPoint); // face our arrow to this point
+	if(event.movementX < 0) {
+		// console.log('-x',x)
+		this.moveState.yawLeft += -event.movementX * 0.004
+		// this.moveState.yawLeft = mouse.x * this.yawDamper
+		this.moveState.yawRight = 0
+	}
+	if(event.movementX > 0) {
+		// console.log('+x',x)
+		this.moveState.yawRight += event.movementX * 0.004
+		// this.moveState.yawRight = mouse.x * this.yawDamper
+		this.moveState.yawLeft = 0
+	}
+	if(event.movementY > 0) {
+		// console.log('+y',y)
+		this.moveState.pitchUp += -event.movementY * 0.004
+		// this.moveState.pitchUp = mouse.y * 0.004
+		this.moveState.pitchDown = 0
+	}
+	if(event.movementY < 0) {
+		// console.log('-y',y)
+		this.moveState.pitchDown += event.movementY * 0.004
+		// this.moveState.pitchDown = mouse.y * this.pitchDamper
+		this.moveState.pitchUp = 0
+	}
+
+	
+
+	this.updateRotationVector();
+
+
+
+
+	}
+
+
+
+
+
+
+
+
+
 
   // this.mousedown = function(event) {
   //   if (this.domElement !== document) {
@@ -328,7 +410,7 @@ THREE.FlyControls = function(object, domElement) {
     window.removeEventListener('keyup', _keyup, false)
   }
 
-  // var _mousemove = bind(this, this.mousemove)
+  var _mousemove = bind(this, this.mousemove)
   // var _mousedown = bind(this, this.mousedown)
   // var _mouseup = bind(this, this.mouseup)
   var _keydown = bind(this, this.keydown)
@@ -336,12 +418,13 @@ THREE.FlyControls = function(object, domElement) {
 
   this.domElement.addEventListener('contextmenu', contextmenu, false)
 
-  // this.domElement.addEventListener('mousemove', _mousemove, false)
+  this.domElement.addEventListener('mousemove', _mousemove, false)
   // this.domElement.addEventListener('mousedown', _mousedown, false)
   // this.domElement.addEventListener('mouseup', _mouseup, false)
 
   window.addEventListener('keydown', _keydown, false)
   window.addEventListener('keyup', _keyup, false)
+  window.addEventListener('mousemove', _mousemove, false)
 
   this.updateMovementVector()
   this.updateRotationVector()

@@ -31,7 +31,15 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
 
-  scene.add(camera)
+  var control = new THREE.PointerLockControls( camera )
+  scene.add(control.getObject())
+  
+
+  window.addEventListener( 'click', function () {
+    
+    console.log(control)
+    control.lock();
+}, false );
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -178,13 +186,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     new THREE.MTLLoader()
       // .setPath('../public/models/')
-      .load('models/DevShip.mtl', function(materials) {
+      .load('models/DevShipT.mtl', function(materials) {
         materials.preload()
         new THREE.OBJLoader()
           .setMaterials(materials)
           // .setPath('../public/models/')
           .load(
-            'models/DevShip.obj',
+            'models/DevShipT.obj',
             function(mesh) {
               // mesh.scale.set(0.7, 0.7, 0.7)
               mesh.rotation.set(0, Math.PI, 0)
@@ -214,7 +222,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // player.getMesh().add(cameraControl.getObject())
   // var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
 
-  camera.position.set(0, 5, 30) // <-- this is relative to the player's position
+  control.getObject().position.set(0, 5, 30) // <-- this is relative to the player's position
+  // camera.position.set(0, 5, 30) // <-- this is relative to the player's position
   player.getMesh().add(camera)
 
   // camera.lookAt(player.getMesh.position);
