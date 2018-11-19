@@ -15,8 +15,8 @@ THREE.FlyControls = function(object, domElement) {
     this.acceleration = 0
     this.maxSpeed = 40
     this.rollSpeed = 0.01
-    this.pitchDamper = 0.9
-    this.yawDamper = 0.7
+    this.pitchDamper = 0.45
+    this.yawDamper = 0.2
     this.rollDamper = 0.6
 
   this.dragToLook = true
@@ -115,7 +115,7 @@ THREE.FlyControls = function(object, domElement) {
         break
       default:
     }
-		console.log(this.moveState)
+		// console.log(this.moveState)
     this.updateMovementVector()
     this.updateRotationVector()
   }
@@ -165,7 +165,7 @@ THREE.FlyControls = function(object, domElement) {
 				break
 			default:
     }
-		console.log(this.moveState)
+		// console.log(this.moveState)
     this.updateMovementVector()
     this.updateRotationVector()
   }
