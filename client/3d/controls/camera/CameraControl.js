@@ -1,3 +1,5 @@
+// // import * as THREE from 'three'
+// import PL from '../../../utilities/PointerLock.js/pointerlock.js'
 
 export const CameraControl = function(_camera, _domElement) {
   let pitchObject = new THREE.Object3D()
