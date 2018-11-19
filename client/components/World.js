@@ -28,6 +28,10 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // const cubesToBeMoved = {}
 
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
+  const handleCollision = function( collided_with, linearVelocity, angularVelocity ) {
+    return console.log('collision pls')
+  }
+
 
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
@@ -43,6 +47,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     },
     false
   )
+
+
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -172,7 +178,26 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  var tunnel = new Tunnel()
+  var stoneGeom = new THREE.BoxGeometry(10, 10, 2)
+  var stone = new Physijs.BoxMesh(
+    stoneGeom,
+    Physijs.createMaterial(
+      new THREE.MeshStandardMaterial({
+        color: '#343f63',
+        transparent: false,
+        opacity: 0.8
+      }),
+      .8, .2
+    ),
+    1,
+    {restitution: 0.2, friction: 0.8}
+  )
+  stone.position.set(0, 50, 0)
+  stone.collisions = 0
+  stone.addEventListener('collision', handleCollision)
+  scene.add(stone)
+
+  // var tunnel = new Tunnel()
   // scene.add(tunnel.getMesh())
   // scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
 
@@ -185,6 +210,20 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     const self = this
     this.hitbox = new THREE.Box3()
     this.canShoot = 0
+
+    var collisionMat = Physijs.createMaterial(
+      new THREE.MeshStandardMaterial({
+        color: '#42f483',
+        transparent: false,
+        opacity: 0.8
+      }),
+      .8, .2
+    )
+    var playerCollision = new Physijs.BoxMesh(new THREE.BoxGeometry(1,1,1), collisionMat, 1,
+    {restitution: 0.2, friction: 0.8})
+    playerCollision.collisions = 0
+    playerCollision.addEventListener('collision', handleCollision)
+    console.log('pcoll', playerCollision)
 
     this.update = function() {
       if (!spaceship) return
@@ -238,6 +277,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
               self.player = spaceship
               playerObj.add(self.player)
+              playerObj.add(playerCollision)
               self.loaded = true
             },
             onProgress,
@@ -256,13 +296,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   scene.add(player.getMesh())
 
   //Add Controls
-  // cameraControl.getObject().position.set(0, 5, 30) // <-- this is relative to the player's position
-  // player.getMesh().add(cameraControl.getObject())
-  // var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
+
 
   control.getObject().position.set(0, 5, 30) // <-- this is relative to the player's position
   // camera.position.set(0, 5, 30) // <-- this is relative to the player's position
-  player.getMesh().add(camera)
+  player.getMesh().add(control.getObject())
 
   // camera.lookAt(player.getMesh.position);
 
@@ -486,12 +524,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     if (player.canShoot > 0) player.canShoot -= 1
 
     renderer.render(scene, camera)
+    scene.simulate();
   }
-  function animate() {
-    if (isPaused) return
-    requestAnimationFrame(animate)
-    render()
-  }
+    function animate() {
+      if (isPaused) return
+      requestAnimationFrame(animate)
+      render()
+    }
 
   // window.addEventListener('keydown', function(e) {
   //   switch (e.keyCode) {
