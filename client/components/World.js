@@ -6,7 +6,7 @@ import {
   //   BlockControl,
   //   PreviewControl,
   CameraControl,
-  MotionControl,
+  MotionControl
   //   AvatarControl,
   //   UndoStack,
   //   HorizonControl
@@ -129,6 +129,19 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
+  var stoneGeom = new THREE.BoxGeometry(0.6, 6, 2)
+  var stone = new Physijs.BoxMesh(
+    stoneGeom,
+    Physijs.createMaterial(
+      new THREE.MeshStandardMaterial({
+        color: '#42f483',
+        transparent: true,
+        opacity: 0.8
+      })
+    )
+  )
+  scene.add(stone)
+
   var tunnel = new Tunnel()
   // scene.add(tunnel.getMesh())
   // scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
@@ -156,25 +169,25 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var onError = function() {}
 
     var keyLight = new THREE.DirectionalLight(
-      new THREE.Color("hsl(30, 100%, 75%)"),
+      new THREE.Color('hsl(30, 100%, 75%)'),
       1.0
-    );
-    keyLight.position.set(-100, 0, 100);
+    )
+    keyLight.position.set(-100, 0, 100)
 
     var fillLight = new THREE.DirectionalLight(
-      new THREE.Color("hsl(240, 100%, 75%)"),
+      new THREE.Color('hsl(240, 100%, 75%)'),
       0.75
-    );
-    fillLight.position.set(100, 0, 100);
+    )
+    fillLight.position.set(100, 0, 100)
 
-    var backLight = new THREE.DirectionalLight(0xffffff, 1.0);
-    backLight.position.set(100, 0, -100).normalize();
+    var backLight = new THREE.DirectionalLight(0xffffff, 1.0)
+    backLight.position.set(100, 0, -100).normalize()
 
+    scene.add(keyLight)
+    scene.add(fillLight)
+    scene.add(backLight)
 
-    scene.add(keyLight);
-    scene.add(fillLight);
-    scene.add(backLight);
-
+    // let shipCollision = Physijs.BoxMesh(2, 2, 2)
 
     new THREE.MTLLoader()
       // .setPath('../public/models/')
@@ -192,7 +205,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
               spaceship = mesh
               spaceship.position.set(0, -7.5, -20)
               self.player = spaceship
+
               playerObj.add(self.player)
+              // shipCollision.add(playerObj)
               self.loaded = true
             },
             onProgress,
@@ -219,9 +234,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // camera.lookAt(player.getMesh.position);
 
-
   var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
-
 
   // var controls = new THREE.PlayerControls(player.getMesh(), camera)
   // controls.init()
@@ -387,7 +400,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   }
   var earth = new Planet()
   scene.add(earth.getMesh())
-
 
   /*********************************
    * Render To Screen

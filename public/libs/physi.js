@@ -505,7 +505,8 @@ window.Physijs = (function() {
     Eventable.call(this)
     THREE.Scene.call(this)
 
-    this._worker = new Worker(Physijs.scripts.worker || 'physijs_worker.js')
+    // this._worker = new Worker(Physijs.scripts.worker || 'physijs_worker.js')
+    this._worker = new Worker('./libs/physijs_worker.js')
     this._worker.transferableMessage =
       this._worker.webkitPostMessage || this._worker.postMessage
     this._materials_ref_counts = {}
@@ -593,7 +594,7 @@ window.Physijs = (function() {
     }
 
     params = params || {}
-    params.ammo = Physijs.scripts.ammo || 'ammo.js'
+    params.ammo = Physijs.scripts.ammo || './ammo.js'
     params.fixedTimeStep = params.fixedTimeStep || 1 / 60
     params.rateLimit = params.rateLimit || true
     this.execute('init', params)
