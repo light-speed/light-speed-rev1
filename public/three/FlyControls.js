@@ -11,6 +11,7 @@ THREE.FlyControls = function(object, domElement) {
 
   // API
 
+<<<<<<< HEAD
   	this.speed = 1
     this.acceleration = 0
     this.maxSpeed = 40
@@ -18,6 +19,16 @@ THREE.FlyControls = function(object, domElement) {
     this.pitchDamper = 0.9
     this.yawDamper = 0.7
     this.rollDamper = 0.6
+=======
+	this.speed = 1
+	this.acceleration = 0
+	this.maxSpeed = 8
+	this.rollSpeed = 0.01
+	this.pitchDamper = 1
+	this.yawDamper = 1
+	this.rollDamper = 1
+
+>>>>>>> f/space-box
 
   this.dragToLook = true
   this.autoForward = false
@@ -115,7 +126,7 @@ THREE.FlyControls = function(object, domElement) {
         break
       default:
     }
-		console.log(this.moveState)
+		// console.log(this.moveState)
     this.updateMovementVector()
     this.updateRotationVector()
   }
@@ -165,7 +176,7 @@ THREE.FlyControls = function(object, domElement) {
 				break
 			default:
     }
-		console.log(this.moveState)
+		// console.log(this.moveState)
     this.updateMovementVector()
     this.updateRotationVector()
   }
