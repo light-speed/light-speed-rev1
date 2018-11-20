@@ -554,22 +554,6 @@ var Planet = function() {
 var earth = new Planet()
 scene.add(earth.getMesh())
 
-//Add clouds to earth
-var materialClouds = new THREE.MeshLambertMaterial({
-  map: new THREE.TextureLoader().load(
-    'textures/planets/earth_clouds_1024.png'
-  ),
-  transparent: true
-})
-var meshClouds = new THREE.Mesh(
-  new THREE.SphereBufferGeometry(4000, 100, 50),
-  materialClouds
-)
-meshClouds.scale.set(1.005, 1.005, 1.005)
-meshClouds.position.set(5000, -1000, -8000)
-meshClouds.rotation.z = 0.41
-scene.add(meshClouds)
-
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -659,6 +643,8 @@ scene.add(meshClouds)
           console.log('camera', cameraPos)
           console.log('player', playerPos
           )
+          console.log('player const', player)
+          console.log('player mesh vertex array', player.getMesh().children[1].children[0].geometry.attributes.position.array)
 
           const shotMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
@@ -674,7 +660,6 @@ scene.add(meshClouds)
           // position the bullet to come from the player's weapon
           // shot.position.set(0, 5, 30)
           shot.position.set(playerPos.x, playerPos.y, playerPos.z )
-          console.log('shot', shot.position)
 
           // set the velocity of the bullet
           shot.velocity = new THREE.Vector3(
