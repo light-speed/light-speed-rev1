@@ -51,6 +51,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   
   loadingManager.onProgress = function(item, loaded, total){
     progressBar.style.width = (loaded / total * 100) + '%';
+    console.log(`loaded resource ${loaded}/${total}`)
   };
   
 	loadingManager.onLoad = function(){
