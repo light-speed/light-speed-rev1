@@ -144,58 +144,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // scene.registerBeforeRender(function() {skybox.getMesh().position = camera.position})
 
-  //Load Tunnel
-  // renderer.setClearColor('#000022')
-  // renderer.setSize(window.innerWidth, window.innerHeight)
-
-  // var Tunnel = function() {
-  //   var tunnel = new THREE.Object3D(),
-  //     meshes = []
-
-  //   meshes.push(
-  //     new THREE.Mesh(
-  //       // new THREE.SphereGeometry(30, 160, 160),
-  //       new THREE.CylinderGeometry(300, 300, 7000, 24, 24, true),
-  //       new THREE.MeshBasicMaterial({
-  //         map: new THREE.TextureLoader().load('textures/space.jpg', function(
-  //           tex
-  //         ) {
-  //           tex.wrapS = tex.wrapT = THREE.RepeatWrapping
-  //           tex.repeat.set(5, 10)
-  //           tex.needsUpdate = true
-  //         }),
-  //         side: THREE.BackSide
-  //       })
-  //     )
-  //   )
-  //   meshes[0].rotation.x = -Math.PI / 2
-  //   // Adding the second mesh as a clone of the first mesh
-  //   meshes.push(meshes[0].clone())
-  //   meshes[1].position.z = -5000
-
-  //   tunnel.add(meshes[0])
-  //   tunnel.add(meshes[1])
-
-  //   this.getMesh = function() {
-  //     return tunnel
-  //   }
-
-  //   this.update = function(z) {
-  //     for (var i = 0; i < 2; i++) {
-  //       if (z < meshes[i].position.z - 2500) {
-  //         meshes[i].position.z -= 10000
-  //         break
-  //       }
-  //     }
-  //   }
-
-  //   return this
-  // }
-
-  // var tunnel = new Tunnel()
-  // scene.add(tunnel.getMesh())
-  // scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
-
   // Player Collision Wrapper Cube
 
   var cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
@@ -288,22 +236,29 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // player.getMesh().position.set(0, 0, 2)s
   scene.add(player.getMesh())
 
-  // Add Ring for Racing
+  // Add Rings for Racing
 
   var geometry = new THREE.RingGeometry(100, 120, 20)
   var material = new THREE.MeshBasicMaterial({
     color: 0xffff00,
     side: THREE.DoubleSide
   })
-  var ring = new THREE.Mesh(geometry, material)
-  ring.position.set(0, 0, -200)
 
+  var ring = new THREE.Mesh(geometry, material)
+  ring.position.z = -200
   scene.add(ring)
 
-  const collisionArr = []
-  ring.name = 'init-ring'
-  collisionArr.push(ring)
-  console.log('COLL ARR:', collisionArr)
+  /// experimental ring array
+  // var ringArray = []
+
+  // for (let i = 0; i < 8; i++) {
+  //   var ring = new THREE.Mesh(geometry, material)
+  //   ring.position.x = Math.floor(Math.random() * 10 - 250)
+  //   ring.position.y = Math.floor(Math.random() * 1000 - 3000)
+  //   ring.position.z = Math.floor(Math.random() * 100 - 200)
+  //   ringArray.push(ring)
+  // }
+  // ringArray.forEach(r => scene.add(r))
 
   //Add Controls
 
@@ -660,8 +615,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      // replace with redux action logging score
-
       globalScore += 1
       console.log('collision', globalScore)
       return globalScore
