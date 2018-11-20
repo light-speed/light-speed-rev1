@@ -1,5 +1,5 @@
 // import * as THREE from 'three'
-import PL from '../../../utilities/PointerLock.js/pointerlock.js'
+// import PL from '../../../utilities/PointerLock.js/pointerlock.js'
 
 export const CameraControl = function(_camera, _domElement) {
   let pitchObject = new THREE.Object3D()
@@ -12,7 +12,6 @@ export const CameraControl = function(_camera, _domElement) {
     console.log(error)
   }
 
-
   function activate() {
     _domElement.addEventListener('mousemove', onMouseMove, false)
   }
@@ -21,25 +20,22 @@ export const CameraControl = function(_camera, _domElement) {
     _domElement.removeEventListener('mousemove', onMouseMove, false)
   }
 
-
-
   function onMouseMove(event) {
     event.preventDefault()
 
     const movementX = event.movementX
     const movementY = event.movementY
 
-    yawObject.rotation.y -= movementX * 0.004
-    pitchObject.rotation.x -= movementY * 0.004
+    // yawObject.rotation.y -= movementX * 0.004
+    // pitchObject.rotation.x -= movementY * 0.004
 
-    pitchObject.rotation.x = Math.max(
-      -Math.PI / 2,
-      Math.min(Math.PI / 2, pitchObject.rotation.x)
-    )
-    // var vector = new THREE.Vector3();
-    // // console.log(yawObject.getWorldDirection(vector))
-    // console.log('yawobject rotation', yawObject)
-    // console.log('pitchOBject rorat', pitchObject.rotation)
+    // pitchObject.rotation.x = Math.max(
+    //   -Math.PI / 2,
+    //   Math.min(Math.PI / 2, pitchObject.rotation.x)
+    // )
+
+    yawObject.rotation.y -= 0
+    pitchObject.rotation.x -= 0
   }
 
   function dispose() {
@@ -47,7 +43,6 @@ export const CameraControl = function(_camera, _domElement) {
   }
 
   // PL.requestPointerLock(document.body, activate(), deactivate(), onError())
-
 
   activate()
 
