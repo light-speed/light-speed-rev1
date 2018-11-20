@@ -21,14 +21,34 @@ import {showInstructions} from '../utilities/utilities'
 
 let isPaused = false
 let onEsc
+let loadingManager = null;
+let RESOURCES_LOADED = false;
+
+// An object to hold all the things needed for our loading screen
+var loadingScreen = {
+	scene: new THREE.Scene(),
+	camera: new THREE.PerspectiveCamera(90, 1280/720, 0.1, 100),
+	box: new THREE.Mesh(
+		new THREE.BoxGeometry(0.5,0.5,0.5),
+		new THREE.MeshBasicMaterial({ color:0x4444ff })
+	)
+};
 
 function generateWorld(/*world, currentUser, guestAvatar*/) {
-  //container for all 3d objects that will be affected by event
-  let objects = []
-  // const cubesToBeMoved = {}
 
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
 
+  loadingManager = new THREE.LoadingManager();
+	
+	loadingManager.onProgress = function(item, loaded, total){
+		console.log(item, loaded, total);
+	};
+	
+	loadingManager.onLoad = function(){
+		console.log("loaded all resources");
+		RESOURCES_LOADED = true;
+	};
+	
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
 
@@ -64,7 +84,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var directions = ['ypos', 'yneg', 'zpos', 'zneg', 'xpos', 'xneg']
     var imageSuffix = '.png'
 
-    var loader = new THREE.TextureLoader()
+    var loader = new THREE.TextureLoader(loadingManager)
 
     let materialArray = []
     // let link
@@ -234,11 +254,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     scene.add(fillLight)
     scene.add(backLight)
 
-    new THREE.MTLLoader()
+    new THREE.MTLLoader(loadingManager)
       // .setPath('../public/models/')
       .load('models/DevShipT.mtl', function(materials) {
         materials.preload()
-        new THREE.OBJLoader()
+        new THREE.OBJLoader(loadingManager)
           .setMaterials(materials)
           // .setPath('../public/models/')
           .load(
@@ -375,7 +395,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //   scene.add(asteroids[i].getMesh())
   // }
   //Load Asteroids
-  var loader = new THREE.OBJLoader()
+  var loader = new THREE.OBJLoader(loadingManager)
 
   var Asteroid = function(rockType) {
     var mesh = new THREE.Object3D(),
@@ -393,7 +413,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.hitbox = new THREE.Box3()
 
     var rockMtl = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load('textures/lunarrock.png')
+      map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
     })
 
     loader.load('models/rock' + rockType + '.obj', function(obj) {
@@ -549,13 +569,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var materialNormalMap = new THREE.MeshPhongMaterial({
       specular: 0x333333,
       shininess: 15,
-      map: new THREE.TextureLoader().load(
+      map: new THREE.TextureLoader(loadingManager).load(
         'textures/planets/earth_atmos_2048.jpg'
       ),
-      specularMap: new THREE.TextureLoader().load(
+      specularMap: new THREE.TextureLoader(loadingManager).load(
         'textures/planets/earth_specular_2048.jpg'
       ),
-      normalMap: new THREE.TextureLoader().load(
+      normalMap: new THREE.TextureLoader(loadingManager).load(
         'textures/planets/earth_normal_2048.jpg'
       ),
       normalScale: new THREE.Vector2(0.85, 0.85)
@@ -581,7 +601,7 @@ scene.add(earth.getMesh())
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
-    map: new THREE.TextureLoader().load(
+    map: new THREE.TextureLoader(loadingManager).load(
       'textures/planets/earth_clouds_1024.png'
     ),
     transparent: true
@@ -650,6 +670,7 @@ scene.add(earth.getMesh())
   var clock = new THREE.Clock()
   const shots = []
   function render() {
+
     player.update()
 
     skybox.getMesh.position = camera.position
@@ -688,8 +709,21 @@ scene.add(earth.getMesh())
 
   function animate() {
     if (isPaused) return
+    
+    // loading screen stuff
+    if( RESOURCES_LOADED == false ){
+      requestAnimationFrame(animate);
+      
+      loadingScreen.box.position.x -= 0.05;
+      if( loadingScreen.box.position.x < -10 ) loadingScreen.box.position.x = 10;
+      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
+        
+      renderer.render(loadingScreen.scene, loadingScreen.camera);
+      return;
+    }
+     
     requestAnimationFrame(animate)
-    render()
+    render() 
   }
 
   // window.addEventListener('keydown', function(e) {
