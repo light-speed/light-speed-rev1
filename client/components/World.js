@@ -911,9 +911,9 @@ class World extends Component {
   render() {
     return (
       <div id="world" className="no-cursor">
+             <HUD /> 
         <div id="blocker">
           <div id="pause-screen">
-             <HUD /> 
             <div id='progress-container'>
              {/* <h1>Loading...</h1> */}
               {/* <div id='progress'/> */}
