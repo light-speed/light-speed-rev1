@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 // import * as THREE from 'three'
 // import {db} from '../firebase'
-import HUD from './HUD';
+import HUD from './HUD'
 import {
   //   BlockControl,
   //   PreviewControl,
@@ -21,34 +21,34 @@ import {showInstructions} from '../utilities/utilities'
 
 let isPaused = false
 let onEsc
-let loadingManager = null;
-let RESOURCES_LOADED = false;
+let loadingManager = null
+let RESOURCES_LOADED = false
+let globalScore = 0
 
 // An object to hold all the things needed for our loading screen
 var loadingScreen = {
-	scene: new THREE.Scene(),
-	camera: new THREE.PerspectiveCamera(90, 1280/720, 0.1, 100),
-	box: new THREE.Mesh(
-		new THREE.BoxGeometry(0.5,0.5,0.5),
-		new THREE.MeshBasicMaterial({ color:0x4444ff })
-	)
-};
+  scene: new THREE.Scene(),
+  camera: new THREE.PerspectiveCamera(90, 1280 / 720, 0.1, 100),
+  box: new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.5, 0.5),
+    new THREE.MeshBasicMaterial({color: 0x4444ff})
+  )
+}
 
 function generateWorld(/*world, currentUser, guestAvatar*/) {
-
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
 
-  loadingManager = new THREE.LoadingManager();
-	
-	loadingManager.onProgress = function(item, loaded, total){
-		console.log(item, loaded, total);
-	};
-	
-	loadingManager.onLoad = function(){
-		console.log("loaded all resources");
-		RESOURCES_LOADED = true;
-	};
-	
+  loadingManager = new THREE.LoadingManager()
+
+  loadingManager.onProgress = function(item, loaded, total) {
+    console.log(item, loaded, total)
+  }
+
+  loadingManager.onLoad = function() {
+    console.log('loaded all resources')
+    RESOURCES_LOADED = true
+  }
+
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
 
@@ -413,7 +413,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.hitbox = new THREE.Box3()
 
     var rockMtl = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
+      map: new THREE.TextureLoader(loadingManager).load(
+        'textures/lunarrock.png'
+      )
     })
 
     loader.load('models/rock' + rockType + '.obj', function(obj) {
@@ -588,16 +590,14 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     planetObj.position.set(5000, -1000, -8000)
 
-  this.getMesh = function() {
-    return planetObj
+    this.getMesh = function() {
+      return planetObj
+    }
+
+    return this
   }
-
-  return this
-}
-var earth = new Planet()
-scene.add(earth.getMesh())
-
-
+  var earth = new Planet()
+  scene.add(earth.getMesh())
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -660,7 +660,11 @@ scene.add(earth.getMesh())
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      console.log('collision')
+      // replace with redux action logging score
+
+      globalScore += 1
+      console.log('collision', globalScore)
+      return globalScore
     }
   }
 
@@ -670,7 +674,6 @@ scene.add(earth.getMesh())
   var clock = new THREE.Clock()
   const shots = []
   function render() {
-
     player.update()
 
     skybox.getMesh.position = camera.position
@@ -686,8 +689,6 @@ scene.add(earth.getMesh())
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
-    //detect collisions
-    // detectColl()
     detectCollisions()
 
     ///shooting function
@@ -709,21 +710,21 @@ scene.add(earth.getMesh())
 
   function animate() {
     if (isPaused) return
-    
+
     // loading screen stuff
-    if( RESOURCES_LOADED == false ){
-      requestAnimationFrame(animate);
-      
-      loadingScreen.box.position.x -= 0.05;
-      if( loadingScreen.box.position.x < -10 ) loadingScreen.box.position.x = 10;
-      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
-        
-      renderer.render(loadingScreen.scene, loadingScreen.camera);
-      return;
+    if (RESOURCES_LOADED == false) {
+      requestAnimationFrame(animate)
+
+      loadingScreen.box.position.x -= 0.05
+      if (loadingScreen.box.position.x < -10) loadingScreen.box.position.x = 10
+      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x)
+
+      renderer.render(loadingScreen.scene, loadingScreen.camera)
+      return
     }
-     
+
     requestAnimationFrame(animate)
-    render() 
+    render()
   }
 
   // window.addEventListener('keydown', function(e) {
@@ -835,7 +836,8 @@ class World extends Component {
   constructor() {
     super()
     this.state = {
-      authorized: false
+      authorized: false,
+      score: 0
     }
   }
   async componentDidMount() {
@@ -884,7 +886,7 @@ class World extends Component {
       <div id="world" className="no-cursor">
         <div id="blocker">
           <div id="pause-screen">
-            <HUD />
+            <HUD score={this.state.score} />
           </div>
         </div>
       </div>
