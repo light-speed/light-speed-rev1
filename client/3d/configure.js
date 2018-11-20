@@ -10,17 +10,11 @@ export function configureRenderer() {
   renderer.setSize(window.innerWidth, window.innerHeight)
 
   // camera.controls = attachCameraControls(camera, renderer.domElement)
-  
+
   //create a new scene
   // const scene = new THREE.Scene()
-  const scene = new Physijs.Scene()
-  scene.setGravity(new THREE.Vector3(0, 0, 0)); 
-  scene.addEventListener(
-    'update',
-    function() {
-      scene.simulate( undefined, 1 );
-    }
-  );
+  const scene = new THREE.Scene()
+
   //create a perspective camera (field-of-view, aspect ratio, min distance, max distance)
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -28,7 +22,7 @@ export function configureRenderer() {
     1,
     60000
   )
-    
+
   window.addEventListener('resize', handleResize)
   function handleResize() {
     camera.aspect = window.innerWidth / window.innerHeight
