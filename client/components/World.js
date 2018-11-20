@@ -723,7 +723,7 @@ scene.add(earth.getMesh())
     }
     
     requestAnimationFrame(animate)
-    render()
+    render() 
   }
 
   // window.addEventListener('keydown', function(e) {
