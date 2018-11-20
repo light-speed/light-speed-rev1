@@ -904,6 +904,7 @@ class World extends Component {
           <div id="pause-screen">
              <HUD /> 
             <div id='progress-container'>
+             <h1>Loading...</h1>
               <div id='progress'/>
             </div>
           </div>

@@ -15,18 +15,32 @@ nav a {
   margin: 1em;
 }
 
+#pause-screen {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  justify-content: center;
+}
+#pause-screen h1{
+  color: #fff;
+  align-self: center;
+}
+
 #progress-container {
-  width: 200px;
+  width: 1000px;
   height: 20px;
   background: #000;
   border: 2px solid #000;
   position: absolute;
+  justify-self: center;
+  align-self: center;
 }
 
 #progress {
-  width: 200px;
+  width: 1000px;
   height: 20px;
-  background: red;
+  background: rgb(49, 182, 206);
   border: none;
 }
 
