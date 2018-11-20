@@ -629,6 +629,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //     }
   //   }
   // }
+  var counter = 0
+
 
   function detectCollisions() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
@@ -636,7 +638,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      console.log('collision')
+      counter += 1
+      console.log(counter)
     }
   }
 

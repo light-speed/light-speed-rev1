@@ -14,7 +14,7 @@ THREE.FlyControls = function(object, domElement) {
   this.acceleration = 0
   this.maxSpeed = 40
   this.rollSpeed = 0.01
-  this.pitchDamper = 0.45
+  this.pitchDamper = 0.3
   this.yawDamper = 0.2
   this.rollDamper = 0.6
   this.keypress = false
@@ -195,50 +195,44 @@ THREE.FlyControls = function(object, domElement) {
   var mouse = new THREE.Vector2() //for reuse
   var intersectPoint = new THREE.Vector3() //for reuse
 
+
+
   this.mousemove = function(event) {
-    //   get mouse coordinates
-    //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     var container = this.getContainerDimensions()
     var halfWidth = container.size[0] / 2
     var halfHeight = container.size[1] / 2
 
-    // this.moveState.yawLeft = - ( ( event.pageX - container.offset[ 0 ] ) - halfWidth ) / halfWidth;
-    // this.moveState.pitchDown = ( ( event.pageY - container.offset[ 1 ] ) - halfHeight ) / halfHeight;
-
     // console.log('ms', this.moveState.yawLeft, this.moveState.pitchDown)
-    // console.log('event', event.pageX, event.pageY)
+    console.log('event.page', event.pageX, event.pageY)
     // console.log('container', container.offset)
     // console.log('e.movement', event.movementX, event.movementY)
 
-    // raycaster.setFromCamera(mouse, camera);//set raycaster
-    // raycaster.ray.intersectPlane(plane, intersectPoint); // find the point of intersection
-    //   obj.position.set(0, 0, -20)
-    //   camera.add(obj).lookAt(intersectPoint); // face our arrow to this point
+
+console.log('event.movement', event.movementX, event.movementY)
+
+
     if (event.movementX < 0) {
       // console.log('-x',x)
-      this.moveState.yawLeft += -event.movementX * 0.004
+      this.moveState.yawLeft = -event.movementX * this.yawDamper
       // this.moveState.yawLeft = mouse.x * this.yawDamper
       this.moveState.yawRight = 0
     }
     if (event.movementX > 0) {
       // console.log('+x',x)
-      this.moveState.yawRight += event.movementX * 0.004
+      this.moveState.yawRight = event.movementX * this.yawDamper
       // this.moveState.yawRight = mouse.x * this.yawDamper
       this.moveState.yawLeft = 0
     }
     if (event.movementY > 0) {
       // console.log('+y',y)
-      this.moveState.pitchUp += -event.movementY * 0.004
+      this.moveState.pitchUp = -event.movementY * this.pitchDamper
       // this.moveState.pitchUp = mouse.y * 0.004
       this.moveState.pitchDown = 0
     }
     if (event.movementY < 0) {
       // console.log('-y',y)
-      this.moveState.pitchDown += event.movementY * 0.004
+      this.moveState.pitchDown = event.movementY * this.pitchDamper
       // this.moveState.pitchDown = mouse.y * this.pitchDamper
       this.moveState.pitchUp = 0
     }
