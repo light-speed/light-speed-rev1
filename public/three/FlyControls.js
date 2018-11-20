@@ -75,7 +75,8 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
 
       case 83 /*S*/:
-        this.moveState.back += this.speed
+        // this.moveState.back += this.speed
+        this.moveState.forward *= 0.5
         event.preventDefault()
         break
 
@@ -125,7 +126,8 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
       default:
     }
-    // console.log(this.moveState)
+    console.log(this.moveState)
+    console.log(this.keypress)
     this.updateMovementVector()
     this.updateRotationVector()
   }
@@ -179,7 +181,8 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
       default:
     }
-    // console.log(this.moveState)
+    console.log(this.moveState)
+    console.log(this.keypress)
     this.updateMovementVector()
     this.updateRotationVector()
   }
@@ -342,9 +345,6 @@ THREE.FlyControls = function(camera, object, domElement) {
     //     ? 1
     //     : 0
 
-    if (this.keypress === false) {
-      this.moveState.forward /= 2
-    }
 
     if (this.moveState.forward > this.maxSpeed) {
       this.moveState.forward = this.maxSpeed
@@ -411,11 +411,20 @@ THREE.FlyControls = function(camera, object, domElement) {
     window.removeEventListener('keyup', _keyup, false)
   }
 
+  // this.resetRotation = function(){
+  //   this.moveState.yawLeft = 0
+  //   this.moveState.yawRight = 0
+  //   this.moveState.pitchDown = 0
+  //   this.moveState.pitchUp = 0
+  //   console.log(this.moveState)
+  // }
+
   var _mousemove = bind(this, this.mousemove)
   // var _mousedown = bind(this, this.mousedown)
   // var _mouseup = bind(this, this.mouseup)
   var _keydown = bind(this, this.keydown)
   var _keyup = bind(this, this.keyup)
+  // var resetRotation = bind(this, this.resetRotation)
 
   this.domElement.addEventListener('contextmenu', contextmenu, false)
 
@@ -424,6 +433,18 @@ THREE.FlyControls = function(camera, object, domElement) {
   // this.domElement.addEventListener('mousemove', _mousemove, false)
   // this.domElement.addEventListener('mousedown', _mousedown, false)
   // this.domElement.addEventListener('mouseup', _mouseup, false)
+
+
+
+  // if ('onpointerlockchange' in document) {
+  //   document.addEventListener('pointerlockchange', resetRotation, false)
+  // }
+
+  // if ("onpointerlockchange" in this.domElement) {
+  //   this.domElement.addEventListener('pointerlockchange', function(){
+  //     console.log('exit pointerlock')
+  //   }, false);
+  // }
 
   window.addEventListener('keydown', _keydown, false)
   window.addEventListener('keyup', _keyup, false)

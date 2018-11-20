@@ -758,7 +758,7 @@ scene.add(earth.getMesh())
           e.preventDefault()
 
           // var cameraPos = control.getObject().position
-          // var playerPos = player.getMesh().position
+          var playerPos = player.getMesh().position
           // console.log('camera', cameraPos)
           // console.log('player', playerPos)
           // console.log('player const', player)
