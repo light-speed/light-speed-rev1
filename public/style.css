@@ -28,13 +28,16 @@ nav a {
 }
 
 #progress-container {
+  display: flex;
   width: 1000px;
   height: 20px;
   background: #000;
   border: 2px solid #000;
   position: absolute;
   justify-self: center;
+  justify-content: center;
   align-self: center;
+  align-items: center;
 }
 
 #progress {
@@ -97,4 +100,12 @@ form div {
   width: 100%;
   justify-content: flex-end;
   margin-left: -13%;
+}
+
+
+
+
+#pause-screen img{
+  width:300px;
+  height:300px;
 }

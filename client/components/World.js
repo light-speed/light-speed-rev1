@@ -42,7 +42,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   var progress = document.getElementById('progress-container');
   // progress.id = 'progress-container'
-  var progressBar = document.getElementById('progress');
+  // var progressBar = document.getElementById('progress');
   var HUD = document.getElementById('hudContainer');
 
   // progressBar.id = 'progress'
@@ -50,14 +50,14 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // document.body.appendChild(progress);
   
   loadingManager.onProgress = function(item, loaded, total){
-    progressBar.style.width = (loaded / total * 100) + '%';
+    // progressBar.style.width = (loaded / total * 100) + '%';
     console.log(`loaded resource ${loaded}/${total}`)
   };
   
 	loadingManager.onLoad = function(){
 		console.log("loaded all resources");
     RESOURCES_LOADED = true;
-    progressBar.style.display = 'none'
+    // progressBar.style.display = 'none'
     progress.style.display = 'none'
     HUD.style.display = 'flex'
 
@@ -904,10 +904,14 @@ class World extends Component {
           <div id="pause-screen">
              <HUD /> 
             <div id='progress-container'>
-             <h1>Loading...</h1>
-              <div id='progress'/>
+             {/* <h1>Loading...</h1> */}
+              {/* <div id='progress'/> */}
+
+   
+              <img src="./loading.gif"/>
+
             </div>
-          </div>
+          </div> 
         </div>
       </div>
     )
