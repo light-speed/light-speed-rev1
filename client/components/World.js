@@ -23,7 +23,7 @@ let isPaused = false
 let onEsc
 let loadingManager = null
 let RESOURCES_LOADED = false
-let globalScore = 0
+let counter = 0
 
 // An object to hold all the things needed for our loading screen
 var loadingScreen = {
@@ -40,29 +40,34 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   loadingManager = new THREE.LoadingManager()
 
+  var progress = document.getElementById('progress-container')
+  // progress.id = 'progress-container'
+  // var progressBar = document.getElementById('progress');
+  var HUD = document.getElementById('hudContainer')
+
+  // progressBar.id = 'progress'
+  // progress.appendChild(progressBar);
+  // document.body.appendChild(progress);
+
   loadingManager.onProgress = function(item, loaded, total) {
-    console.log(item, loaded, total)
+    // progressBar.style.width = (loaded / total * 100) + '%';
+    console.log(`loaded resource ${loaded}/${total}`)
   }
 
   loadingManager.onLoad = function() {
     console.log('loaded all resources')
     RESOURCES_LOADED = true
+    // progressBar.style.display = 'none'
+    progress.style.display = 'none'
+    HUD.style.display = 'flex'
   }
+
+  // loadingScreen.box.position.set(0,0,5);
+  // loadingScreen.camera.lookAt(loadingScreen.box.position);
+  // loadingScreen.scene.add(loadingScreen.box);
 
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
-
-  var control = new THREE.PointerLockControls(camera)
-  scene.add(control.getObject())
-
-  window.addEventListener(
-    'click',
-    function() {
-      console.log(control)
-      control.lock()
-    },
-    false
-  )
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -261,6 +266,22 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // ringArray.forEach(r => scene.add(r))
 
   //Add Controls
+  //add pointerlock to camera
+  // const control = new THREE.PointerLockControls(camera)
+  // scene.add(control.getObject())
+
+  // window.addEventListener(
+  //   'click',
+  //   function() {
+  //     control.lock()
+  //   },
+  //   false
+  // )
+  var controls = new THREE.FlyControls(
+    camera,
+    player.getMesh(),
+    renderer.domElement
+  )
 
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
   camera.position.set(0, 30, 70) // <-- this is relative to the player's position
@@ -268,7 +289,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
 
-  var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
+  //add flight to player
 
   // var controls = new THREE.PlayerControls(player.getMesh(), camera)
   // controls.init()
@@ -608,6 +629,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //     }
   //   }
   // }
+  var counter = 0
 
   function detectCollisions() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
@@ -615,9 +637,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      globalScore += 1
-      console.log('collision', globalScore)
-      return globalScore
+      counter += 1
+      console.log(counter)
     }
   }
 
@@ -665,7 +686,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     if (isPaused) return
 
     // loading screen stuff
-    if (RESOURCES_LOADED == false) {
+    if (RESOURCES_LOADED === false) {
       requestAnimationFrame(animate)
 
       loadingScreen.box.position.x -= 0.05
@@ -702,12 +723,12 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         case 32: // Space
           e.preventDefault()
 
-          var cameraPos = control.getObject().position
+          // var cameraPos = control.getObject().position
           var playerPos = player.getMesh().position
-          console.log('camera', cameraPos)
-          console.log('player', playerPos)
-          console.log('player const', player)
-          // console.log('player mesh vertex array', player.getMesh().children[1].children[0].geometry.attributes.position.array)
+          // console.log('camera', cameraPos)
+          // console.log('player', playerPos)
+          // console.log('player const', player)
+          // // console.log('player mesh vertex array', player.getMesh().children[1].children[0].geometry.attributes.position.array)
 
           const shotMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
@@ -739,6 +760,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
             shot.alive = false
             scene.remove(shot)
           }, 1000)
+
+          console.log(scene)
 
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
@@ -790,9 +813,10 @@ class World extends Component {
     super()
     this.state = {
       authorized: false,
-      score: 0
+      loaded: false
     }
   }
+
   async componentDidMount() {
     generateWorld()
     // try {
@@ -837,9 +861,15 @@ class World extends Component {
   render() {
     return (
       <div id="world" className="no-cursor">
+        <HUD />
         <div id="blocker">
           <div id="pause-screen">
-            <HUD score={this.state.score} />
+            <div id="progress-container">
+              {/* <h1>Loading...</h1> */}
+              {/* <div id='progress'/> */}
+
+              <img src="./loading.gif" />
+            </div>
           </div>
         </div>
       </div>
