@@ -28,8 +28,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
 
-
-
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
 
@@ -44,8 +42,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     },
     false
   )
-
-
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -128,53 +124,52 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // scene.registerBeforeRender(function() {skybox.getMesh().position = camera.position})
 
   //Load Tunnel
-  renderer.setClearColor('#000022')
-  renderer.setSize(window.innerWidth, window.innerHeight)
+  // renderer.setClearColor('#000022')
+  // renderer.setSize(window.innerWidth, window.innerHeight)
 
-  var Tunnel = function() {
-    var tunnel = new THREE.Object3D(),
-      meshes = []
+  // var Tunnel = function() {
+  //   var tunnel = new THREE.Object3D(),
+  //     meshes = []
 
-    meshes.push(
-      new THREE.Mesh(
-        // new THREE.SphereGeometry(30, 160, 160),
-        new THREE.CylinderGeometry(300, 300, 7000, 24, 24, true),
-        new THREE.MeshBasicMaterial({
-          map: new THREE.TextureLoader().load('textures/space.jpg', function(
-            tex
-          ) {
-            tex.wrapS = tex.wrapT = THREE.RepeatWrapping
-            tex.repeat.set(5, 10)
-            tex.needsUpdate = true
-          }),
-          side: THREE.BackSide
-        })
-      )
-    )
-    meshes[0].rotation.x = -Math.PI / 2
-    // Adding the second mesh as a clone of the first mesh
-    meshes.push(meshes[0].clone())
-    meshes[1].position.z = -5000
+  //   meshes.push(
+  //     new THREE.Mesh(
+  //       // new THREE.SphereGeometry(30, 160, 160),
+  //       new THREE.CylinderGeometry(300, 300, 7000, 24, 24, true),
+  //       new THREE.MeshBasicMaterial({
+  //         map: new THREE.TextureLoader().load('textures/space.jpg', function(
+  //           tex
+  //         ) {
+  //           tex.wrapS = tex.wrapT = THREE.RepeatWrapping
+  //           tex.repeat.set(5, 10)
+  //           tex.needsUpdate = true
+  //         }),
+  //         side: THREE.BackSide
+  //       })
+  //     )
+  //   )
+  //   meshes[0].rotation.x = -Math.PI / 2
+  //   // Adding the second mesh as a clone of the first mesh
+  //   meshes.push(meshes[0].clone())
+  //   meshes[1].position.z = -5000
 
-    tunnel.add(meshes[0])
-    tunnel.add(meshes[1])
+  //   tunnel.add(meshes[0])
+  //   tunnel.add(meshes[1])
 
-    this.getMesh = function() {
-      return tunnel
-    }
+  //   this.getMesh = function() {
+  //     return tunnel
+  //   }
 
-    this.update = function(z) {
-      for (var i = 0; i < 2; i++) {
-        if (z < meshes[i].position.z - 2500) {
-          meshes[i].position.z -= 10000
-          break
-        }
-      }
-    }
+  //   this.update = function(z) {
+  //     for (var i = 0; i < 2; i++) {
+  //       if (z < meshes[i].position.z - 2500) {
+  //         meshes[i].position.z -= 10000
+  //         break
+  //       }
+  //     }
+  //   }
 
-    return this
-  }
-
+  //   return this
+  // }
 
   // var tunnel = new Tunnel()
   // scene.add(tunnel.getMesh())
@@ -189,7 +184,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     const self = this
     this.hitbox = new THREE.Box3()
     this.canShoot = 0
-
 
     this.update = function() {
       if (!spaceship) return
@@ -257,11 +251,20 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   }
 
   const player = new Player()
-  // player.getMesh().position.set(0, 0, 2)
+  // player.getMesh().position.set(0, 0, 2)s
   scene.add(player.getMesh())
 
-  //Add Controls
+  // Add Ring for Racing
 
+  var geometry = new THREE.RingGeometry(100, 120, 20)
+  var material = new THREE.MeshBasicMaterial({
+    color: 0xffff00,
+    side: THREE.DoubleSide
+  })
+  var mesh = new THREE.Mesh(geometry, material)
+  scene.add(mesh)
+
+  //Add Controls
 
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
   camera.position.set(0, 30, 70) // <-- this is relative to the player's position
@@ -514,62 +517,44 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // var earth = new Planet()
   // scene.add(earth.getMesh())
 
-//Add Planet
-var Planet = function() {
-  var planetObj = new THREE.Object3D()
-  planetObj.name = 'EARTH'
-  // Speed of motion and rotation
+  //Add Planet
+  var Planet = function() {
+    var planetObj = new THREE.Object3D()
+    planetObj.name = 'EARTH'
+    // Speed of motion and rotation
 
-  this.hitbox = new THREE.Box3()
-  var radius = 4000
-  var geometry = new THREE.SphereBufferGeometry(radius, 100, 50)
-  var materialNormalMap = new THREE.MeshPhongMaterial({
-    specular: 0x333333,
-    shininess: 15,
-    map: new THREE.TextureLoader().load(
-      'textures/planets/earth_atmos_2048.jpg'
-    ),
-    specularMap: new THREE.TextureLoader().load(
-      'textures/planets/earth_specular_2048.jpg'
-    ),
-    normalMap: new THREE.TextureLoader().load(
-      'textures/planets/earth_normal_2048.jpg'
-    ),
-    normalScale: new THREE.Vector2(0.85, 0.85)
-  })
-  var meshPlanet = new THREE.Mesh(geometry, materialNormalMap)
+    this.hitbox = new THREE.Box3()
+    var radius = 4000
+    var geometry = new THREE.SphereBufferGeometry(radius, 100, 50)
+    var materialNormalMap = new THREE.MeshPhongMaterial({
+      specular: 0x333333,
+      shininess: 15,
+      map: new THREE.TextureLoader().load(
+        'textures/planets/earth_atmos_2048.jpg'
+      ),
+      specularMap: new THREE.TextureLoader().load(
+        'textures/planets/earth_specular_2048.jpg'
+      ),
+      normalMap: new THREE.TextureLoader().load(
+        'textures/planets/earth_normal_2048.jpg'
+      ),
+      normalScale: new THREE.Vector2(0.85, 0.85)
+    })
+    var meshPlanet = new THREE.Mesh(geometry, materialNormalMap)
 
-  planetObj.add(meshPlanet)
-  planetObj.rotation.y = 0
-  planetObj.rotation.z = 0.41
-
+    planetObj.add(meshPlanet)
+    planetObj.rotation.y = 0
+    planetObj.rotation.z = 0.41
 
     planetObj.position.set(5000, -1000, -8000)
-  this.getMesh = function() {
-    return planetObj
+    this.getMesh = function() {
+      return planetObj
+    }
+
+    return this
   }
-
-  return this
-}
-var earth = new Planet()
-scene.add(earth.getMesh())
-
-//Add clouds to earth
-var materialClouds = new THREE.MeshLambertMaterial({
-  map: new THREE.TextureLoader().load(
-    'textures/planets/earth_clouds_1024.png'
-  ),
-  transparent: true
-})
-var meshClouds = new THREE.Mesh(
-  new THREE.SphereBufferGeometry(4000, 100, 50),
-  materialClouds
-)
-meshClouds.scale.set(1.005, 1.005, 1.005)
-meshClouds.position.set(5000, -1000, -8000)
-meshClouds.rotation.z = 0.41
-scene.add(meshClouds)
-
+  var earth = new Planet()
+  scene.add(earth.getMesh())
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -622,15 +607,13 @@ scene.add(meshClouds)
     if (player.canShoot > 0) player.canShoot -= 1
 
     renderer.render(scene, camera)
-
   }
 
-
-    function animate() {
-      if (isPaused) return
-      requestAnimationFrame(animate)
-      render()
-    }
+  function animate() {
+    if (isPaused) return
+    requestAnimationFrame(animate)
+    render()
+  }
 
   // window.addEventListener('keydown', function(e) {
   //   switch (e.keyCode) {
@@ -657,8 +640,7 @@ scene.add(meshClouds)
           var cameraPos = control.getObject().position
           var playerPos = player.getMesh().position
           console.log('camera', cameraPos)
-          console.log('player', playerPos
-          )
+          console.log('player', playerPos)
 
           const shotMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
@@ -673,7 +655,7 @@ scene.add(meshClouds)
 
           // position the bullet to come from the player's weapon
           // shot.position.set(0, 5, 30)
-          shot.position.set(playerPos.x, playerPos.y, playerPos.z )
+          shot.position.set(playerPos.x, playerPos.y, playerPos.z)
           console.log('shot', shot.position)
 
           // set the velocity of the bullet
