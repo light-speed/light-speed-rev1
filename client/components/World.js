@@ -34,9 +34,13 @@ var loadingScreen = {
 	)
 };
 
+
+
+
 function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
+
 
   loadingManager = new THREE.LoadingManager();
 
@@ -70,17 +74,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
 
-  var control = new THREE.PointerLockControls(camera)
-  scene.add(control.getObject())
-
-  window.addEventListener(
-    'click',
-    function() {
-      console.log(control)
-      control.lock()
-    },
-    false
-  )
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -324,6 +317,18 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   console.log('COLL ARR:', collisionArr)
 
   //Add Controls
+  //add pointerlock to camera
+  // const control = new THREE.PointerLockControls(camera)
+  // scene.add(control.getObject())
+
+  // window.addEventListener(
+  //   'click',
+  //   function() {
+  //     control.lock()
+  //   },
+  //   false
+  // )
+  var controls = new THREE.FlyControls(camera, player.getMesh(), renderer.domElement)
 
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
   camera.position.set(0, 30, 70) // <-- this is relative to the player's position
@@ -331,7 +336,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
 
-  var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
+
+  //add flight to player
 
   // var controls = new THREE.PlayerControls(player.getMesh(), camera)
   // controls.init()
@@ -671,6 +677,8 @@ scene.add(earth.getMesh())
   //     }
   //   }
   // }
+  var counter = 0
+
 
   function detectCollisions() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
@@ -678,7 +686,8 @@ scene.add(earth.getMesh())
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      console.log('collision')
+      counter += 1
+      console.log(counter)
     }
   }
 
@@ -725,21 +734,21 @@ scene.add(earth.getMesh())
 
   function animate() {
     if (isPaused) return
-    
+
     // loading screen stuff
     if( RESOURCES_LOADED === false ){
       requestAnimationFrame(animate);
-      
+
       loadingScreen.box.position.x -= 0.05;
       if( loadingScreen.box.position.x < -10 ) loadingScreen.box.position.x = 10;
       loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
-        
+
       renderer.render(loadingScreen.scene, loadingScreen.camera);
       return;
     }
-     
+
     requestAnimationFrame(animate)
-    render() 
+    render()
   }
 
   // window.addEventListener('keydown', function(e) {
@@ -764,12 +773,12 @@ scene.add(earth.getMesh())
         case 32: // Space
           e.preventDefault()
 
-          var cameraPos = control.getObject().position
+          // var cameraPos = control.getObject().position
           var playerPos = player.getMesh().position
-          console.log('camera', cameraPos)
-          console.log('player', playerPos)
-          console.log('player const', player)
-          // console.log('player mesh vertex array', player.getMesh().children[1].children[0].geometry.attributes.position.array)
+          // console.log('camera', cameraPos)
+          // console.log('player', playerPos)
+          // console.log('player const', player)
+          // // console.log('player mesh vertex array', player.getMesh().children[1].children[0].geometry.attributes.position.array)
 
           const shotMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
@@ -801,6 +810,8 @@ scene.add(earth.getMesh())
             shot.alive = false
             scene.remove(shot)
           }, 1000)
+
+          console.log(scene)
 
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
