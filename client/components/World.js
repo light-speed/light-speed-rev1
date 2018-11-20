@@ -717,7 +717,7 @@ scene.add(earth.getMesh())
       loadingScreen.box.position.x -= 0.05;
       if( loadingScreen.box.position.x < -10 ) loadingScreen.box.position.x = 10;
       loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
-       
+        
       renderer.render(loadingScreen.scene, loadingScreen.camera);
       return;
     }
