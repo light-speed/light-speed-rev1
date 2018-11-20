@@ -2,11 +2,21 @@
  * @author James Baicoianu / http://www.baicoianu.com/
  */
 
-THREE.FlyControls = function(object, domElement) {
+THREE.FlyControls = function(camera, object, domElement) {
   this.object = object
 
   this.domElement = domElement !== undefined ? domElement : document
   if (domElement) this.domElement.setAttribute('tabindex', -1)
+
+  const control = new THREE.PointerLockControls(camera)
+  window.addEventListener(
+    'click',
+    function() {
+      control.lock()
+      console.log(control.isLocked)
+    },
+    false
+  )
 
   // API
 
@@ -14,8 +24,8 @@ THREE.FlyControls = function(object, domElement) {
   this.acceleration = 0
   this.maxSpeed = 40
   this.rollSpeed = 0.01
-  this.pitchDamper = 0.3
-  this.yawDamper = 0.2
+  this.pitchDamper = 0.6
+  this.yawDamper = 0.5
   this.rollDamper = 0.6
   this.keypress = false
 
@@ -188,56 +198,52 @@ THREE.FlyControls = function(object, domElement) {
 
   // }
 
-  window.addEventListener('mousemove', onmousemove, false)
+  // window.addEventListener('mousemove', onmousemove, false)
 
   var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0) // it's up to you how you will create THREE.Plane(), there are several methods
   var raycaster = new THREE.Raycaster() //for reuse
   var mouse = new THREE.Vector2() //for reuse
   var intersectPoint = new THREE.Vector3() //for reuse
 
-
-
   this.mousemove = function(event) {
-
     var container = this.getContainerDimensions()
     var halfWidth = container.size[0] / 2
     var halfHeight = container.size[1] / 2
 
     // console.log('ms', this.moveState.yawLeft, this.moveState.pitchDown)
-    console.log('event.page', event.pageX, event.pageY)
+    // console.log('event.page', event.pageX, event.pageY)
     // console.log('container', container.offset)
     // console.log('e.movement', event.movementX, event.movementY)
 
+    // console.log('event.movement', event.movementX, event.movementY)
+    if (control.isLocked === true) {
+      if (event.movementX < 0) {
+        // console.log('-x',x)
+        this.moveState.yawLeft = -event.movementX * (this.yawDamper * 0.25)
+        // this.moveState.yawLeft = mouse.x * this.yawDamper
+        this.moveState.yawRight = 0
+      }
+      if (event.movementX > 0) {
+        // console.log('+x',x)
+        this.moveState.yawRight = event.movementX * (this.yawDamper * 0.25)
+        // this.moveState.yawRight = mouse.x * this.yawDamper
+        this.moveState.yawLeft = 0
+      }
+      if (event.movementY > 0) {
+        // console.log('+y',y)
+        this.moveState.pitchUp = -event.movementY * (this.pitchDamper * 0.25)
+        // this.moveState.pitchUp = mouse.y * 0.004
+        this.moveState.pitchDown = 0
+      }
+      if (event.movementY < 0) {
+        // console.log('-y',y)
+        this.moveState.pitchDown = event.movementY * (this.pitchDamper * 0.25)
+        // this.moveState.pitchDown = mouse.y * this.pitchDamper
+        this.moveState.pitchUp = 0
+      }
 
-console.log('event.movement', event.movementX, event.movementY)
-
-
-    if (event.movementX < 0) {
-      // console.log('-x',x)
-      this.moveState.yawLeft = -event.movementX * this.yawDamper
-      // this.moveState.yawLeft = mouse.x * this.yawDamper
-      this.moveState.yawRight = 0
+      this.updateRotationVector()
     }
-    if (event.movementX > 0) {
-      // console.log('+x',x)
-      this.moveState.yawRight = event.movementX * this.yawDamper
-      // this.moveState.yawRight = mouse.x * this.yawDamper
-      this.moveState.yawLeft = 0
-    }
-    if (event.movementY > 0) {
-      // console.log('+y',y)
-      this.moveState.pitchUp = -event.movementY * this.pitchDamper
-      // this.moveState.pitchUp = mouse.y * 0.004
-      this.moveState.pitchDown = 0
-    }
-    if (event.movementY < 0) {
-      // console.log('-y',y)
-      this.moveState.pitchDown = event.movementY * this.pitchDamper
-      // this.moveState.pitchDown = mouse.y * this.pitchDamper
-      this.moveState.pitchUp = 0
-    }
-
-    this.updateRotationVector()
   }
 
   // this.mousedown = function(event) {
@@ -413,7 +419,9 @@ console.log('event.movement', event.movementX, event.movementY)
 
   this.domElement.addEventListener('contextmenu', contextmenu, false)
 
-  this.domElement.addEventListener('mousemove', _mousemove, false)
+  // control.addEventListener('lock', _mousemove, false)
+
+  // this.domElement.addEventListener('mousemove', _mousemove, false)
   // this.domElement.addEventListener('mousedown', _mousedown, false)
   // this.domElement.addEventListener('mouseup', _mouseup, false)
 

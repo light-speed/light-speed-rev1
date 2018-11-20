@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 // import * as THREE from 'three'
 // import {db} from '../firebase'
+import HUD from './HUD';
 import {
   //   BlockControl,
   //   PreviewControl,
@@ -20,28 +21,41 @@ import {showInstructions} from '../utilities/utilities'
 
 let isPaused = false
 let onEsc
+let loadingManager = null;
+let RESOURCES_LOADED = false;
+
+// An object to hold all the things needed for our loading screen
+var loadingScreen = {
+	scene: new THREE.Scene(),
+	camera: new THREE.PerspectiveCamera(90, 1280/720, 0.1, 100),
+	box: new THREE.Mesh(
+		new THREE.BoxGeometry(0.5,0.5,0.5),
+		new THREE.MeshBasicMaterial({ color:0x4444ff })
+	)
+};
+
+
+
 
 function generateWorld(/*world, currentUser, guestAvatar*/) {
-  //container for all 3d objects that will be affected by event
-  let objects = []
-  // const cubesToBeMoved = {}
 
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
+
+
+  loadingManager = new THREE.LoadingManager();
+
+	loadingManager.onProgress = function(item, loaded, total){
+		console.log(item, loaded, total);
+	};
+
+	loadingManager.onLoad = function(){
+		console.log("loaded all resources");
+		RESOURCES_LOADED = true;
+	};
 
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
 
-  var control = new THREE.PointerLockControls(camera)
-  scene.add(control.getObject())
-
-  window.addEventListener(
-    'click',
-    function() {
-      console.log(control)
-      control.lock()
-    },
-    false
-  )
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -63,7 +77,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var directions = ['ypos', 'yneg', 'zpos', 'zneg', 'xpos', 'xneg']
     var imageSuffix = '.png'
 
-    var loader = new THREE.TextureLoader()
+    var loader = new THREE.TextureLoader(loadingManager)
 
     let materialArray = []
     // let link
@@ -233,11 +247,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     scene.add(fillLight)
     scene.add(backLight)
 
-    new THREE.MTLLoader()
+    new THREE.MTLLoader(loadingManager)
       // .setPath('../public/models/')
       .load('models/DevShipT.mtl', function(materials) {
         materials.preload()
-        new THREE.OBJLoader()
+        new THREE.OBJLoader(loadingManager)
           .setMaterials(materials)
           // .setPath('../public/models/')
           .load(
@@ -285,6 +299,18 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   console.log('COLL ARR:', collisionArr)
 
   //Add Controls
+  //add pointerlock to camera
+  // const control = new THREE.PointerLockControls(camera)
+  // scene.add(control.getObject())
+
+  // window.addEventListener(
+  //   'click',
+  //   function() {
+  //     control.lock()
+  //   },
+  //   false
+  // )
+  var controls = new THREE.FlyControls(camera, player.getMesh(), renderer.domElement)
 
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
   camera.position.set(0, 30, 70) // <-- this is relative to the player's position
@@ -292,7 +318,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
 
-  var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
+
+  //add flight to player
 
   // var controls = new THREE.PlayerControls(player.getMesh(), camera)
   // controls.init()
@@ -374,7 +401,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //   scene.add(asteroids[i].getMesh())
   // }
   //Load Asteroids
-  var loader = new THREE.OBJLoader()
+  var loader = new THREE.OBJLoader(loadingManager)
 
   var Asteroid = function(rockType) {
     var mesh = new THREE.Object3D(),
@@ -392,7 +419,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.hitbox = new THREE.Box3()
 
     var rockMtl = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load('textures/lunarrock.png')
+      map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
     })
 
     loader.load('models/rock' + rockType + '.obj', function(obj) {
@@ -548,13 +575,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var materialNormalMap = new THREE.MeshPhongMaterial({
       specular: 0x333333,
       shininess: 15,
-      map: new THREE.TextureLoader().load(
+      map: new THREE.TextureLoader(loadingManager).load(
         'textures/planets/earth_atmos_2048.jpg'
       ),
-      specularMap: new THREE.TextureLoader().load(
+      specularMap: new THREE.TextureLoader(loadingManager).load(
         'textures/planets/earth_specular_2048.jpg'
       ),
-      normalMap: new THREE.TextureLoader().load(
+      normalMap: new THREE.TextureLoader(loadingManager).load(
         'textures/planets/earth_normal_2048.jpg'
       ),
       normalScale: new THREE.Vector2(0.85, 0.85)
@@ -566,18 +593,21 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     planetObj.rotation.z = 0.41
 
     planetObj.position.set(5000, -1000, -8000)
-    this.getMesh = function() {
-      return planetObj
-    }
 
-    return this
+  this.getMesh = function() {
+    return planetObj
   }
-  var earth = new Planet()
-  scene.add(earth.getMesh())
+
+  return this
+}
+var earth = new Planet()
+scene.add(earth.getMesh())
+
+
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
-    map: new THREE.TextureLoader().load(
+    map: new THREE.TextureLoader(loadingManager).load(
       'textures/planets/earth_clouds_1024.png'
     ),
     transparent: true
@@ -649,6 +679,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   var clock = new THREE.Clock()
   const shots = []
   function render() {
+
     player.update()
 
     skybox.getMesh.position = camera.position
@@ -687,6 +718,19 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   function animate() {
     if (isPaused) return
+
+    // loading screen stuff
+    if( RESOURCES_LOADED == false ){
+      requestAnimationFrame(animate);
+
+      loadingScreen.box.position.x -= 0.05;
+      if( loadingScreen.box.position.x < -10 ) loadingScreen.box.position.x = 10;
+      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
+
+      renderer.render(loadingScreen.scene, loadingScreen.camera);
+      return;
+    }
+
     requestAnimationFrame(animate)
     render()
   }
@@ -713,12 +757,12 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         case 32: // Space
           e.preventDefault()
 
-          var cameraPos = control.getObject().position
-          var playerPos = player.getMesh().position
-          console.log('camera', cameraPos)
-          console.log('player', playerPos)
-          console.log('player const', player)
-          // console.log('player mesh vertex array', player.getMesh().children[1].children[0].geometry.attributes.position.array)
+          // var cameraPos = control.getObject().position
+          // var playerPos = player.getMesh().position
+          // console.log('camera', cameraPos)
+          // console.log('player', playerPos)
+          // console.log('player const', player)
+          // // console.log('player mesh vertex array', player.getMesh().children[1].children[0].geometry.attributes.position.array)
 
           const shotMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
@@ -750,6 +794,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
             shot.alive = false
             scene.remove(shot)
           }, 1000)
+
+          console.log(scene)
 
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
@@ -849,7 +895,7 @@ class World extends Component {
       <div id="world" className="no-cursor">
         <div id="blocker">
           <div id="pause-screen">
-            <h1>Paused</h1>
+            <HUD />
           </div>
         </div>
       </div>
