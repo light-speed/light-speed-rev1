@@ -27,9 +27,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // const cubesToBeMoved = {}
 
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
-  const handleCollision = function( collided_with, linearVelocity, angularVelocity ) {
-    return console.log('collision pls')
-  }
+  // const handleCollision = function( collided_with, linearVelocity, angularVelocity ) {
+  //   console.log('collision pls')
+  // }
 
 
   // const cameraControl = new CameraControl(camera, renderer.domElement)
@@ -143,24 +143,27 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  var stoneGeom = new THREE.BoxGeometry(10, 10, 2)
-  var stone = new Physijs.BoxMesh(
-    stoneGeom,
-    Physijs.createMaterial(
-      new THREE.MeshStandardMaterial({
-        color: '#343f63',
-        transparent: false,
-        opacity: 0.8
-      }),
-      .8, .2
-    ),
-    1,
-    {restitution: 0.2, friction: 0.8}
-  )
-  stone.position.set(0, 50, 0)
-  stone.collisions = 0
-  stone.addEventListener('collision', handleCollision)
-  scene.add(stone)
+  // var stoneGeom = new THREE.BoxGeometry(10, 10, 2)
+  // var stone = new Physijs.BoxMesh(
+  //   stoneGeom,
+  //   Physijs.createMaterial(
+  //     new THREE.MeshStandardMaterial({
+  //       color: '#343f63',
+  //       transparent: false,
+  //       opacity: 0.8
+  //     }),
+  //     .8, .2
+  //   ),
+  //   1,
+  //   {restitution: 0.2, friction: 0.8}
+  // )
+  // stone.position.set(0, 50, 0)
+  // stone.collisions = 0
+  // scene.add(stone)
+  // stone.addEventListener('collision', handleCollision)
+  // const handleCollision = function( collided_with, linearVelocity, angularVelocity ) {
+  //   console.log('collision pls')
+  // }
 
   // var tunnel = new Tunnel()
   // scene.add(tunnel.getMesh())
@@ -176,19 +179,19 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.hitbox = new THREE.Box3()
     this.canShoot = 10
 
-    var collisionMat = Physijs.createMaterial(
-      new THREE.MeshStandardMaterial({
-        color: '#42f483',
-        transparent: false,
-        opacity: 0.8
-      }),
-      .8, .2
-    )
-    var playerCollision = new Physijs.BoxMesh(new THREE.BoxGeometry(1,1,1), collisionMat, 1,
-    {restitution: 0.2, friction: 0.8})
-    playerCollision.collisions = 0
-    playerCollision.addEventListener('collision', handleCollision)
-    console.log('pcoll', playerCollision)
+    // var collisionMat = Physijs.createMaterial(
+    //   new THREE.MeshStandardMaterial({
+    //     color: '#42f483',
+    //     transparent: false,
+    //     opacity: 0.8
+    //   }),
+    //   .8, .2
+    // )
+    // var playerCollision = new Physijs.BoxMesh(new THREE.BoxGeometry(1,1,1), collisionMat, 1,
+    // {restitution: 0.2, friction: 0.8})
+    // playerCollision.collisions = 0
+    // playerCollision.addEventListener('collision', handleCollision)
+    // console.log('pcoll', playerCollision)
     
     this.update = function() {
       if (!spaceship) return
@@ -418,7 +421,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  let NUM_ASTEROIDS = 1
+  let NUM_ASTEROIDS = 15
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
