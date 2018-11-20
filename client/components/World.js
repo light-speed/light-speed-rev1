@@ -175,6 +175,15 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // scene.add(tunnel.getMesh())
   // scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
 
+  // Player Collision Wrapper Cube
+
+  var cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
+  var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x00ff00})
+  var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+  cube.position.set(0, 0, -5)
+  cube.name = 'cube'
+  scene.add(cube)
+
   //Load Player Ship
   let spaceship = null
 
@@ -268,12 +277,14 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   const collisionArr = []
   ring.name = 'init-ring'
   collisionArr.push(ring)
+  console.log('COLL ARR:', collisionArr)
 
   //Add Controls
 
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
   camera.position.set(0, 30, 70) // <-- this is relative to the player's position
   player.getMesh().add(camera)
+  player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
 
   // camera.lookAt(player.getMesh.position);
@@ -598,6 +609,35 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
+    // collision detection
+    var cube2 = scene.getObjectByName('cube')
+    var originPoint = cube2.position.clone()
+
+    for (
+      var vertexIndex = 0;
+      vertexIndex < cube2.geometry.vertices.length;
+      vertexIndex++
+    ) {
+      var localVertex = cube2.geometry.vertices[vertexIndex].clone()
+      var globalVertex = localVertex.applyMatrix4(cube.matrix)
+      var directionVector = globalVertex.sub(cube.position)
+
+      var ray = new THREE.Raycaster(
+        originPoint,
+        directionVector.clone().normalize()
+      )
+      var collisionResults = ray.intersectObjects(collisionArr)
+
+      if (
+        collisionResults.length > 0 &&
+        collisionResults[0].distance < directionVector.length()
+      ) {
+        collisionResults[0].object.material.transparent = true
+        collisionResults[0].object.material.opacity = 0.4
+        console.log('COLLLISIIOSISN')
+      }
+    }
+    ///shooting function
     for (var index = 0; index < shots.length; index += 1) {
       if (shots[index] === undefined) continue
       if (shots[index].alive === false) {

@@ -11,8 +11,6 @@ export function configureRenderer() {
 
   // camera.controls = attachCameraControls(camera, renderer.domElement)
 
-  //create a new scene
-  // const scene = new THREE.Scene()
   const scene = new THREE.Scene()
 
   //create a perspective camera (field-of-view, aspect ratio, min distance, max distance)
