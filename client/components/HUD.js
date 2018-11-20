@@ -14,14 +14,5 @@ class HUD extends React.Component {
           <h1>00:30s</h1>
         </div>
       </div>
-      <div className="hudScore">
-        <h1>Score: {props.score}</h1>
-      </div>
-      <div className="hudTime">
-        <h1>00:30s</h1>
-      </div>
-    </div>
   )
 }
-
-export default HUD

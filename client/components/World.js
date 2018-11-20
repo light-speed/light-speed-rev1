@@ -867,7 +867,6 @@ class World extends Component {
             <div id="progress-container">
               {/* <h1>Loading...</h1> */}
               {/* <div id='progress'/> */}
-
               <img src="./loading.gif" />
             </div>
           </div>
