@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 // import * as THREE from 'three'
 // import {db} from '../firebase'
+import HUD from './HUD';
 import {
   //   BlockControl,
   //   PreviewControl,
@@ -554,22 +555,6 @@ var Planet = function() {
 var earth = new Planet()
 scene.add(earth.getMesh())
 
-//Add clouds to earth
-var materialClouds = new THREE.MeshLambertMaterial({
-  map: new THREE.TextureLoader().load(
-    'textures/planets/earth_clouds_1024.png'
-  ),
-  transparent: true
-})
-var meshClouds = new THREE.Mesh(
-  new THREE.SphereBufferGeometry(4000, 100, 50),
-  materialClouds
-)
-meshClouds.scale.set(1.005, 1.005, 1.005)
-meshClouds.position.set(5000, -1000, -8000)
-meshClouds.rotation.z = 0.41
-scene.add(meshClouds)
-
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -791,6 +776,7 @@ class World extends Component {
         <div id="blocker">
           <div id="pause-screen">
             <h1>Paused</h1>
+            <HUD />
           </div>
         </div>
       </div>
