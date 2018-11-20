@@ -775,7 +775,6 @@ class World extends Component {
       <div id="world" className="no-cursor">
         <div id="blocker">
           <div id="pause-screen">
-            <h1>Paused</h1>
             <HUD />
           </div>
         </div>
