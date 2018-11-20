@@ -3,7 +3,7 @@ import React from 'react'
 class HUD extends React.Component {
   render() {
     return (
-      <div className="hudContainer">
+      <div id="hudContainer">
         <div className="hudUserName">
           <h1>User Name</h1>
         </div>
