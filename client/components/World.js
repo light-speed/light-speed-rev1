@@ -261,8 +261,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     color: 0xffff00,
     side: THREE.DoubleSide
   })
-  var mesh = new THREE.Mesh(geometry, material)
-  scene.add(mesh)
+  var ring = new THREE.Mesh(geometry, material)
+  ring.position.set(0, 0, -200)
+  scene.add(ring)
+
+  const collisionArr = []
+  ring.name = 'init-ring'
+  collisionArr.push(ring)
 
   //Add Controls
 
