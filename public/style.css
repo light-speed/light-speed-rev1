@@ -23,3 +23,49 @@ form div {
 /* .no-cursor {
   cursor: none
 } */
+
+.hudContainer {
+    display: flex;
+    flex-direction: row;
+    background: url('http://orig14.deviantart.net/f7cf/f/2016/093/7/0/header_by_sinithwar-d9xm2hn.png');
+    height: 20%;
+    width: 100%;
+    background-size: 100% 100%;
+    padding: 0;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* text-align: center; */
+    opacity: 0.6;
+    position: absolute;
+    /* justify-content: space-around; */
+}
+.hudUserName{
+  display: flex;
+  color: #fff;
+  font-size: 1vw;
+  margin-top: 15px;
+  position: absolute;
+  width: 33%;
+  justify-content: center;
+  /* margin-left: 9%;  */
+}
+.hudScore{
+  display: flex;
+  color: #fff;
+  font-size: 1vw;
+  margin-top: 35px;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+}
+.hudTime{
+  display: flex;
+  color: #fff;
+  font-size: 1vw;
+  margin-top: 15px;
+  position: absolute;
+  width: 100%;
+  justify-content: flex-end;
+  margin-left: -13%;
+}

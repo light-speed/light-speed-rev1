@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 // import * as THREE from 'three'
 // import {db} from '../firebase'
+import HUD from './HUD';
 import {
   //   BlockControl,
   //   PreviewControl,
@@ -566,14 +567,17 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     planetObj.rotation.z = 0.41
 
     planetObj.position.set(5000, -1000, -8000)
-    this.getMesh = function() {
-      return planetObj
-    }
 
-    return this
+  this.getMesh = function() {
+    return planetObj
   }
-  var earth = new Planet()
-  scene.add(earth.getMesh())
+
+  return this
+}
+var earth = new Planet()
+scene.add(earth.getMesh())
+
+
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -846,7 +850,7 @@ class World extends Component {
       <div id="world" className="no-cursor">
         <div id="blocker">
           <div id="pause-screen">
-            <h1>Paused</h1>
+            <HUD />
           </div>
         </div>
       </div>
