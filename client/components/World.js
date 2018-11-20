@@ -721,7 +721,7 @@ scene.add(earth.getMesh())
       renderer.render(loadingScreen.scene, loadingScreen.camera);
       return;
     }
-    
+     
     requestAnimationFrame(animate)
     render() 
   }
