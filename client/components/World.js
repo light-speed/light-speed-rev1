@@ -39,15 +39,32 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
 
   loadingManager = new THREE.LoadingManager();
-	
-	loadingManager.onProgress = function(item, loaded, total){
-		console.log(item, loaded, total);
-	};
-	
+
+  var progress = document.getElementById('progress-container');
+  // progress.id = 'progress-container'
+  var progressBar = document.getElementById('progress');
+  var HUD = document.getElementById('hudContainer');
+
+  // progressBar.id = 'progress'
+  // progress.appendChild(progressBar);
+  // document.body.appendChild(progress);
+  
+  loadingManager.onProgress = function(item, loaded, total){
+    progressBar.style.width = (loaded / total * 100) + '%';
+  };
+  
 	loadingManager.onLoad = function(){
 		console.log("loaded all resources");
-		RESOURCES_LOADED = true;
-	};
+    RESOURCES_LOADED = true;
+    progressBar.style.display = 'none'
+    progress.style.display = 'none'
+    HUD.style.display = 'flex'
+
+  };
+  
+  // loadingScreen.box.position.set(0,0,5);
+	// loadingScreen.camera.lookAt(loadingScreen.box.position);
+	// loadingScreen.scene.add(loadingScreen.box);
 	
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
@@ -686,8 +703,6 @@ scene.add(earth.getMesh())
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
-    //detect collisions
-    // detectColl()
     detectCollisions()
 
     ///shooting function
@@ -711,7 +726,7 @@ scene.add(earth.getMesh())
     if (isPaused) return
     
     // loading screen stuff
-    if( RESOURCES_LOADED == false ){
+    if( RESOURCES_LOADED === false ){
       requestAnimationFrame(animate);
       
       loadingScreen.box.position.x -= 0.05;
@@ -835,9 +850,11 @@ class World extends Component {
   constructor() {
     super()
     this.state = {
-      authorized: false
+      authorized: false,
+      loaded: false
     }
   }
+
   async componentDidMount() {
     generateWorld()
     // try {
@@ -884,7 +901,10 @@ class World extends Component {
       <div id="world" className="no-cursor">
         <div id="blocker">
           <div id="pause-screen">
-            <HUD />
+             <HUD /> 
+            <div id='progress-container'>
+              <div id='progress'/>
+            </div>
           </div>
         </div>
       </div>
