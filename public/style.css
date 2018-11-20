@@ -58,6 +58,7 @@ form div {
 } */
 
 #hudContainer {
+    z-index: 1337;
     display: none;
     flex-direction: row;
     background: url('http://orig14.deviantart.net/f7cf/f/2016/093/7/0/header_by_sinithwar-d9xm2hn.png');
