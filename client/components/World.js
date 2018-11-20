@@ -183,6 +183,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     side: THREE.DoubleSide
   })
   var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+
   cube.position.set(0, 0, -5)
   cube.name = 'cube'
   scene.add(cube)
@@ -275,6 +276,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   })
   var ring = new THREE.Mesh(geometry, material)
   ring.position.set(0, 0, -200)
+
   scene.add(ring)
 
   const collisionArr = []
@@ -289,8 +291,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   player.getMesh().add(camera)
   player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
-
-  // camera.lookAt(player.getMesh.position);
 
   var controls = new THREE.FlyControls(player.getMesh(), renderer.domElement)
 
@@ -449,52 +449,52 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     scene.add(asteroids[i].getMesh())
   }
 
-  //Add Shooting
-  const Shot = function(initialPos) {
-    const shotMaterial = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
-      transparent: true,
-      opacity: 0.5
-    })
+  // //Add Shooting
+  // const Shot = function(initialPos) {
+  //   const shotMaterial = new THREE.MeshBasicMaterial({
+  //     color: 0xff0000,
+  //     transparent: true,
+  //     opacity: 0.5
+  //   })
 
-    this.mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(0.7, 16, 16),
-      shotMaterial
-    )
+  //   this.mesh = new THREE.Mesh(
+  //     new THREE.SphereGeometry(0.7, 16, 16),
+  //     shotMaterial
+  //   )
 
-    // var geometry = new THREE.CylinderGeometry(7.47, 9.63, 48.57, 23, 50, false)
-    // var material = new THREE.MeshBasicMaterial({
-    //   shading: THREE.FlatShading,
-    //   color: 0xeb1d1d
-    // })
+  //   // var geometry = new THREE.CylinderGeometry(7.47, 9.63, 48.57, 23, 50, false)
+  //   // var material = new THREE.MeshBasicMaterial({
+  //   //   shading: THREE.FlatShading,
+  //   //   color: 0xeb1d1d
+  //   // })
 
-    // this.mesh = new THREE.Mesh(geometry, material)
+  //   // this.mesh = new THREE.Mesh(geometry, material)
 
-    // this.mesh.rotation.x = 10
-    // this.mesh.scale.x = this.mesh.scale.y = this.mesh.scale.z = 0.0027;
+  //   // this.mesh.rotation.x = 10
+  //   // this.mesh.scale.x = this.mesh.scale.y = this.mesh.scale.z = 0.0027;
 
-    this.mesh.position.copy(initialPos)
+  //   this.mesh.position.copy(initialPos)
 
-    // this.mesh
+  //   // this.mesh
 
-    this.getMesh = function() {
-      return this.mesh
-    }
+  //   this.getMesh = function() {
+  //     return this.mesh
+  //   }
 
-    var shotVector = new THREE.Vector3()
-    player.getMesh().getWorldDirection(shotVector)
+  //   var shotVector = new THREE.Vector3()
+  //   player.getMesh().getWorldDirection(shotVector)
 
-    this.update = function(z) {
-      this.mesh.translateOnAxis(shotVector, -30)
+  //   this.update = function(z) {
+  //     this.mesh.translateOnAxis(shotVector, -30)
 
-      if (Math.abs(this.mesh.position.z - z) > 1000) {
-        return false
-        // delete this.mesh;
-      }
-      return true
-    }
-    return this
-  }
+  //     if (Math.abs(this.mesh.position.z - z) > 1000) {
+  //       return false
+  //       // delete this.mesh;
+  //     }
+  //     return true
+  //   }
+  //   return this
+  // }
 
   // //Add Planet
   // var Planet = function() {
@@ -591,42 +591,52 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   meshClouds.rotation.z = 0.41
   scene.add(meshClouds)
 
-  function detectColl() {
-    // collision detection
-    collisionArr.forEach(function(e) {
-      e.material.transparent = false
-      e.material.opacity = 1.0
-    })
+  // function detectColl() {
+  //   // collision detection
+  //   collisionArr.forEach(function(e) {
+  //     e.material.transparent = false
+  //     e.material.opacity = 1.0
+  //   })
 
-    var cube2 = scene.getObjectByName('cube')
-    var originPoint = cube2.position.clone()
+  //   var cube2 = scene.getObjectByName('cube')
+  //   var originPoint = cube2.position.clone()
 
-    for (
-      var vertexIndex = 0;
-      vertexIndex < cube2.geometry.vertices.length;
-      vertexIndex++
-    ) {
-      var localVertex = cube2.geometry.vertices[vertexIndex].clone()
-      var globalVertex = localVertex.applyMatrix4(cube2.matrix)
-      var directionVector = globalVertex.sub(cube2.position)
+  //   for (
+  //     var vertexIndex = 0;
+  //     vertexIndex < cube2.geometry.vertices.length;
+  //     vertexIndex++
+  //   ) {
+  //     var localVertex = cube2.geometry.vertices[vertexIndex].clone()
+  //     var globalVertex = localVertex.applyMatrix4(cube2.matrix)
+  //     var directionVector = globalVertex.sub(cube2.position)
 
-      var ray = new THREE.Raycaster(
-        originPoint,
-        directionVector.clone().normalize()
-      )
-      var collisionResults = ray.intersectObjects(collisionArr)
-      // console.log('coll ARR', collisionArr)
-      // console.log('coll Results', collisionResults)
-      // console.log('cube2', cube2)
-      // console.log('originpoint', originPoint)
-      if (
-        collisionResults.length > 0 &&
-        collisionResults[0].distance < directionVector.length()
-      ) {
-        collisionResults[0].object.material.transparent = true
-        collisionResults[0].object.material.opacity = 0.4
-        console.log('COLLLISIIOSISN')
-      }
+  //     var ray = new THREE.Raycaster(
+  //       originPoint,
+  //       directionVector.clone().normalize()
+  //     )
+  //     var collisionResults = ray.intersectObjects(collisionArr)
+  //     // console.log('coll ARR', collisionArr)
+  //     // console.log('coll Results', collisionResults)
+  //     // console.log('cube2', cube2)
+  //     // console.log('originpoint', originPoint)
+  //     if (
+  //       collisionResults.length > 0 &&
+  //       collisionResults[0].distance < directionVector.length()
+  //     ) {
+  //       collisionResults[0].object.material.transparent = true
+  //       collisionResults[0].object.material.opacity = 0.4
+  //       console.log('COLLLISIIOSISN')
+  //     }
+  //   }
+  // }
+
+  function detectCollisions() {
+    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    cubeBBox.setFromObject(cube)
+    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    ringBBox.setFromObject(ring)
+    if (cubeBBox.intersectsBox(ringBBox)) {
+      console.log('collision')
     }
   }
 
@@ -652,7 +662,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     meshClouds.rotation.y += rotationSpeed * delta
 
     //detect collisions
-    detectColl()
+    // detectColl()
+    detectCollisions()
 
     ///shooting function
     for (var index = 0; index < shots.length; index += 1) {
