@@ -314,8 +314,6 @@ THREE.FlyControls = function(object, domElement) {
     // this.object.position.x += 1000;
     // this.object.translateX(1000);
 
-
-
     this.object.translateX(this.moveVector.x * moveMult)
     this.object.translateY(this.moveVector.y * moveMult)
     this.object.translateZ(this.moveVector.z * moveMult)
@@ -344,12 +342,9 @@ THREE.FlyControls = function(object, domElement) {
     //     ? 1
     //     : 0
 
-    console.log(this.moveState.forward, this.keypress)
-
     if (this.keypress === false) {
       this.moveState.forward /= 2
     }
-
 
     if (this.moveState.forward > this.maxSpeed) {
       this.moveState.forward = this.maxSpeed
