@@ -142,7 +142,7 @@ THREE.FlyControls = function(camera, object, domElement) {
       case 87:
         /*W*/
 
-        this.moveState.forward *= 0.66
+        // this.moveState.forward *= 0.66
 
         break
       case 83:
@@ -312,8 +312,8 @@ THREE.FlyControls = function(camera, object, domElement) {
   // }
 
   this.update = function(delta) {
-    var moveMult = this.speed
-    var rotMult = this.rollSpeed
+    var moveMult = delta * this.movementSpeed;
+		var rotMult = delta * this.rollSpeed;
     // this.object.position.x += 1000;
     // this.object.translateX(1000);
 

@@ -370,7 +370,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         Math.random() * (z + 150 - (z - 150)) + (z - 150)
       )
 
-      console.log('RESET')
     }
 
     this.update = function(z) {
@@ -426,7 +425,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         (player.getMesh().position.y - 500)
       ring.position.z -= Math.random() * (1000 - 250) + 250
       asteroids.forEach(e => {
-        console.log('did this reset?')
         e.reset(ring.position.z)
       })
     }
