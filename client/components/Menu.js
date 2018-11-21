@@ -6,13 +6,13 @@ class Menu extends React.Component {
         return (
             <div className='Menu'>
                 <div>
-                <button>PLAY GAME</button>
+                    <button>PLAY GAME</button>
                 </div>
                 <div>
-                <button>HOW TO PLAY</button>
+                    <button>HOW TO PLAY</button>
                 </div>
                 <div>
-                <button>CREDITS</button>
+                    <button>CREDITS</button>
                 </div>
             </div>
         )

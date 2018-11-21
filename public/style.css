@@ -115,6 +115,10 @@ form div {
 
 
 .Menu {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  text-align: center;
   
 }
 .Menu button{
@@ -123,11 +127,13 @@ form div {
   color: rgb(0, 218, 213);
   transition: all 0.3s ease-out;
   border-radius: 7px; 
-  font-size: 28px;
+  font-size: 1.8vw;
   font-family: 'Titillium Web', sans-serif;
   font-weight: bold;
-  width: 25%;
-  height: 50px;
+  width: 30vw;
+  height: 7vh;
+  margin: 10px;
+  text-align: center;
 }
 .Menu button:hover{
   background: rgb(0, 218, 213);
