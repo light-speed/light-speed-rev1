@@ -168,7 +168,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   //Load Player Ship
 
-
   var Player = function() {
     let spaceship = null
     var playerObj = new THREE.Object3D()
@@ -180,8 +179,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.canShoot = 0
 
     playerObj.add(this.hitbox)
-
-
 
     var onProgress = function(xhr) {
       if (xhr.lengthComputable) {
@@ -440,7 +437,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      store.dispatch(addPoints(100)) 
+      store.dispatch(addPoints(100))
       // counter += 1
       // console.log(counter)
       return true
@@ -458,9 +455,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //   ringArray.push(ring)
   // }
   // ringArray.forEach(r => scene.add(r))
-
-
-
 
   //Add Planet
   var Planet = function() {
@@ -509,7 +503,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //   }
   // }
 
-
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
     map: new THREE.TextureLoader(loadingManager).load(
@@ -525,8 +518,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   meshClouds.position.set(5000, -1000, -8000)
   meshClouds.rotation.z = 0.41
   scene.add(meshClouds)
-
-
 
   /*********************************
    * Render To Screen
@@ -746,15 +737,35 @@ class World extends Component {
   }
 
   render() {
-
     return (
       <div id="world" className="no-cursor">
         <HUD />
-          <div id="pause-screen">
-            <div id="progress-container">
-              {/* <h1>Loading...</h1> */}
-              {/* <div id='progress'/> */}
+        <div id="pause-screen">
+          <div id="progress-container">
+            <div>
+              <div class="preloader-1">
+                <div>Loading</div>
+                <span class="line line-1" />
+                <span class="line line-2" />
+                <span class="line line-3" />
+                <span class="line line-4" />
+                <span class="line line-5" />
+                <span class="line line-6" />
+                <span class="line line-7" />
+                <span class="line line-8" />
+                <span class="line line-9" />
+                <span class="line line-10" />
+                <span class="line line-11" />
+                <span class="line line-12" />
+                <span class="line line-13" />
+                <span class="line line-14" />
+                <span class="line line-15" />
+                <span class="line line-16" />
+              </div>
               <img src="./loading.gif" />
+            </div>
+            {/* <h1>Loading...</h1> */}
+            {/* <div id='progress'/> */}
           </div>
         </div>
       </div>

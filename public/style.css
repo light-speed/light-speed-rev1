@@ -306,3 +306,85 @@ form div {
   text-shadow: 2px 2px rgb(33, 70, 72);
 
 }
+
+
+
+.preloader-1 {
+  /* margin: 100px auto 0; */
+  width: 120px;
+  height: 55px;
+  color:rgb(0, 218, 213);
+  margin: 5px;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  font-size: 26px;
+  letter-spacing: 1px;
+  margin-left: 30%;
+}
+
+/* div {
+  color: #fff;
+  margin: 5px 0;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+} */
+
+.preloader-1 .line {
+  width: 5px;
+  height: 20px;
+  background: rgb(0, 218, 213);
+  margin: 0 1px;
+  display: inline-block;
+  animation: opacity-1 1000ms infinite ease-in-out;
+}
+
+
+
+.preloader-1 .line-1, .preloader-2 .line-1 { animation-delay: 800ms; }
+.preloader-1 .line-2, .preloader-2 .line-2 { animation-delay: 700ms; }
+.preloader-1 .line-3, .preloader-2 .line-3 { animation-delay: 600ms; }
+.preloader-1 .line-4, .preloader-2 .line-4 { animation-delay: 500ms; }
+.preloader-1 .line-5, .preloader-2 .line-5 { animation-delay: 400ms; }
+.preloader-1 .line-6, .preloader-2 .line-6 { animation-delay: 300ms; }
+.preloader-1 .line-7, .preloader-2 .line-7 { animation-delay: 200ms; }
+.preloader-1 .line-8, .preloader-2 .line-8 { animation-delay: 100ms; }
+.preloader-1 .line-9, .preloader-2 .line-9 { animation-delay: 100ms; }
+.preloader-1 .line-10, .preloader-2 .line-10 { animation-delay: 200ms; }
+.preloader-1 .line-11, .preloader-2 .line-11 { animation-delay: 300ms; }
+.preloader-1 .line-12, .preloader-2 .line-12 { animation-delay: 400ms; }
+.preloader-1 .line-13, .preloader-2 .line-13 { animation-delay: 500ms; }
+.preloader-1 .line-14, .preloader-2 .line-14 { animation-delay: 600ms; }
+.preloader-1 .line-15, .preloader-2 .line-15 { animation-delay: 700ms; }
+.preloader-1 .line-16, .preloader-2 .line-16 { animation-delay: 800ms; }
+
+
+@keyframes opacity-1 { 
+  0% { 
+    opacity: 1;
+  }
+  50% { 
+    opacity: 0;
+  }
+  100% { 
+    opacity: 1;
+  }  
+}
+
+@keyframes opacity-2 { 
+  0% { 
+    opacity: 1;
+    height: 15px;
+  }
+  50% { 
+    opacity: 0;
+    height: 12px;
+  }
+  100% { 
+    opacity: 1;
+    height: 15px;
+  }  
+}
