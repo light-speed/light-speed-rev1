@@ -1,4 +1,8 @@
 body {
+  background: url("https://i.ytimg.com/vi/aiU22lKiZbA/maxresdefault.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
   font-family: 'Titillium Web', sans-serif;
 }
 
@@ -116,4 +120,42 @@ form div {
   width: 300px;
   height: 300px;
   border: solid 1px black;
+}
+
+
+.Menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  margin-top: 20vh;
+  margin-bottom: 30vh;
+  
+}
+.Menu button{
+  border: 3px solid rgb(0, 218, 213);
+  background: rgb(33, 70, 72);
+  color: rgb(0, 218, 213);
+  transition: all 0.3s ease-out;
+  border-radius: 7px; 
+  font-size: 1.8vw;
+  font-weight: bold;
+  width: 30vw;
+  height: 7vh;
+  margin: 10px;
+  text-align: center;
+}
+.Menu button:hover{
+  background: rgb(0, 218, 213);
+  color: rgb(33, 70, 72);
+  border: 3px solid rgb(33, 70, 72);
+}
+.Menu h1  {
+  font-size: 2.8vw;
+  font-weight: 500;
+  color: rgb(0, 218, 213);
+  margin-bottom: 8vh;
+  text-shadow: 2px 2px rgb(33, 70, 72);
+
 }
