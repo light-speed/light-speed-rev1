@@ -117,3 +117,20 @@ form div {
 .Menu {
   
 }
+.Menu button{
+  border: 3px solid rgb(0, 218, 213);
+  background: rgb(33, 70, 72);
+  color: rgb(0, 218, 213);
+  transition: all 0.3s ease-out;
+  border-radius: 7px; 
+  font-size: 28px;
+  font-family: 'Titillium Web', sans-serif;
+  font-weight: bold;
+  width: 25%;
+  height: 50px;
+}
+.Menu button:hover{
+  background: rgb(0, 218, 213);
+  color: rgb(33, 70, 72);
+  border: 3px solid rgb(33, 70, 72);
+}
