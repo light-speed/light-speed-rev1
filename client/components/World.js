@@ -169,7 +169,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var playerObj = new THREE.Object3D()
     this.loaded = false
     const self = this
-    this.hitbox = new THREE.Box3()
+    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     this.canShoot = 0
 
     this.update = function() {
@@ -239,19 +239,52 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   const player = new Player()
   // player.getMesh().position.set(0, 0, 2)s
+
   scene.add(player.getMesh())
 
+  console.log(player)
   // Add Rings for Racing
 
-  var geometry = new THREE.RingGeometry(100, 120, 20)
-  var material = new THREE.MeshBasicMaterial({
-    color: 0xffff00,
-    side: THREE.DoubleSide
-  })
+  // var geometry = new THREE.TorusGeometry(20, 2, 20, 70)
+  // var material = new THREE.MeshBasicMaterial({
+  //   color: 0x7dd2d8,
+  //   side: THREE.DoubleSide
+  // })
 
-  var ring = new THREE.Mesh(geometry, material)
-  ring.position.z = -200
-  scene.add(ring)
+  // var ring = new THREE.Mesh(geometry, material)
+  // ring.position.z = -200
+  // scene.add(ring)
+  /////////////////////
+  function ringGen(prevRing) {
+    scene.remove(prevRing)
+    var geometry = new THREE.TorusGeometry(20, 2, 20, 70)
+    var material = new THREE.MeshBasicMaterial({
+      color: 0x7dd2d8,
+      side: THREE.DoubleSide
+    })
+    var ring = new THREE.Mesh(geometry, material)
+    prevRing ? (ring.position.z -= 300) : (ring.position.z = -200)
+    ring.name = 'ring'
+    scene.add(ring)
+    return ring
+  }
+  var ring = ringGen()
+
+  ringGen()
+
+  var counter = 0
+
+  function detectCollisions() {
+    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    cubeBBox.setFromObject(cube)
+    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    ringBBox.setFromObject(ring)
+    if (cubeBBox.intersectsBox(ringBBox)) {
+      counter += 1
+      console.log(counter)
+      return ringGen(ring)
+    }
+  }
 
   /// experimental ring array
   // var ringArray = []
@@ -629,18 +662,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //     }
   //   }
   // }
-  var counter = 0
-
-  function detectCollisions() {
-    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    cubeBBox.setFromObject(cube)
-    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    ringBBox.setFromObject(ring)
-    if (cubeBBox.intersectsBox(ringBBox)) {
-      counter += 1
-      console.log(counter)
-    }
-  }
 
   /*********************************
    * Render To Screen
@@ -813,7 +834,8 @@ class World extends Component {
     super()
     this.state = {
       authorized: false,
-      loaded: false
+      loaded: false,
+      score: 0
     }
   }
 
@@ -859,9 +881,11 @@ class World extends Component {
   }
 
   render() {
+    const {score} = this.state
+
     return (
       <div id="world" className="no-cursor">
-        <HUD />
+        <HUD score={score} />
         <div id="blocker">
           <div id="pause-screen">
             <div id="progress-container">
