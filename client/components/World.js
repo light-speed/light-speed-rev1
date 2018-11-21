@@ -278,8 +278,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   )
 
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
-  camera.position.set(0, 30, 70) // <-- this is relative to the player's position
+  camera.position.set(0, 45, 90) // <-- this is relative to the player's position
   player.getMesh().add(camera)
+  // camera.add(skybox.getMesh())
   // player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
 
@@ -328,7 +329,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.loaded = false
 
     // Speed of motion and rotation
-    mesh.velocity = Math.random() * 2 + 2
+    mesh.velocity = Math.random() * 2 + 1
     mesh.vRotation = new THREE.Vector3(
       Math.random(),
       Math.random(),
@@ -350,58 +351,40 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         }
       })
 
-      obj.scale.set(40, 40, 40)
+      obj.scale.set(30, 30, 30)
 
       mesh.add(obj)
-      // mesh.position.set(
-      //   -300 + Math.random() * 600,
-      //   -300 + Math.random() * 600,
-      //   -2000 - Math.random() * 2000
-      // )
+
       mesh.position.set(
-        Math.random() * (ring.position.x + 300 - (ring.position.x - 300)) +
-          (ring.position.x - 300),
-        Math.random() * (ring.position.y + 300 - (ring.position.y - 300)) +
-          (ring.position.y - 300),
-        Math.random() * (ring.position.z + 300 - (ring.position.z - 300)) +
-          (ring.position.z - 300)
+        Math.random() * (ring.position.x + 250 - (ring.position.x - 250)) +
+          (ring.position.x - 250),
+        Math.random() * (ring.position.y + 250 - (ring.position.y - 250)) +
+          (ring.position.y - 250),
+        Math.random() * (ring.position.z + 100 - (ring.position.z - 100)) +
+          (ring.position.z - 100)
       )
       self.loaded = true
       self.BBox.setFromObject(obj)
     })
 
     this.reset = function(z) {
-      mesh.velocity = Math.random() * 4 + 4
+      mesh.velocity = Math.random() * 2 + 1
       mesh.position.set(
-        Math.random() * (ring.position.x + 150 - (ring.position.x - 150)) +
-          (ring.position.x - 150),
-        Math.random() * (ring.position.y + 150 - (ring.position.y - 150)) +
-          (ring.position.y - 150),
-        Math.random() * (z + 150 - (z - 150)) + (z - 150)
+        Math.random() * (ring.position.x + 250 - (ring.position.x - 250)) +
+          (ring.position.x - 250),
+        Math.random() * (ring.position.y + 250 - (ring.position.y - 250)) +
+          (ring.position.y - 250),
+        Math.random() * (z + 100 - (z - 100)) + (z - 100)
       )
     }
 
     this.update = function(z) {
-      mesh.position.z += mesh.velocity
+      // mesh.position.z += mesh.velocity
       mesh.rotation.x += mesh.vRotation.x * 0.02
       mesh.rotation.y += mesh.vRotation.y * 0.02
       mesh.rotation.z += mesh.vRotation.z * 0.02
 
       if (mesh.children.length > 0) this.BBox.setFromObject(mesh.children[0])
-
-      // if (mesh.position.z > z) {
-      //   this.reset(z)
-      // }
-
-      // if (moveRing() === true){
-      //   this.reset()
-      // }
-
-      // mesh.position.set(
-      //   Math.random() * ((ring.position.x + 400)-(ring.position.x - 400)) + (ring.position.x - 400),
-      //   Math.random() * ((ring.position.y + 400)-(ring.position.y - 400)) + (ring.position.y - 400),
-      //   Math.random() * ((ring.position.z + 400)-(ring.position.z - 400)) + (ring.position.z - 400),
-      // )
     }
 
     this.getMesh = function() {
@@ -411,7 +394,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  let NUM_ASTEROIDS = 4
+  let NUM_ASTEROIDS = 5
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
@@ -419,7 +402,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   }
 
   function moveRing() {
-    if (detectRingCollision() === true) {
+    if (detectRingCollision() === true || ringPlanetCollision() === true) {
       ring.position.x =
         Math.random() *
           (player.getMesh().position.x +
@@ -432,7 +415,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
             500 -
             (player.getMesh().position.y - 500)) +
         (player.getMesh().position.y - 500)
-      ring.position.z -= Math.random() * (1000 - 250) + 250
+      ring.position.z =
+        Math.random() *
+          (player.getMesh().position.z +
+            500 -
+            (player.getMesh().position.z - 500)) +
+        (player.getMesh().position.z - 500)
+
       asteroids.forEach(e => {
         e.reset(ring.position.z)
       })
@@ -461,7 +450,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     planetObj.name = 'EARTH'
     // Speed of motion and rotation
 
-    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     var radius = 4000
     var geometry = new THREE.SphereBufferGeometry(radius, 100, 50)
     var materialNormalMap = new THREE.MeshPhongMaterial({
@@ -486,21 +474,53 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     planetObj.position.set(5000, -1000, -8000)
 
+    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     this.hitbox.setFromObject(meshPlanet)
+
     this.getMesh = function() {
       return planetObj
+    }
+
+    this.getMeshPlanet = function() {
+      return meshPlanet
+    }
+
+    this.getPlanetRadius = function() {
+      return radius
     }
 
     return this
   }
   var earth = new Planet()
   scene.add(earth.getMesh())
+  // skybox.getMesh().add(earth.getMesh())
 
-  // function detectPlanetCollision(){
-  //   if (player.hitbox.intersectsBox(earth.hitbox)){
-  //     console.log('DEATH')
-  //   }
-  // }
+  // console.log(earth.getPlanetMesh())
+  // console.log(earth.getPlanetMesh().geometry.boundingSphere.radius)
+
+  function playerPlanetCollision() {
+    //player vs earth collision
+    var playerPos = player.getMesh().position.clone()
+    var earthBSphere = new THREE.Sphere(
+      earth.getMesh().position,
+      earth.getPlanetRadius()
+    )
+    if (earthBSphere.containsPoint(playerPos)) {
+      console.log('DEATH')
+      return true
+    }
+  }
+  function ringPlanetCollision() {
+    //ring vs earth collision
+    var earthBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    earthBBox.setFromObject(earth.getMeshPlanet())
+    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    ringBBox.setFromObject(ring)
+    if (earthBBox.intersectsBox(ringBBox)) {
+      // console.log(counter)
+      return true
+    }
+  }
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -516,7 +536,43 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   meshClouds.scale.set(1.005, 1.005, 1.005)
   meshClouds.position.set(5000, -1000, -8000)
   meshClouds.rotation.z = 0.41
+  earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
+
+  //add arrow helper
+  var dir = ring.position
+  var origin = camera.position
+  var length = 2
+  var hex = 0xffff00
+
+
+  // var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0); // it's up to you how you will create THREE.Plane(), there are several methods
+  //   var raycaster = new THREE.Raycaster(); //for reuse
+  //   var intersectPoint = new THREE.Vector3(); //for reuse
+
+
+  //   raycaster.setFromCamera(mouse, camera);//set raycaster
+  //       raycaster.ray.intersectPlane(plane, intersectPoint); // find the point of intersection
+  //       obj.position.set(0, 0, -20)
+  //       obj.lookAt(intersectPoint); // face our arrow to this point
+  //       console.log(intersectPoint)
+  //     }
+
+  // var pointerGeometry = new THREE.ConeGeometry( 3, 20, 9 );
+  var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
+  var pointerMaterial = new THREE.MeshBasicMaterial({color: 0xffff00})
+  var pointerMesh= new THREE.Mesh(pointerGeometry, pointerMaterial)
+
+
+
+
+  pointerMesh.position.set(-110, 1, 0)
+
+  scene.add(pointerMesh)
+  player.getMesh().add(pointerMesh)
+
+
+
 
   /*********************************
    * Render To Screen
@@ -530,6 +586,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     var delta = clock.getDelta()
     controls.update(delta)
+    // console.log(delta)
 
     // console.log(controls.pressed[87], controls.pressed[83], 'speed:', controls.moveState.forward)
 
@@ -541,8 +598,10 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
+
+    pointerMesh.lookAt(ring.position)
     moveRing()
-    // detectPlanetCollision()
+    playerPlanetCollision()
 
     ///shooting function
     for (var index = 0; index < shots.length; index += 1) {

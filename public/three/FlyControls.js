@@ -211,25 +211,25 @@ THREE.FlyControls = function(camera, object, domElement) {
     if (control.isLocked === true) {
       if (event.movementX < 0) {
         // console.log('-x',x)
-        this.moveState.yawLeft = -event.movementX * (this.yawDamper * 0.25)
+        this.moveState.yawLeft = -event.movementX * (this.yawDamper * 0.10)
         // this.moveState.yawLeft = mouse.x * this.yawDamper
         this.moveState.yawRight = 0
       }
       if (event.movementX > 0) {
         // console.log('+x',x)
-        this.moveState.yawRight = event.movementX * (this.yawDamper * 0.25)
+        this.moveState.yawRight = event.movementX * (this.yawDamper * 0.05)
         // this.moveState.yawRight = mouse.x * this.yawDamper
         this.moveState.yawLeft = 0
       }
       if (event.movementY > 0) {
         // console.log('+y',y)
-        this.moveState.pitchUp = -event.movementY * (this.pitchDamper * 0.25)
+        this.moveState.pitchUp = -event.movementY * (this.pitchDamper * 0.05)
         // this.moveState.pitchUp = mouse.y * 0.004
         this.moveState.pitchDown = 0
       }
       if (event.movementY < 0) {
         // console.log('-y',y)
-        this.moveState.pitchDown = event.movementY * (this.pitchDamper * 0.25)
+        this.moveState.pitchDown = event.movementY * (this.pitchDamper * 0.05)
         // this.moveState.pitchDown = mouse.y * this.pitchDamper
         this.moveState.pitchUp = 0
       }
