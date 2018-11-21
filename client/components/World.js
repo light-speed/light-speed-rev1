@@ -580,7 +580,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // var pointerGeometry = new THREE.ConeGeometry( 3, 20, 9 );
   var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
-  var pointerMaterial = new THREE.MeshBasicMaterial({color: 0xffff00})
+  var pointerMaterial = new THREE.MeshPhongMaterial({color: 0x00cccc})
   var pointerMesh = new THREE.Mesh(pointerGeometry, pointerMaterial)
 
   pointerMesh.position.set(-110, 1, 0)
