@@ -168,7 +168,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   //Load Player Ship
 
-
   var Player = function() {
     let spaceship = null
     var playerObj = new THREE.Object3D()
@@ -180,8 +179,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.canShoot = 0
 
     playerObj.add(this.hitbox)
-
-
 
     var onProgress = function(xhr) {
       if (xhr.lengthComputable) {
@@ -308,6 +305,20 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   var ring = new THREE.Mesh(geometry, material)
   ring.position.set(0, 0, -500)
   scene.add(ring)
+
+  // ring sound
+  function ringSound() {
+    var listener = new THREE.AudioListener()
+    camera.add(listener)
+    var audioLoader = new THREE.AudioLoader()
+    var sound1 = new THREE.PositionalAudio(listener)
+    audioLoader.load('./sounds/sweep.wav', function(buffer) {
+      sound1.setBuffer(buffer)
+      sound1.setRefDistance(20)
+      sound1.play()
+    })
+    ring.add(sound1)
+  }
 
   //Load Asteroids
   var loader = new THREE.OBJLoader(loadingManager)
@@ -440,27 +451,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      store.dispatch(addPoints(100)) 
+      store.dispatch(addPoints(100))
       // counter += 1
       // console.log(counter)
+      ringSound()
       return true
     }
   }
-
-  /// experimental ring array
-  // var ringArray = []
-
-  // for (let i = 0; i < 8; i++) {
-  //   var ring = new THREE.Mesh(geometry, material)
-  //   ring.position.x = Math.floor(Math.random() * 10 - 250)
-  //   ring.position.y = Math.floor(Math.random() * 1000 - 3000)
-  //   ring.position.z = Math.floor(Math.random() * 100 - 200)
-  //   ringArray.push(ring)
-  // }
-  // ringArray.forEach(r => scene.add(r))
-
-
-
 
   //Add Planet
   var Planet = function() {
@@ -509,7 +506,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //   }
   // }
 
-
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
     map: new THREE.TextureLoader(loadingManager).load(
@@ -525,8 +521,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   meshClouds.position.set(5000, -1000, -8000)
   meshClouds.rotation.z = 0.41
   scene.add(meshClouds)
-
-
 
   /*********************************
    * Render To Screen
@@ -746,15 +740,14 @@ class World extends Component {
   }
 
   render() {
-
     return (
       <div id="world" className="no-cursor">
         <HUD />
-          <div id="pause-screen">
-            <div id="progress-container">
-              {/* <h1>Loading...</h1> */}
-              {/* <div id='progress'/> */}
-              <img src="./loading.gif" />
+        <div id="pause-screen">
+          <div id="progress-container">
+            {/* <h1>Loading...</h1> */}
+            {/* <div id='progress'/> */}
+            <img src="./loading.gif" />
           </div>
         </div>
       </div>
