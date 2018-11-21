@@ -13,7 +13,7 @@ class Menu extends React.Component {
                     <button>HOW TO PLAY</button>
                 </div>
                 <div>
-                    <button>CREDITS</button>
+                    <button onClick={() => this.props.history.push('/credits')}>CREDITS</button>
                 </div>
             </div>
         )
