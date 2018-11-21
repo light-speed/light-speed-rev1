@@ -152,17 +152,16 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // Player Collision Wrapper Cube
 
-  var cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
+  var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
   var cubeMaterial = new THREE.MeshBasicMaterial({
-    color: 0x000000,
-    // alphaMap: new THREE,
+    color: 0x003500,
     opacity: 0,
     side: THREE.DoubleSide,
     transparent: true
   })
   var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
-  cube.position.set(0, 0, -5)
+  cube.position.set(0, 0, 0)
   cube.name = 'cube'
   scene.add(cube)
 
@@ -297,7 +296,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // scene.add(ring)
   /////////////////////
   // ADD INITIAL RING
-  var geometry = new THREE.TorusGeometry(20, 2, 20, 100)
+  var geometry = new THREE.TorusGeometry(60, 2, 20, 100)
   var material = new THREE.MeshBasicMaterial({
     color: 0x7dd2d8,
     side: THREE.DoubleSide
@@ -381,7 +380,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         Math.random() * (z + 150 - (z - 150)) + (z - 150)
       )
 
-      console.log('RESET')
     }
 
     this.update = function(z) {
@@ -437,7 +435,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
         (player.getMesh().position.y - 500)
       ring.position.z -= Math.random() * (1000 - 250) + 250
       asteroids.forEach(e => {
-        console.log('did this reset?')
         e.reset(ring.position.z)
       })
     }
@@ -534,6 +531,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     var delta = clock.getDelta()
     controls.update(delta)
+
+    // console.log(controls.pressed[87], controls.pressed[83], 'speed:', controls.moveState.forward)
 
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
       asteroids[i].update(ring.position.z)
