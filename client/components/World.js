@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 // import * as THREE from 'three'
 // import {db} from '../firebase'
-import HUD from './HUD';
+import HUD from './HUD'
 import {
   //   BlockControl,
   //   PreviewControl,
@@ -21,41 +21,53 @@ import {showInstructions} from '../utilities/utilities'
 
 let isPaused = false
 let onEsc
-let loadingManager = null;
-let RESOURCES_LOADED = false;
+let loadingManager = null
+let RESOURCES_LOADED = false
+let counter = 0
 
 // An object to hold all the things needed for our loading screen
 var loadingScreen = {
-	scene: new THREE.Scene(),
-	camera: new THREE.PerspectiveCamera(90, 1280/720, 0.1, 100),
-	box: new THREE.Mesh(
-		new THREE.BoxGeometry(0.5,0.5,0.5),
-		new THREE.MeshBasicMaterial({ color:0x4444ff })
-	)
-};
-
-
-
+  scene: new THREE.Scene(),
+  camera: new THREE.PerspectiveCamera(90, 1280 / 720, 0.1, 100),
+  box: new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.5, 0.5),
+    new THREE.MeshBasicMaterial({color: 0x4444ff})
+  )
+}
 
 function generateWorld(/*world, currentUser, guestAvatar*/) {
-
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
 
+  loadingManager = new THREE.LoadingManager()
 
-  loadingManager = new THREE.LoadingManager();
+  var progress = document.getElementById('progress-container')
+  // progress.id = 'progress-container'
+  // var progressBar = document.getElementById('progress');
+  var HUD = document.getElementById('hudContainer')
 
-	loadingManager.onProgress = function(item, loaded, total){
-		console.log(item, loaded, total);
-	};
+  // progressBar.id = 'progress'
+  // progress.appendChild(progressBar);
+  // document.body.appendChild(progress);
 
-	loadingManager.onLoad = function(){
-		console.log("loaded all resources");
-		RESOURCES_LOADED = true;
-	};
+  loadingManager.onProgress = function(item, loaded, total) {
+    // progressBar.style.width = (loaded / total * 100) + '%';
+    console.log(`loaded resource ${loaded}/${total}`)
+  }
+
+  loadingManager.onLoad = function() {
+    console.log('loaded all resources')
+    RESOURCES_LOADED = true
+    // progressBar.style.display = 'none'
+    progress.style.display = 'none'
+    HUD.style.display = 'flex'
+  }
+
+  // loadingScreen.box.position.set(0,0,5);
+  // loadingScreen.camera.lookAt(loadingScreen.box.position);
+  // loadingScreen.scene.add(loadingScreen.box);
 
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
-
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -137,64 +149,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // scene.registerBeforeRender(function() {skybox.getMesh().position = camera.position})
 
-  //Load Tunnel
-  // renderer.setClearColor('#000022')
-  // renderer.setSize(window.innerWidth, window.innerHeight)
-
-  // var Tunnel = function() {
-  //   var tunnel = new THREE.Object3D(),
-  //     meshes = []
-
-  //   meshes.push(
-  //     new THREE.Mesh(
-  //       // new THREE.SphereGeometry(30, 160, 160),
-  //       new THREE.CylinderGeometry(300, 300, 7000, 24, 24, true),
-  //       new THREE.MeshBasicMaterial({
-  //         map: new THREE.TextureLoader().load('textures/space.jpg', function(
-  //           tex
-  //         ) {
-  //           tex.wrapS = tex.wrapT = THREE.RepeatWrapping
-  //           tex.repeat.set(5, 10)
-  //           tex.needsUpdate = true
-  //         }),
-  //         side: THREE.BackSide
-  //       })
-  //     )
-  //   )
-  //   meshes[0].rotation.x = -Math.PI / 2
-  //   // Adding the second mesh as a clone of the first mesh
-  //   meshes.push(meshes[0].clone())
-  //   meshes[1].position.z = -5000
-
-  //   tunnel.add(meshes[0])
-  //   tunnel.add(meshes[1])
-
-  //   this.getMesh = function() {
-  //     return tunnel
-  //   }
-
-  //   this.update = function(z) {
-  //     for (var i = 0; i < 2; i++) {
-  //       if (z < meshes[i].position.z - 2500) {
-  //         meshes[i].position.z -= 10000
-  //         break
-  //       }
-  //     }
-  //   }
-
-  //   return this
-  // }
-
-  // var tunnel = new Tunnel()
-  // scene.add(tunnel.getMesh())
-  // scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
-
   // Player Collision Wrapper Cube
 
   var cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
   var cubeMaterial = new THREE.MeshLambertMaterial({
     color: 0x00ff00,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    transparent: true
   })
   var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
@@ -209,10 +170,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var playerObj = new THREE.Object3D()
     this.loaded = false
     const self = this
-    this.hitbox = new THREE.Box3()
+    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     this.canShoot = 0
-
-
 
     var onProgress = function(xhr) {
       if (xhr.lengthComputable) {
@@ -268,12 +227,10 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
           )
       })
 
-
-
     this.update = function() {
-        if (!spaceship) return
-        this.hitbox.setFromObject(spaceship)
-      }
+      if (!spaceship) return
+      this.hitbox.setFromObject(spaceship)
+    }
     this.getMesh = function() {
       return playerObj
     }
@@ -282,24 +239,10 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   const player = new Player()
   // player.getMesh().position.set(0, 0, 2)s
+
   scene.add(player.getMesh())
 
-  // Add Ring for Racing
-
-  var geometry = new THREE.RingGeometry(100, 120, 20)
-  var material = new THREE.MeshBasicMaterial({
-    color: 0xffff00,
-    side: THREE.DoubleSide
-  })
-  var ring = new THREE.Mesh(geometry, material)
-  ring.position.set(0, 0, -200)
-
-  scene.add(ring)
-
-  const collisionArr = []
-  ring.name = 'init-ring'
-  collisionArr.push(ring)
-  console.log('COLL ARR:', collisionArr)
+  // console.log(player)
 
   //Add Controls
   //add pointerlock to camera
@@ -313,7 +256,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //   },
   //   false
   // )
-  var controls = new THREE.FlyControls(camera, player.getMesh(), renderer.domElement)
+  var controls = new THREE.FlyControls(
+    camera,
+    player.getMesh(),
+    renderer.domElement
+  )
 
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
   camera.position.set(0, 30, 70) // <-- this is relative to the player's position
@@ -321,13 +268,28 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
 
+  // Add Rings for Racing
 
-  // let NUM_ASTEROIDS = 10
-  // let asteroids = []
-  // for (var i = 0; i < NUM_ASTEROIDS; i++) {
-  //   asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
-  //   scene.add(asteroids[i].getMesh())
-  // }
+  // var geometry = new THREE.TorusGeometry(20, 2, 20, 70)
+  // var material = new THREE.MeshBasicMaterial({
+  //   color: 0x7dd2d8,
+  //   side: THREE.DoubleSide
+  // })
+
+  // var ring = new THREE.Mesh(geometry, material)
+  // ring.position.z = -200
+  // scene.add(ring)
+  /////////////////////
+  // ADD INITIAL RING
+  var geometry = new THREE.TorusGeometry(20, 2, 20, 100)
+  var material = new THREE.MeshBasicMaterial({
+    color: 0x7dd2d8,
+    side: THREE.DoubleSide
+  })
+  var ring = new THREE.Mesh(geometry, material)
+  ring.position.set(0, 0, -500)
+  scene.add(ring)
+
   //Load Asteroids
   var loader = new THREE.OBJLoader(loadingManager)
 
@@ -347,7 +309,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.BBox = new THREE.Box3()
 
     var rockMtl = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
+      map: new THREE.TextureLoader(loadingManager).load(
+        'textures/lunarrock.png'
+      )
     })
 
     loader.load('models/rock' + rockType + '.obj', function(obj) {
@@ -366,9 +330,12 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       //   -2000 - Math.random() * 2000
       // )
       mesh.position.set(
-        Math.random() * ((ring.position.x + 100)-(ring.position.x - 100)) + (ring.position.x - 100),
-        Math.random() * ((ring.position.y + 100)-(ring.position.y - 100)) + (ring.position.y - 100),
-        Math.random() * ((ring.position.z + 100)-(ring.position.z - 100)) + (ring.position.z - 100),
+        Math.random() * (ring.position.x + 300 - (ring.position.x - 300)) +
+          (ring.position.x - 300),
+        Math.random() * (ring.position.y + 300 - (ring.position.y - 300)) +
+          (ring.position.y - 300),
+        Math.random() * (ring.position.z + 300 - (ring.position.z - 300)) +
+          (ring.position.z - 300)
       )
       self.loaded = true
       self.BBox.setFromObject(obj)
@@ -377,10 +344,14 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.reset = function(z) {
       mesh.velocity = Math.random() * 4 + 4
       mesh.position.set(
-        -500 + Math.random() * 1000,
-        -500 + Math.random() * 1000,
-        z - 3000 - Math.random() * 3000
+        Math.random() * (ring.position.x + 150 - (ring.position.x - 150)) +
+          (ring.position.x - 150),
+        Math.random() * (ring.position.y + 150 - (ring.position.y - 150)) +
+          (ring.position.y - 150),
+        Math.random() * (z + 150 - (z - 150)) + (z - 150)
       )
+
+      console.log('RESET')
     }
 
     this.update = function(z) {
@@ -389,11 +360,21 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       mesh.rotation.y += mesh.vRotation.y * 0.02
       mesh.rotation.z += mesh.vRotation.z * 0.02
 
-      if (mesh.children.length > 0) this.hitbox.setFromObject(mesh.children[0])
+      if (mesh.children.length > 0) this.BBox.setFromObject(mesh.children[0])
 
-      if (mesh.position.z > z) {
-        this.reset(z)
-      }
+      // if (mesh.position.z > z) {
+      //   this.reset(z)
+      // }
+
+      // if (moveRing() === true){
+      //   this.reset()
+      // }
+
+      // mesh.position.set(
+      //   Math.random() * ((ring.position.x + 400)-(ring.position.x - 400)) + (ring.position.x - 400),
+      //   Math.random() * ((ring.position.y + 400)-(ring.position.y - 400)) + (ring.position.y - 400),
+      //   Math.random() * ((ring.position.z + 400)-(ring.position.z - 400)) + (ring.position.z - 400),
+      // )
     }
 
     this.getMesh = function() {
@@ -403,12 +384,60 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  let NUM_ASTEROIDS = 10
+  let NUM_ASTEROIDS = 4
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
     scene.add(asteroids[i].getMesh())
   }
+
+  function moveRing() {
+    if (detectRingCollision() === true) {
+      ring.position.x =
+        Math.random() *
+          (player.getMesh().position.x +
+            500 -
+            (player.getMesh().position.x - 500)) +
+        (player.getMesh().position.x - 500)
+      ring.position.y =
+        Math.random() *
+          (player.getMesh().position.y +
+            500 -
+            (player.getMesh().position.y - 500)) +
+        (player.getMesh().position.y - 500)
+      ring.position.z -= Math.random() * (1000 - 250) + 250
+      asteroids.forEach(e => {
+        console.log('did this reset?')
+        e.reset(ring.position.z)
+      })
+    }
+  }
+
+  var counter = 0
+
+  function detectRingCollision() {
+    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    cubeBBox.setFromObject(cube)
+    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    ringBBox.setFromObject(ring)
+    if (cubeBBox.intersectsBox(ringBBox)) {
+      counter += 1
+      // console.log(counter)
+      return true
+    }
+  }
+
+  /// experimental ring array
+  // var ringArray = []
+
+  // for (let i = 0; i < 8; i++) {
+  //   var ring = new THREE.Mesh(geometry, material)
+  //   ring.position.x = Math.floor(Math.random() * 10 - 250)
+  //   ring.position.y = Math.floor(Math.random() * 1000 - 3000)
+  //   ring.position.z = Math.floor(Math.random() * 100 - 200)
+  //   ringArray.push(ring)
+  // }
+  // ringArray.forEach(r => scene.add(r))
 
   // //Add Shooting
   // const Shot = function(initialPos) {
@@ -528,16 +557,14 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     planetObj.position.set(5000, -1000, -8000)
 
-  this.getMesh = function() {
-    return planetObj
+    this.getMesh = function() {
+      return planetObj
+    }
+
+    return this
   }
-
-  return this
-}
-var earth = new Planet()
-scene.add(earth.getMesh())
-
-
+  var earth = new Planet()
+  scene.add(earth.getMesh())
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -593,19 +620,6 @@ scene.add(earth.getMesh())
   //     }
   //   }
   // }
-  var counter = 0
-
-
-  function detectCollisions() {
-    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    cubeBBox.setFromObject(cube)
-    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    ringBBox.setFromObject(ring)
-    if (cubeBBox.intersectsBox(ringBBox)) {
-      counter += 1
-      console.log(counter)
-    }
-  }
 
   /*********************************
    * Render To Screen
@@ -613,7 +627,6 @@ scene.add(earth.getMesh())
   var clock = new THREE.Clock()
   const shots = []
   function render() {
-
     player.update()
 
     skybox.getMesh.position = camera.position
@@ -622,16 +635,14 @@ scene.add(earth.getMesh())
     controls.update(delta)
 
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
-      asteroids[i].update(camera.position.z)
+      asteroids[i].update(ring.position.z)
     }
 
     var rotationSpeed = 0.01
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
-    //detect collisions
-    // detectColl()
-    detectCollisions()
+    moveRing()
 
     ///shooting function
     for (var index = 0; index < shots.length; index += 1) {
@@ -654,15 +665,15 @@ scene.add(earth.getMesh())
     if (isPaused) return
 
     // loading screen stuff
-    if( RESOURCES_LOADED == false ){
-      requestAnimationFrame(animate);
+    if (RESOURCES_LOADED === false) {
+      requestAnimationFrame(animate)
 
-      loadingScreen.box.position.x -= 0.05;
-      if( loadingScreen.box.position.x < -10 ) loadingScreen.box.position.x = 10;
-      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
+      loadingScreen.box.position.x -= 0.05
+      if (loadingScreen.box.position.x < -10) loadingScreen.box.position.x = 10
+      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x)
 
-      renderer.render(loadingScreen.scene, loadingScreen.camera);
-      return;
+      renderer.render(loadingScreen.scene, loadingScreen.camera)
+      return
     }
 
     requestAnimationFrame(animate)
@@ -729,7 +740,7 @@ scene.add(earth.getMesh())
             scene.remove(shot)
           }, 1000)
 
-          console.log(scene)
+          // console.log(scene)
 
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
@@ -780,9 +791,12 @@ class World extends Component {
   constructor() {
     super()
     this.state = {
-      authorized: false
+      authorized: false,
+      loaded: false,
+      score: 0
     }
   }
+
   async componentDidMount() {
     generateWorld()
     // try {
@@ -825,11 +839,18 @@ class World extends Component {
   }
 
   render() {
+    const {score} = this.state
+
     return (
       <div id="world" className="no-cursor">
+        <HUD score={score} />
         <div id="blocker">
           <div id="pause-screen">
-            <HUD />
+            <div id="progress-container">
+              {/* <h1>Loading...</h1> */}
+              {/* <div id='progress'/> */}
+              <img src="./loading.gif" />
+            </div>
           </div>
         </div>
       </div>

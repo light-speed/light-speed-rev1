@@ -1,5 +1,5 @@
 body {
-  font-family: sans-serif;
+  font-family: 'Titillium Web', sans-serif;
 }
 
 a {
@@ -15,6 +15,47 @@ nav a {
   margin: 1em;
 }
 
+#pause-screen {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  justify-content: center;
+}
+#pause-screen h1 {
+  color: #fff;
+  align-self: center;
+}
+
+#progress-container {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(
+    45deg,
+    rgb(10, 10, 10),
+    rgb(15, 15, 15),
+    rgb(20, 20, 20),
+    rgb(30, 30, 30),
+    rgb(40, 40, 40),
+    rgb(50, 50, 50)
+  );
+  display: flex;
+  /* background: #000; */
+  border: 2px solid #000;
+  position: absolute;
+  justify-self: center;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+}
+
+#progress {
+  width: 1000px;
+  height: 20px;
+  background: rgb(49, 182, 206);
+  border: none;
+}
+
 form div {
   margin: 1em;
   display: inline-block;
@@ -24,23 +65,24 @@ form div {
   cursor: none
 } */
 
-.hudContainer {
-    display: flex;
-    flex-direction: row;
-    background: url('http://orig14.deviantart.net/f7cf/f/2016/093/7/0/header_by_sinithwar-d9xm2hn.png');
-    height: 20%;
-    width: 100%;
-    background-size: 100% 100%;
-    padding: 0;
-    margin: 0;
-    background-repeat: no-repeat;
-    background-position: center;
-    /* text-align: center; */
-    opacity: 0.6;
-    position: absolute;
-    /* justify-content: space-around; */
+#hudContainer {
+  z-index: 1337;
+  display: none;
+  flex-direction: row;
+  background: url('http://orig14.deviantart.net/f7cf/f/2016/093/7/0/header_by_sinithwar-d9xm2hn.png');
+  height: 20%;
+  width: 100%;
+  background-size: 100% 100%;
+  padding: 0;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* text-align: center; */
+  opacity: 0.6;
+  position: absolute;
+  /* justify-content: space-around; */
 }
-.hudUserName{
+.hudUserName {
   display: flex;
   color: #fff;
   font-size: 1vw;
@@ -50,7 +92,7 @@ form div {
   justify-content: center;
   /* margin-left: 9%;  */
 }
-.hudScore{
+.hudScore {
   display: flex;
   color: #fff;
   font-size: 1vw;
@@ -59,7 +101,7 @@ form div {
   width: 100%;
   justify-content: center;
 }
-.hudTime{
+.hudTime {
   display: flex;
   color: #fff;
   font-size: 1vw;
@@ -68,4 +110,10 @@ form div {
   width: 100%;
   justify-content: flex-end;
   margin-left: -13%;
+}
+
+#pause-screen img {
+  width: 300px;
+  height: 300px;
+  border: solid 1px black;
 }
