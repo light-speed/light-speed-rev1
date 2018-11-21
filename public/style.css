@@ -164,10 +164,6 @@ form div {
 
 }
 
-
-
-
-
 .fade {
   overflow: hidden;
   position: relative;
@@ -290,8 +286,3 @@ form div {
   position: relative;
   right: 2px;
 }
-
-/* .container {
-padding-top: 2em;
-margin: auto 49%;
-} */
