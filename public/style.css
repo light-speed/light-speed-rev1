@@ -1,8 +1,9 @@
 body {
-  background: url("https://i.ytimg.com/vi/aiU22lKiZbA/maxresdefault.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
+  background: url("https://i.ytimg.com/vi/aiU22lKiZbA/maxresdefault.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   font-family: 'Titillium Web', sans-serif;
 }
 
