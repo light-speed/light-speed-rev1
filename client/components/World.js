@@ -558,20 +558,18 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //       console.log(intersectPoint)
   //     }
 
-  var cylGeometry = new THREE.ConeGeometry( 3, 20, 9 );
-  var cylGeometry = new THREE.BoxGeometry(5, 5, 30)
-  var cylMaterial = new THREE.MeshBasicMaterial({color: 0xffff00})
-  var cylinderMesh= new THREE.Mesh(cylGeometry, cylMaterial)
+  // var pointerGeometry = new THREE.ConeGeometry( 3, 20, 9 );
+  var pointerGeometry = new THREE.BoxGeometry(5, 5, 30)
+  var pointerMaterial = new THREE.MeshBasicMaterial({color: 0xffff00})
+  var pointerMesh= new THREE.Mesh(pointerGeometry, pointerMaterial)
 
 
 
-  // camera.add(cylinder)
-  // cylinderMesh.rotation.x = -Math.PI/2
-  cylinderMesh.position.set(0, 85, 0)
-  // cylinderMesh.quaternion.setFromUnitVectors(axis, ring.position.clone().normalize());
 
-  scene.add(cylinderMesh)
-  player.getMesh().add(cylinderMesh)
+  pointerMesh.position.set(0, 85, 0)
+
+  scene.add(pointerMesh)
+  player.getMesh().add(pointerMesh)
 
 
 
