@@ -166,22 +166,20 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   scene.add(cube)
 
   //Load Player Ship
-  let spaceship = null
+
 
   var Player = function() {
+    let spaceship = null
     var playerObj = new THREE.Object3D()
     this.loaded = false
     const self = this
-    // this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    this.hitbox = cube
+    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    this.hitbox.setFromObject(cube)
     this.canShoot = 0
 
     playerObj.add(this.hitbox)
 
-    this.update = function() {
-      if (!spaceship) return
-      this.hitbox.setFromObject(spaceship)
-    }
+
 
     var onProgress = function(xhr) {
       if (xhr.lengthComputable) {
@@ -237,6 +235,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
           )
       })
 
+    // this.update = function() {
+    //   this.hitbox.setFromObject(spaceship)
+    // }
     this.getMesh = function() {
       return playerObj
     }
@@ -247,50 +248,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // player.getMesh().position.set(0, 0, 2)s
 
   scene.add(player.getMesh())
-
-  console.log(player)
-  // Add Rings for Racing
-
-  // var geometry = new THREE.TorusGeometry(20, 2, 20, 70)
-  // var material = new THREE.MeshBasicMaterial({
-  //   color: 0x7dd2d8,
-  //   side: THREE.DoubleSide
-  // })
-
-  // var ring = new THREE.Mesh(geometry, material)
-  // ring.position.z = -200
-  // scene.add(ring)
-  /////////////////////
-  // ADD INITIAL RING
-  var geometry = new THREE.TorusGeometry(20, 2, 20, 100)
-  var material = new THREE.MeshBasicMaterial({
-    color: 0x7dd2d8,
-    side: THREE.DoubleSide
-  })
-  var ring = new THREE.Mesh(geometry, material)
-  ring.position.set(0, 0, -500)
-  scene.add(ring)
-
-  function moveRing() {
-    if (detectRingCollision() === true) {
-      ring.position.z -= Math.floor(Math.random() * 3000)
-    }
-  }
-
-  var counter = 0
-
-  function detectRingCollision() {
-    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    // console.log(player)
-    cubeBBox.setFromObject(player.hitbox)
-    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    ringBBox.setFromObject(ring)
-    if (cubeBBox.intersectsBox(ringBBox)) {
-      counter += 1
-      console.log(counter)
-      return true
-    }
-  }
 
   /// experimental ring array
   // var ringArray = []
@@ -328,87 +285,28 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
 
-  //add flight to player
+  // Add Rings for Racing
 
-  // var controls = new THREE.PlayerControls(player.getMesh(), camera)
-  // controls.init()
-  // controls.addEventListener('change', render, false );
+  // var geometry = new THREE.TorusGeometry(20, 2, 20, 70)
+  // var material = new THREE.MeshBasicMaterial({
+  //   color: 0x7dd2d8,
+  //   side: THREE.DoubleSide
+  // })
 
-  // //Load Asteroids
-  // var loader = new THREE.OBJLoader()
+  // var ring = new THREE.Mesh(geometry, material)
+  // ring.position.z = -200
+  // scene.add(ring)
+  /////////////////////
+  // ADD INITIAL RING
+  var geometry = new THREE.TorusGeometry(20, 2, 20, 100)
+  var material = new THREE.MeshBasicMaterial({
+    color: 0x7dd2d8,
+    side: THREE.DoubleSide
+  })
+  var ring = new THREE.Mesh(geometry, material)
+  ring.position.set(0, 0, -500)
+  scene.add(ring)
 
-  // var Asteroid = function(rockType) {
-  //   var mesh = new THREE.Object3D(),
-  //     self = this
-  //   this.loaded = false
-
-  //   // Speed of motion and rotation
-  //   mesh.velocity = Math.random() * 2 + 2
-  //   mesh.vRotation = new THREE.Vector3(
-  //     Math.random(),
-  //     Math.random(),
-  //     Math.random()
-  //   )
-
-  //   this.hitbox = new THREE.Box3()
-
-  //   var rockMtl = new THREE.MeshBasicMaterial({
-  //     map: new THREE.TextureLoader().load('textures/lunarrock.png')
-  //   })
-
-  //   loader.load('models/rock' + rockType + '.obj', function(obj) {
-  //     obj.traverse(function(child) {
-  //       if (child instanceof THREE.Mesh) {
-  //         child.material = rockMtl
-  //       }
-  //     })
-
-  //     obj.scale.set(20, 20, 20)
-
-  //     mesh.add(obj)
-  //     mesh.position.set(
-  //       -150 + Math.random() * 300,
-  //       -150 + Math.random() * 300,
-  //       -1500 - Math.random() * 1500
-  //     )
-  //     self.loaded = true
-  //   })
-
-  //   this.reset = function(z) {
-  //     mesh.velocity = Math.random() * 2 + 2
-  //     mesh.position.set(
-  //       -50 + Math.random() * 100,
-  //       -50 + Math.random() * 100,
-  //       z - 1500 - Math.random() * 1500
-  //     )
-  //   }
-
-  //   this.update = function(z) {
-  //     mesh.position.z += mesh.velocity
-  //     mesh.rotation.x += mesh.vRotation.x * 0.02
-  //     mesh.rotation.y += mesh.vRotation.y * 0.02
-  //     mesh.rotation.z += mesh.vRotation.z * 0.02
-
-  //     if (mesh.children.length > 0) this.hitbox.setFromObject(mesh.children[0])
-
-  //     if (mesh.position.z > z) {
-  //       this.reset(z)
-  //     }
-  //   }
-
-  //   this.getMesh = function() {
-  //     return mesh
-  //   }
-
-  //   return this
-  // }
-
-  // let NUM_ASTEROIDS = 10
-  // let asteroids = []
-  // for (var i = 0; i < NUM_ASTEROIDS; i++) {
-  //   asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
-  //   scene.add(asteroids[i].getMesh())
-  // }
   //Load Asteroids
   var loader = new THREE.OBJLoader(loadingManager)
 
@@ -425,7 +323,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       Math.random()
     )
 
-    this.hitbox = new THREE.Box3()
+    this.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
 
     var rockMtl = new THREE.MeshBasicMaterial({
       map: new THREE.TextureLoader(loadingManager).load(
@@ -443,21 +341,34 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       obj.scale.set(40, 40, 40)
 
       mesh.add(obj)
+      // mesh.position.set(
+      //   -300 + Math.random() * 600,
+      //   -300 + Math.random() * 600,
+      //   -2000 - Math.random() * 2000
+      // )
       mesh.position.set(
-        -300 + Math.random() * 600,
-        -300 + Math.random() * 600,
-        -2000 - Math.random() * 2000
+        Math.random() * (ring.position.x + 300 - (ring.position.x - 300)) +
+          (ring.position.x - 300),
+        Math.random() * (ring.position.y + 300 - (ring.position.y - 300)) +
+          (ring.position.y - 300),
+        Math.random() * (ring.position.z + 300 - (ring.position.z - 300)) +
+          (ring.position.z - 300)
       )
       self.loaded = true
+      self.BBox.setFromObject(obj)
     })
 
     this.reset = function(z) {
       mesh.velocity = Math.random() * 4 + 4
       mesh.position.set(
-        -500 + Math.random() * 1000,
-        -500 + Math.random() * 1000,
-        z - 3000 - Math.random() * 3000
+        Math.random() * (ring.position.x + 150 - (ring.position.x - 150)) +
+          (ring.position.x - 150),
+        Math.random() * (ring.position.y + 150 - (ring.position.y - 150)) +
+          (ring.position.y - 150),
+        Math.random() * (z + 150 - (z - 150)) + (z - 150)
       )
+
+      console.log('RESET')
     }
 
     this.update = function(z) {
@@ -466,11 +377,21 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       mesh.rotation.y += mesh.vRotation.y * 0.02
       mesh.rotation.z += mesh.vRotation.z * 0.02
 
-      if (mesh.children.length > 0) this.hitbox.setFromObject(mesh.children[0])
+      if (mesh.children.length > 0) this.BBox.setFromObject(mesh.children[0])
 
-      if (mesh.position.z > z) {
-        this.reset(z)
-      }
+      // if (mesh.position.z > z) {
+      //   this.reset(z)
+      // }
+
+      // if (moveRing() === true){
+      //   this.reset()
+      // }
+
+      // mesh.position.set(
+      //   Math.random() * ((ring.position.x + 400)-(ring.position.x - 400)) + (ring.position.x - 400),
+      //   Math.random() * ((ring.position.y + 400)-(ring.position.y - 400)) + (ring.position.y - 400),
+      //   Math.random() * ((ring.position.z + 400)-(ring.position.z - 400)) + (ring.position.z - 400),
+      // )
     }
 
     this.getMesh = function() {
@@ -480,99 +401,63 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  let NUM_ASTEROIDS = 3
+  let NUM_ASTEROIDS = 4
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
     scene.add(asteroids[i].getMesh())
   }
 
-  // //Add Shooting
-  // const Shot = function(initialPos) {
-  //   const shotMaterial = new THREE.MeshBasicMaterial({
-  //     color: 0xff0000,
-  //     transparent: true,
-  //     opacity: 0.5
-  //   })
+  function moveRing() {
+    if (detectRingCollision() === true) {
+      ring.position.x =
+        Math.random() *
+          (player.getMesh().position.x +
+            500 -
+            (player.getMesh().position.x - 500)) +
+        (player.getMesh().position.x - 500)
+      ring.position.y =
+        Math.random() *
+          (player.getMesh().position.y +
+            500 -
+            (player.getMesh().position.y - 500)) +
+        (player.getMesh().position.y - 500)
+      ring.position.z -= Math.random() * (1000 - 250) + 250
+      asteroids.forEach(e => {
+        console.log('did this reset?')
+        e.reset(ring.position.z)
+      })
+    }
+  }
 
-  //   this.mesh = new THREE.Mesh(
-  //     new THREE.SphereGeometry(0.7, 16, 16),
-  //     shotMaterial
-  //   )
+  var counter = 0
 
-  //   // var geometry = new THREE.CylinderGeometry(7.47, 9.63, 48.57, 23, 50, false)
-  //   // var material = new THREE.MeshBasicMaterial({
-  //   //   shading: THREE.FlatShading,
-  //   //   color: 0xeb1d1d
-  //   // })
+  function detectRingCollision() {
+    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    cubeBBox.setFromObject(cube)
+    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    ringBBox.setFromObject(ring)
+    if (cubeBBox.intersectsBox(ringBBox)) {
+      counter += 1
+      // console.log(counter)
+      return true
+    }
+  }
 
-  //   // this.mesh = new THREE.Mesh(geometry, material)
+  /// experimental ring array
+  // var ringArray = []
 
-  //   // this.mesh.rotation.x = 10
-  //   // this.mesh.scale.x = this.mesh.scale.y = this.mesh.scale.z = 0.0027;
-
-  //   this.mesh.position.copy(initialPos)
-
-  //   // this.mesh
-
-  //   this.getMesh = function() {
-  //     return this.mesh
-  //   }
-
-  //   var shotVector = new THREE.Vector3()
-  //   player.getMesh().getWorldDirection(shotVector)
-
-  //   this.update = function(z) {
-  //     this.mesh.translateOnAxis(shotVector, -30)
-
-  //     if (Math.abs(this.mesh.position.z - z) > 1000) {
-  //       return false
-  //       // delete this.mesh;
-  //     }
-  //     return true
-  //   }
-  //   return this
+  // for (let i = 0; i < 8; i++) {
+  //   var ring = new THREE.Mesh(geometry, material)
+  //   ring.position.x = Math.floor(Math.random() * 10 - 250)
+  //   ring.position.y = Math.floor(Math.random() * 1000 - 3000)
+  //   ring.position.z = Math.floor(Math.random() * 100 - 200)
+  //   ringArray.push(ring)
   // }
+  // ringArray.forEach(r => scene.add(r))
 
-  // //Add Planet
-  // var Planet = function() {
-  //   var planetObj = new THREE.Object3D()
-  //   planetObj.name = 'EARTH'
-  //   // Speed of motion and rotation
 
-  //   this.hitbox = new THREE.Box3()
-  //   var radius = 4000
-  //   var geometry = new THREE.SphereBufferGeometry(radius, 100, 50)
-  //   var materialNormalMap = new THREE.MeshPhongMaterial({
-  //     specular: 0x333333,
-  //     shininess: 15,
-  //     map: new THREE.TextureLoader().load(
-  //       'textures/planets/earth_atmos_2048.jpg'
-  //     ),
-  //     specularMap: new THREE.TextureLoader().load(
-  //       'textures/planets/earth_specular_2048.jpg'
-  //     ),
-  //     normalMap: new THREE.TextureLoader().load(
-  //       'textures/planets/earth_normal_2048.jpg'
-  //     ),
-  //     normalScale: new THREE.Vector2(0.85, 0.85)
-  //   })
-  //   var meshPlanet = new THREE.Mesh(geometry, materialNormalMap)
 
-  //   planetObj.add(meshPlanet)
-  //   planetObj.rotation.y = 0
-  //   planetObj.rotation.z = 0.41
-
-  //   planetObj.position.set(4000, -1000, -8000)
-
-  //   this.getMesh = function() {
-  //     return planetObj
-  //   }
-
-  //   return this
-  // }
-  // var earth = new Planet()
-  // scene.add(earth.getMesh())
 
   //Add Planet
   var Planet = function() {
@@ -580,7 +465,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     planetObj.name = 'EARTH'
     // Speed of motion and rotation
 
-    this.hitbox = new THREE.Box3()
+    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     var radius = 4000
     var geometry = new THREE.SphereBufferGeometry(radius, 100, 50)
     var materialNormalMap = new THREE.MeshPhongMaterial({
@@ -605,6 +490,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     planetObj.position.set(5000, -1000, -8000)
 
+    this.hitbox.setFromObject(meshPlanet)
     this.getMesh = function() {
       return planetObj
     }
@@ -613,6 +499,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   }
   var earth = new Planet()
   scene.add(earth.getMesh())
+
+  function detectPlanetCollision(){
+    if (player.hitbox.intersectsBox(earth.hitbox)){
+      console.log('DEATH')
+    }
+  }
+
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -630,44 +523,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   meshClouds.rotation.z = 0.41
   scene.add(meshClouds)
 
-  // function detectColl() {
-  //   // collision detection
-  //   collisionArr.forEach(function(e) {
-  //     e.material.transparent = false
-  //     e.material.opacity = 1.0
-  //   })
 
-  //   var cube2 = scene.getObjectByName('cube')
-  //   var originPoint = cube2.position.clone()
-
-  //   for (
-  //     var vertexIndex = 0;
-  //     vertexIndex < cube2.geometry.vertices.length;
-  //     vertexIndex++
-  //   ) {
-  //     var localVertex = cube2.geometry.vertices[vertexIndex].clone()
-  //     var globalVertex = localVertex.applyMatrix4(cube2.matrix)
-  //     var directionVector = globalVertex.sub(cube2.position)
-
-  //     var ray = new THREE.Raycaster(
-  //       originPoint,
-  //       directionVector.clone().normalize()
-  //     )
-  //     var collisionResults = ray.intersectObjects(collisionArr)
-  //     // console.log('coll ARR', collisionArr)
-  //     // console.log('coll Results', collisionResults)
-  //     // console.log('cube2', cube2)
-  //     // console.log('originpoint', originPoint)
-  //     if (
-  //       collisionResults.length > 0 &&
-  //       collisionResults[0].distance < directionVector.length()
-  //     ) {
-  //       collisionResults[0].object.material.transparent = true
-  //       collisionResults[0].object.material.opacity = 0.4
-  //       console.log('COLLLISIIOSISN')
-  //     }
-  //   }
-  // }
 
   /*********************************
    * Render To Screen
@@ -683,7 +539,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     controls.update(delta)
 
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
-      asteroids[i].update(camera.position.z)
+      asteroids[i].update(ring.position.z)
     }
 
     var rotationSpeed = 0.01
@@ -691,6 +547,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     meshClouds.rotation.y += rotationSpeed * delta
 
     moveRing()
+    detectPlanetCollision()
 
     ///shooting function
     for (var index = 0; index < shots.length; index += 1) {
@@ -702,7 +559,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       // shots[index].position.add(shots[index].velocity)
       var shotVector = new THREE.Vector3()
       player.getMesh().getWorldDirection(shotVector)
-      shots[index].translateOnAxis(shotVector, -30)
+      shots[index].translateOnAxis(shotVector, -75)
     }
     if (player.canShoot > 0) player.canShoot -= 1
 
@@ -788,7 +645,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
             scene.remove(shot)
           }, 1000)
 
-          console.log(scene)
+          // console.log(scene)
 
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
