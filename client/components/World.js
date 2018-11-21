@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router'
+import store, {addPoints} from '../store'
 // import * as THREE from 'three'
 // import {db} from '../firebase'
 import HUD from './HUD'
@@ -439,7 +440,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      counter += 1
+      store.dispatch(addPoints(100))
+      // counter += 1
       // console.log(counter)
       return true
     }
@@ -698,8 +700,7 @@ class World extends Component {
     super()
     this.state = {
       authorized: false,
-      loaded: false,
-      score: 0
+      loaded: false
     }
   }
 
@@ -745,11 +746,10 @@ class World extends Component {
   }
 
   render() {
-    const {score} = this.state
 
     return (
       <div id="world" className="no-cursor">
-        <HUD score={score} />
+        <HUD />
         <div id="blocker">
           <div id="pause-screen">
             <div id="progress-container">
