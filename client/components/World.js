@@ -263,26 +263,18 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     side: THREE.DoubleSide
   })
   var ring = new THREE.Mesh(geometry, material)
-  ring.name = 'init'
+  ring.position.set(0, 0, -500)
   scene.add(ring)
 
-  function ringGen(prevRing) {
-    var oldRing = scene.getObjectByName('init')
-    scene.remove(oldRing)
-    var ring2 = new THREE.Mesh(geometry, material)
-    ring2.name = 'next'
-    prevRing
-      ? (ring2.position.z -= Math.floor(Math.random() * 5000))
-      : (ring.position.z = -200)
-
-    return scene.add(ring2)
+  function moveRing() {
+    if (detectRingCollision() === true) {
+      ring.position.z -= Math.floor(Math.random() * 3000)
+    }
   }
-  var oldRing = scene.getObjectByName('init')
-  scene.remove(oldRing)
 
   var counter = 0
 
-  function detectCollisions() {
+  function detectRingCollision() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     cubeBBox.setFromObject(cube)
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
@@ -290,7 +282,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     if (cubeBBox.intersectsBox(ringBBox)) {
       counter += 1
       console.log(counter)
-      return ringGen(ring)
+      return true
     }
   }
 
@@ -692,7 +684,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
-    detectCollisions()
+    moveRing()
 
     ///shooting function
     for (var index = 0; index < shots.length; index += 1) {
