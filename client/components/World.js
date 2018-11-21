@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router'
+import store, {addPoints} from '../store'
 // import * as THREE from 'three'
 // import {db} from '../firebase'
 import HUD from './HUD'
@@ -151,17 +152,16 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // Player Collision Wrapper Cube
 
-  var cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
+  var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
   var cubeMaterial = new THREE.MeshBasicMaterial({
-    color: 0x000000,
-    // alphaMap: new THREE,
+    color: 0x003500,
     opacity: 0,
     side: THREE.DoubleSide,
     transparent: true
   })
   var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
-  cube.position.set(0, 0, -5)
+  cube.position.set(0, 0, 0)
   cube.name = 'cube'
   scene.add(cube)
 
@@ -297,7 +297,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // scene.add(ring)
   /////////////////////
   // ADD INITIAL RING
-  var geometry = new THREE.TorusGeometry(20, 2, 20, 100)
+  var geometry = new THREE.TorusGeometry(60, 2, 20, 100)
   var material = new THREE.MeshBasicMaterial({
     color: 0x7dd2d8,
     side: THREE.DoubleSide
@@ -305,6 +305,20 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   var ring = new THREE.Mesh(geometry, material)
   ring.position.set(0, 0, -500)
   scene.add(ring)
+
+  // ring sound
+  function ringSound() {
+    var listener = new THREE.AudioListener()
+    camera.add(listener)
+    var audioLoader = new THREE.AudioLoader()
+    var sound1 = new THREE.PositionalAudio(listener)
+    audioLoader.load('./sounds/sweep2.wav', function(buffer) {
+      sound1.setBuffer(buffer)
+      sound1.setRefDistance(20)
+      sound1.play()
+    })
+    ring.add(sound1)
+  }
 
   //Load Asteroids
   var loader = new THREE.OBJLoader(loadingManager)
@@ -422,23 +436,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      counter += 1
+      store.dispatch(addPoints(100))
+      // counter += 1
       // console.log(counter)
+      ringSound()
       return true
     }
   }
-
-  /// experimental ring array
-  // var ringArray = []
-
-  // for (let i = 0; i < 8; i++) {
-  //   var ring = new THREE.Mesh(geometry, material)
-  //   ring.position.x = Math.floor(Math.random() * 10 - 250)
-  //   ring.position.y = Math.floor(Math.random() * 1000 - 3000)
-  //   ring.position.z = Math.floor(Math.random() * 100 - 200)
-  //   ringArray.push(ring)
-  // }
-  // ringArray.forEach(r => scene.add(r))
 
   //Add Planet
   var Planet = function() {
@@ -585,6 +589,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var delta = clock.getDelta()
     controls.update(delta)
     // console.log(delta)
+
+    // console.log(controls.pressed[87], controls.pressed[83], 'speed:', controls.moveState.forward)
+
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
       asteroids[i].update(ring.position.z)
     }
@@ -746,8 +753,7 @@ class World extends Component {
     super()
     this.state = {
       authorized: false,
-      loaded: false,
-      score: 0
+      loaded: false
     }
   }
 
@@ -793,18 +799,14 @@ class World extends Component {
   }
 
   render() {
-    const {score} = this.state
-
     return (
       <div id="world" className="no-cursor">
-        <HUD score={score} />
-        <div id="blocker">
-          <div id="pause-screen">
-            <div id="progress-container">
-              {/* <h1>Loading...</h1> */}
-              {/* <div id='progress'/> */}
-              <img src="./loading.gif" />
-            </div>
+        <HUD />
+        <div id="pause-screen">
+          <div id="progress-container">
+            {/* <h1>Loading...</h1> */}
+            {/* <div id='progress'/> */}
+            <img src="./loading.gif" />
           </div>
         </div>
       </div>

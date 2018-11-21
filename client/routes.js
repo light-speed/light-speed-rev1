@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import {Login, Signup, UserHome, World, World2} from './components'
 import {me} from './store'
 import Menu from './components/Menu';
+import Credits from './components/Credits';
+import HowToPlay from './components/HowToPlay';
 
 
 /**
@@ -25,6 +27,8 @@ class Routes extends Component {
         <Route path="/signup" component={Signup} />
         <Route path="/world2" component={World2} />
         <Route path='/play' component={World} />
+        <Route path='/credits' component={Credits} />
+        <Route path='/howtoplay' component={HowToPlay} />
 
         {isLoggedIn && (
           <Switch>
@@ -35,6 +39,8 @@ class Routes extends Component {
         {/* Displays our Login component as a fallback */}
         <Route component={Menu} />
         <Route path='/play' component={World} />
+        <Route path='/credits' component={Credits} />
+        <Route path='/howtoplay' component={HowToPlay} />
       </Switch>
     )
   }
