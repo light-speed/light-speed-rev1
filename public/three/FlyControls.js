@@ -126,8 +126,8 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
       default:
     }
-    console.log(this.moveState)
-    console.log(this.keypress)
+    // console.log(this.moveState)
+    // console.log(this.keypress)
     this.updateMovementVector()
     this.updateRotationVector()
   }
@@ -181,8 +181,8 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
       default:
     }
-    console.log(this.moveState)
-    console.log(this.keypress)
+    // console.log(this.moveState)
+    // console.log(this.keypress)
     this.updateMovementVector()
     this.updateRotationVector()
   }

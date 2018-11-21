@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 // import * as THREE from 'three'
 // import {db} from '../firebase'
-import HUD from './HUD';
+import HUD from './HUD'
 import {
   //   BlockControl,
   //   PreviewControl,
@@ -21,59 +21,53 @@ import {showInstructions} from '../utilities/utilities'
 
 let isPaused = false
 let onEsc
-let loadingManager = null;
-let RESOURCES_LOADED = false;
+let loadingManager = null
+let RESOURCES_LOADED = false
+let counter = 0
 
 // An object to hold all the things needed for our loading screen
 var loadingScreen = {
-	scene: new THREE.Scene(),
-	camera: new THREE.PerspectiveCamera(90, 1280/720, 0.1, 100),
-	box: new THREE.Mesh(
-		new THREE.BoxGeometry(0.5,0.5,0.5),
-		new THREE.MeshBasicMaterial({ color:0x4444ff })
-	)
-};
-
-
-
+  scene: new THREE.Scene(),
+  camera: new THREE.PerspectiveCamera(90, 1280 / 720, 0.1, 100),
+  box: new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.5, 0.5),
+    new THREE.MeshBasicMaterial({color: 0x4444ff})
+  )
+}
 
 function generateWorld(/*world, currentUser, guestAvatar*/) {
-
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
 
+  loadingManager = new THREE.LoadingManager()
 
-  loadingManager = new THREE.LoadingManager();
-
-  var progress = document.getElementById('progress-container');
+  var progress = document.getElementById('progress-container')
   // progress.id = 'progress-container'
   // var progressBar = document.getElementById('progress');
-  var HUD = document.getElementById('hudContainer');
+  var HUD = document.getElementById('hudContainer')
 
   // progressBar.id = 'progress'
   // progress.appendChild(progressBar);
   // document.body.appendChild(progress);
-  
-  loadingManager.onProgress = function(item, loaded, total){
+
+  loadingManager.onProgress = function(item, loaded, total) {
     // progressBar.style.width = (loaded / total * 100) + '%';
     console.log(`loaded resource ${loaded}/${total}`)
-  };
-  
-	loadingManager.onLoad = function(){
-		console.log("loaded all resources");
-    RESOURCES_LOADED = true;
+  }
+
+  loadingManager.onLoad = function() {
+    console.log('loaded all resources')
+    RESOURCES_LOADED = true
     // progressBar.style.display = 'none'
     progress.style.display = 'none'
     HUD.style.display = 'flex'
+  }
 
-  };
-  
   // loadingScreen.box.position.set(0,0,5);
-	// loadingScreen.camera.lookAt(loadingScreen.box.position);
-	// loadingScreen.scene.add(loadingScreen.box);
-	
+  // loadingScreen.camera.lookAt(loadingScreen.box.position);
+  // loadingScreen.scene.add(loadingScreen.box);
+
   // const cameraControl = new CameraControl(camera, renderer.domElement)
   // scene.add(cameraControl.getObject())
-
 
   /*
       EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
@@ -155,64 +149,15 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // scene.registerBeforeRender(function() {skybox.getMesh().position = camera.position})
 
-  //Load Tunnel
-  // renderer.setClearColor('#000022')
-  // renderer.setSize(window.innerWidth, window.innerHeight)
-
-  // var Tunnel = function() {
-  //   var tunnel = new THREE.Object3D(),
-  //     meshes = []
-
-  //   meshes.push(
-  //     new THREE.Mesh(
-  //       // new THREE.SphereGeometry(30, 160, 160),
-  //       new THREE.CylinderGeometry(300, 300, 7000, 24, 24, true),
-  //       new THREE.MeshBasicMaterial({
-  //         map: new THREE.TextureLoader().load('textures/space.jpg', function(
-  //           tex
-  //         ) {
-  //           tex.wrapS = tex.wrapT = THREE.RepeatWrapping
-  //           tex.repeat.set(5, 10)
-  //           tex.needsUpdate = true
-  //         }),
-  //         side: THREE.BackSide
-  //       })
-  //     )
-  //   )
-  //   meshes[0].rotation.x = -Math.PI / 2
-  //   // Adding the second mesh as a clone of the first mesh
-  //   meshes.push(meshes[0].clone())
-  //   meshes[1].position.z = -5000
-
-  //   tunnel.add(meshes[0])
-  //   tunnel.add(meshes[1])
-
-  //   this.getMesh = function() {
-  //     return tunnel
-  //   }
-
-  //   this.update = function(z) {
-  //     for (var i = 0; i < 2; i++) {
-  //       if (z < meshes[i].position.z - 2500) {
-  //         meshes[i].position.z -= 10000
-  //         break
-  //       }
-  //     }
-  //   }
-
-  //   return this
-  // }
-
-  // var tunnel = new Tunnel()
-  // scene.add(tunnel.getMesh())
-  // scene.fog = new THREE.FogExp2(0x0000022, 0.0015)
-
   // Player Collision Wrapper Cube
 
-  var cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
-  var cubeMaterial = new THREE.MeshLambertMaterial({
-    color: 0x00ff00,
-    side: THREE.DoubleSide
+  var cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
+  var cubeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    // alphaMap: new THREE,
+    opacity: 0,
+    side: THREE.DoubleSide,
+    transparent: true
   })
   var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
@@ -227,8 +172,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var playerObj = new THREE.Object3D()
     this.loaded = false
     const self = this
-    this.hitbox = new THREE.Box3()
+    // this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    this.hitbox = cube
     this.canShoot = 0
+
+    playerObj.add(this.hitbox)
 
     this.update = function() {
       if (!spaceship) return
@@ -297,24 +245,64 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   const player = new Player()
   // player.getMesh().position.set(0, 0, 2)s
+
   scene.add(player.getMesh())
 
-  // Add Ring for Racing
+  console.log(player)
+  // Add Rings for Racing
 
-  var geometry = new THREE.RingGeometry(100, 120, 20)
+  // var geometry = new THREE.TorusGeometry(20, 2, 20, 70)
+  // var material = new THREE.MeshBasicMaterial({
+  //   color: 0x7dd2d8,
+  //   side: THREE.DoubleSide
+  // })
+
+  // var ring = new THREE.Mesh(geometry, material)
+  // ring.position.z = -200
+  // scene.add(ring)
+  /////////////////////
+  // ADD INITIAL RING
+  var geometry = new THREE.TorusGeometry(20, 2, 20, 100)
   var material = new THREE.MeshBasicMaterial({
-    color: 0xffff00,
+    color: 0x7dd2d8,
     side: THREE.DoubleSide
   })
   var ring = new THREE.Mesh(geometry, material)
-  ring.position.set(0, 0, -200)
-
+  ring.position.set(0, 0, -500)
   scene.add(ring)
 
-  const collisionArr = []
-  ring.name = 'init-ring'
-  collisionArr.push(ring)
-  console.log('COLL ARR:', collisionArr)
+  function moveRing() {
+    if (detectRingCollision() === true) {
+      ring.position.z -= Math.floor(Math.random() * 3000)
+    }
+  }
+
+  var counter = 0
+
+  function detectRingCollision() {
+    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    // console.log(player)
+    cubeBBox.setFromObject(player.hitbox)
+    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    ringBBox.setFromObject(ring)
+    if (cubeBBox.intersectsBox(ringBBox)) {
+      counter += 1
+      console.log(counter)
+      return true
+    }
+  }
+
+  /// experimental ring array
+  // var ringArray = []
+
+  // for (let i = 0; i < 8; i++) {
+  //   var ring = new THREE.Mesh(geometry, material)
+  //   ring.position.x = Math.floor(Math.random() * 10 - 250)
+  //   ring.position.y = Math.floor(Math.random() * 1000 - 3000)
+  //   ring.position.z = Math.floor(Math.random() * 100 - 200)
+  //   ringArray.push(ring)
+  // }
+  // ringArray.forEach(r => scene.add(r))
 
   //Add Controls
   //add pointerlock to camera
@@ -328,14 +316,17 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   //   },
   //   false
   // )
-  var controls = new THREE.FlyControls(camera, player.getMesh(), renderer.domElement)
+  var controls = new THREE.FlyControls(
+    camera,
+    player.getMesh(),
+    renderer.domElement
+  )
 
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
   camera.position.set(0, 30, 70) // <-- this is relative to the player's position
   player.getMesh().add(camera)
-  player.getMesh().add(cube)
+  // player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
-
 
   //add flight to player
 
@@ -437,7 +428,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.hitbox = new THREE.Box3()
 
     var rockMtl = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
+      map: new THREE.TextureLoader(loadingManager).load(
+        'textures/lunarrock.png'
+      )
     })
 
     loader.load('models/rock' + rockType + '.obj', function(obj) {
@@ -487,7 +480,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  let NUM_ASTEROIDS = 1
+  let NUM_ASTEROIDS = 3
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
@@ -612,16 +605,14 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
     planetObj.position.set(5000, -1000, -8000)
 
-  this.getMesh = function() {
-    return planetObj
+    this.getMesh = function() {
+      return planetObj
+    }
+
+    return this
   }
-
-  return this
-}
-var earth = new Planet()
-scene.add(earth.getMesh())
-
-
+  var earth = new Planet()
+  scene.add(earth.getMesh())
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -677,19 +668,6 @@ scene.add(earth.getMesh())
   //     }
   //   }
   // }
-  var counter = 0
-
-
-  function detectCollisions() {
-    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    cubeBBox.setFromObject(cube)
-    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    ringBBox.setFromObject(ring)
-    if (cubeBBox.intersectsBox(ringBBox)) {
-      counter += 1
-      console.log(counter)
-    }
-  }
 
   /*********************************
    * Render To Screen
@@ -697,8 +675,7 @@ scene.add(earth.getMesh())
   var clock = new THREE.Clock()
   const shots = []
   function render() {
-
-    player.update()
+    // player.update()
 
     skybox.getMesh.position = camera.position
 
@@ -713,7 +690,7 @@ scene.add(earth.getMesh())
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
-    detectCollisions()
+    moveRing()
 
     ///shooting function
     for (var index = 0; index < shots.length; index += 1) {
@@ -736,15 +713,15 @@ scene.add(earth.getMesh())
     if (isPaused) return
 
     // loading screen stuff
-    if( RESOURCES_LOADED === false ){
-      requestAnimationFrame(animate);
+    if (RESOURCES_LOADED === false) {
+      requestAnimationFrame(animate)
 
-      loadingScreen.box.position.x -= 0.05;
-      if( loadingScreen.box.position.x < -10 ) loadingScreen.box.position.x = 10;
-      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
+      loadingScreen.box.position.x -= 0.05
+      if (loadingScreen.box.position.x < -10) loadingScreen.box.position.x = 10
+      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x)
 
-      renderer.render(loadingScreen.scene, loadingScreen.camera);
-      return;
+      renderer.render(loadingScreen.scene, loadingScreen.camera)
+      return
     }
 
     requestAnimationFrame(animate)
@@ -863,7 +840,8 @@ class World extends Component {
     super()
     this.state = {
       authorized: false,
-      loaded: false
+      loaded: false,
+      score: 0
     }
   }
 
@@ -909,20 +887,19 @@ class World extends Component {
   }
 
   render() {
+    const {score} = this.state
+
     return (
       <div id="world" className="no-cursor">
-             <HUD /> 
+        <HUD score={score} />
         <div id="blocker">
           <div id="pause-screen">
-            <div id='progress-container'>
-             {/* <h1>Loading...</h1> */}
+            <div id="progress-container">
+              {/* <h1>Loading...</h1> */}
               {/* <div id='progress'/> */}
-
-   
-              <img src="./loading.gif"/>
-
+              <img src="./loading.gif" />
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     )
