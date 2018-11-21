@@ -263,9 +263,10 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       side: THREE.DoubleSide
     })
     var ring = new THREE.Mesh(geometry, material)
-    prevRing ? (ring.position.z -= 300) : (ring.position.z = -200)
+    prevRing ? (ring.position.z -= 500) : (ring.position.z = -200)
     ring.name = 'ring'
     scene.add(ring)
+    console.log(ring)
     return ring
   }
   var ring = ringGen()
@@ -474,7 +475,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  let NUM_ASTEROIDS = 1
+  let NUM_ASTEROIDS = 3
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
