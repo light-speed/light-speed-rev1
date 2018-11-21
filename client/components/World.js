@@ -212,10 +212,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     this.hitbox = new THREE.Box3()
     this.canShoot = 0
 
-    this.update = function() {
-      if (!spaceship) return
-      this.hitbox.setFromObject(spaceship)
-    }
+
 
     var onProgress = function(xhr) {
       if (xhr.lengthComputable) {
@@ -271,6 +268,12 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
           )
       })
 
+
+
+    this.update = function() {
+        if (!spaceship) return
+        this.hitbox.setFromObject(spaceship)
+      }
     this.getMesh = function() {
       return playerObj
     }
@@ -319,81 +322,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // player.getMesh().add(control.getObject())
 
 
-  //add flight to player
-
-  // var controls = new THREE.PlayerControls(player.getMesh(), camera)
-  // controls.init()
-  // controls.addEventListener('change', render, false );
-
-  // //Load Asteroids
-  // var loader = new THREE.OBJLoader()
-
-  // var Asteroid = function(rockType) {
-  //   var mesh = new THREE.Object3D(),
-  //     self = this
-  //   this.loaded = false
-
-  //   // Speed of motion and rotation
-  //   mesh.velocity = Math.random() * 2 + 2
-  //   mesh.vRotation = new THREE.Vector3(
-  //     Math.random(),
-  //     Math.random(),
-  //     Math.random()
-  //   )
-
-  //   this.hitbox = new THREE.Box3()
-
-  //   var rockMtl = new THREE.MeshBasicMaterial({
-  //     map: new THREE.TextureLoader().load('textures/lunarrock.png')
-  //   })
-
-  //   loader.load('models/rock' + rockType + '.obj', function(obj) {
-  //     obj.traverse(function(child) {
-  //       if (child instanceof THREE.Mesh) {
-  //         child.material = rockMtl
-  //       }
-  //     })
-
-  //     obj.scale.set(20, 20, 20)
-
-  //     mesh.add(obj)
-  //     mesh.position.set(
-  //       -150 + Math.random() * 300,
-  //       -150 + Math.random() * 300,
-  //       -1500 - Math.random() * 1500
-  //     )
-  //     self.loaded = true
-  //   })
-
-  //   this.reset = function(z) {
-  //     mesh.velocity = Math.random() * 2 + 2
-  //     mesh.position.set(
-  //       -50 + Math.random() * 100,
-  //       -50 + Math.random() * 100,
-  //       z - 1500 - Math.random() * 1500
-  //     )
-  //   }
-
-  //   this.update = function(z) {
-  //     mesh.position.z += mesh.velocity
-  //     mesh.rotation.x += mesh.vRotation.x * 0.02
-  //     mesh.rotation.y += mesh.vRotation.y * 0.02
-  //     mesh.rotation.z += mesh.vRotation.z * 0.02
-
-  //     if (mesh.children.length > 0) this.hitbox.setFromObject(mesh.children[0])
-
-  //     if (mesh.position.z > z) {
-  //       this.reset(z)
-  //     }
-  //   }
-
-  //   this.getMesh = function() {
-  //     return mesh
-  //   }
-
-  //   return this
-  // }
-
   // let NUM_ASTEROIDS = 10
   // let asteroids = []
   // for (var i = 0; i < NUM_ASTEROIDS; i++) {
@@ -416,7 +344,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       Math.random()
     )
 
-    this.hitbox = new THREE.Box3()
+    this.BBox = new THREE.Box3()
 
     var rockMtl = new THREE.MeshBasicMaterial({
       map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
@@ -432,12 +360,18 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       obj.scale.set(40, 40, 40)
 
       mesh.add(obj)
+      // mesh.position.set(
+      //   -300 + Math.random() * 600,
+      //   -300 + Math.random() * 600,
+      //   -2000 - Math.random() * 2000
+      // )
       mesh.position.set(
-        -300 + Math.random() * 600,
-        -300 + Math.random() * 600,
-        -2000 - Math.random() * 2000
+        Math.random() * ((ring.position.x + 100)-(ring.position.x - 100)) + (ring.position.x - 100),
+        Math.random() * ((ring.position.y + 100)-(ring.position.y - 100)) + (ring.position.y - 100),
+        Math.random() * ((ring.position.z + 100)-(ring.position.z - 100)) + (ring.position.z - 100),
       )
       self.loaded = true
+      self.BBox.setFromObject(obj)
     })
 
     this.reset = function(z) {
@@ -469,7 +403,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     return this
   }
 
-  let NUM_ASTEROIDS = 1
+  let NUM_ASTEROIDS = 10
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
@@ -709,7 +643,7 @@ scene.add(earth.getMesh())
       // shots[index].position.add(shots[index].velocity)
       var shotVector = new THREE.Vector3()
       player.getMesh().getWorldDirection(shotVector)
-      shots[index].translateOnAxis(shotVector, -30)
+      shots[index].translateOnAxis(shotVector, -75)
     }
     if (player.canShoot > 0) player.canShoot -= 1
 
