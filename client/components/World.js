@@ -311,7 +311,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     camera.add(listener)
     var audioLoader = new THREE.AudioLoader()
     var sound1 = new THREE.PositionalAudio(listener)
-    audioLoader.load('./sounds/sweep.wav', function(buffer) {
+    audioLoader.load('./sounds/sweep2.wav', function(buffer) {
       sound1.setBuffer(buffer)
       sound1.setRefDistance(20)
       sound1.play()
@@ -379,7 +379,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
           (ring.position.y - 150),
         Math.random() * (z + 150 - (z - 150)) + (z - 150)
       )
-
     }
 
     this.update = function(z) {
