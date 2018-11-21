@@ -154,7 +154,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   var cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
   var cubeMaterial = new THREE.MeshLambertMaterial({
     color: 0x00ff00,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    transparent: true
   })
   var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
@@ -255,23 +256,29 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // ring.position.z = -200
   // scene.add(ring)
   /////////////////////
-  function ringGen(prevRing) {
-    scene.remove(prevRing)
-    var geometry = new THREE.TorusGeometry(20, 2, 20, 70)
-    var material = new THREE.MeshBasicMaterial({
-      color: 0x7dd2d8,
-      side: THREE.DoubleSide
-    })
-    var ring = new THREE.Mesh(geometry, material)
-    prevRing ? (ring.position.z -= 500) : (ring.position.z = -200)
-    ring.name = 'ring'
-    scene.add(ring)
-    console.log(ring)
-    return ring
-  }
-  var ring = ringGen()
+  // ADD INITIAL RING
+  var geometry = new THREE.TorusGeometry(20, 2, 20, 100)
+  var material = new THREE.MeshBasicMaterial({
+    color: 0x7dd2d8,
+    side: THREE.DoubleSide
+  })
+  var ring = new THREE.Mesh(geometry, material)
+  ring.name = 'init'
+  scene.add(ring)
 
-  ringGen()
+  function ringGen(prevRing) {
+    var oldRing = scene.getObjectByName('init')
+    scene.remove(oldRing)
+    var ring2 = new THREE.Mesh(geometry, material)
+    ring2.name = 'next'
+    prevRing
+      ? (ring2.position.z -= Math.floor(Math.random() * 5000))
+      : (ring.position.z = -200)
+
+    return scene.add(ring2)
+  }
+  var oldRing = scene.getObjectByName('init')
+  scene.remove(oldRing)
 
   var counter = 0
 
