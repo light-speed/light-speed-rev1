@@ -21,8 +21,8 @@ THREE.FlyControls = function(camera, object, domElement) {
   // API
 
   this.speed = 1
-  this.acceleration = 0
-  this.maxSpeed = 40
+  this.accelDamper = 0.33
+  this.maxSpeed = 15
   this.rollSpeed = 0.01
   this.pitchDamper = 0.6
   this.yawDamper = 0.5
@@ -70,7 +70,7 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
 
       case 87 /*W*/:
-        this.moveState.forward += this.speed
+        this.moveState.forward += this.speed * this.accelDamper
         event.preventDefault()
         break
 
