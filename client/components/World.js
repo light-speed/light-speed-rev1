@@ -440,7 +440,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
-      store.dispatch(addPoints(100))
+      store.dispatch(addPoints(100)) 
       // counter += 1
       // console.log(counter)
       return true
