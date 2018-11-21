@@ -151,9 +151,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // Player Collision Wrapper Cube
 
-  var cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
-  var cubeMaterial = new THREE.MeshLambertMaterial({
-    color: 0x00ff00,
+  var cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
+  var cubeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    // alphaMap: new THREE,
+    opacity: 0,
     side: THREE.DoubleSide,
     transparent: true
   })
@@ -170,8 +172,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var playerObj = new THREE.Object3D()
     this.loaded = false
     const self = this
-    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    // this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    this.hitbox = cube
     this.canShoot = 0
+
+    playerObj.add(this.hitbox)
 
     this.update = function() {
       if (!spaceship) return
@@ -276,7 +281,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   function detectRingCollision() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    cubeBBox.setFromObject(cube)
+    // console.log(player)
+    cubeBBox.setFromObject(player.hitbox)
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
@@ -319,7 +325,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
   camera.position.set(0, 30, 70) // <-- this is relative to the player's position
   player.getMesh().add(camera)
-  player.getMesh().add(cube)
+  // player.getMesh().add(cube)
   // player.getMesh().add(control.getObject())
 
   //add flight to player
@@ -669,7 +675,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   var clock = new THREE.Clock()
   const shots = []
   function render() {
-    player.update()
+    // player.update()
 
     skybox.getMesh.position = camera.position
 
