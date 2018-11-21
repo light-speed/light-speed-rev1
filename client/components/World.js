@@ -173,8 +173,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var playerObj = new THREE.Object3D()
     this.loaded = false
     const self = this
-    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    this.hitbox.setFromObject(cube)
+    // this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    // this.hitbox.setFromObject(cube)
+    this.hitbox = cube
     this.canShoot = 0
 
     playerObj.add(this.hitbox)
@@ -500,11 +501,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   var earth = new Planet()
   scene.add(earth.getMesh())
 
-  function detectPlanetCollision(){
-    if (player.hitbox.intersectsBox(earth.hitbox)){
-      console.log('DEATH')
-    }
-  }
+  // function detectPlanetCollision(){
+  //   if (player.hitbox.intersectsBox(earth.hitbox)){
+  //     console.log('DEATH')
+  //   }
+  // }
 
 
   //Add clouds to earth
@@ -547,7 +548,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     meshClouds.rotation.y += rotationSpeed * delta
 
     moveRing()
-    detectPlanetCollision()
+    // detectPlanetCollision()
 
     ///shooting function
     for (var index = 0; index < shots.length; index += 1) {
