@@ -750,14 +750,11 @@ class World extends Component {
     return (
       <div id="world" className="no-cursor">
         <HUD />
-
           <div id="pause-screen">
-        
             <div id="progress-container">
               {/* <h1>Loading...</h1> */}
               {/* <div id='progress'/> */}
               <img src="./loading.gif" />
-
           </div>
         </div>
       </div>
