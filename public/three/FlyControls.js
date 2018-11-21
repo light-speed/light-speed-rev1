@@ -120,11 +120,11 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
 
       case 65 /*A*/:
-        this.moveState.rollLeft = this.speed
+        this.moveState.rollLeft = 2
         event.preventDefault()
         break
       case 68 /*D*/:
-        this.moveState.rollRight = this.speed
+        this.moveState.rollRight = 2
         event.preventDefault()
         break
       default:
