@@ -4,6 +4,7 @@ import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Login, Signup, UserHome, World, World2} from './components'
 import {me} from './store'
+import Menu from './components/Menu';
 
 
 /**
@@ -31,7 +32,8 @@ class Routes extends Component {
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-        <Route component={World} />
+        <Route component={Menu} />
+        <Route path='/play' component={World} />
       </Switch>
     )
   }
