@@ -20,6 +20,8 @@ THREE.FlyControls = function(camera, object, domElement) {
 
   // API
 
+  this.pressed = {}
+
   this.speed = 1
   this.accelDamper = 0.33
   this.maxSpeed = 15
@@ -27,7 +29,7 @@ THREE.FlyControls = function(camera, object, domElement) {
   this.pitchDamper = 0.6
   this.yawDamper = 0.5
   this.rollDamper = 0.6
-  this.keypress = false
+  // this.keypress = false
 
   this.dragToLook = true
   this.autoForward = false
@@ -45,7 +47,7 @@ THREE.FlyControls = function(camera, object, domElement) {
     down: 0,
     left: 0,
     right: 0,
-    forward: 0,
+    forward: 3,
     back: 0,
     pitchUp: 0,
     pitchDown: 0,
@@ -58,7 +60,8 @@ THREE.FlyControls = function(camera, object, domElement) {
   this.rotationVector = new THREE.Vector3(0, 0, 0)
 
   this.keydown = function(event) {
-    this.keypress = true
+    this.pressed[event.keyCode] = true
+    // this.keypress = true
     if (event.altKey) {
       return
     }
@@ -70,13 +73,13 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
 
       case 87 /*W*/:
-        this.moveState.forward += this.speed * this.accelDamper
+        // this.moveState.forward += this.speed * this.accelDamper
         event.preventDefault()
         break
 
       case 83 /*S*/:
         // this.moveState.back += this.speed
-        this.moveState.forward *= 0.5
+        // this.moveState.forward *= 0.5
         event.preventDefault()
         break
 
@@ -133,7 +136,8 @@ THREE.FlyControls = function(camera, object, domElement) {
   }
 
   this.keyup = function(event) {
-    this.keypress = false
+    this.pressed[event.keyCode] = false
+    // this.keypress = false
     switch (event.keyCode) {
       case 16:
         /* shift */ this.movementSpeedMultiplier = 1
@@ -142,11 +146,12 @@ THREE.FlyControls = function(camera, object, domElement) {
       case 87:
         /*W*/
 
-        // this.moveState.forward *= 0.66
+        // if (this.moveState.forward > 9)
+        //   this.moveState.forward *= 0.66
 
         break
       case 83:
-        /*S*/ this.moveState.back = 1
+        /*S*/ this.moveState.back = 0
         break
 
       // case 65: /*A*/ this.moveState.left = 0; break;
@@ -186,22 +191,6 @@ THREE.FlyControls = function(camera, object, domElement) {
     this.updateMovementVector()
     this.updateRotationVector()
   }
-
-  // this.keyup = function(event) {
-  //   if (event.keyCode ===  87) {
-  //     console.log('DECELLERATE', this.moveState)
-  //     const deccelerate = function() {
-  //       this.moveState.forward -= 1
-  //     }
-  //     setInterval(deccelerate, 1000)
-
-  //   }
-  //   this.updateMovementVector()
-  //   this.updateRotationVector()
-
-  // }
-
-  // window.addEventListener('mousemove', onmousemove, false)
 
   var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0) // it's up to you how you will create THREE.Plane(), there are several methods
   var raycaster = new THREE.Raycaster() //for reuse
@@ -249,73 +238,39 @@ THREE.FlyControls = function(camera, object, domElement) {
     }
   }
 
-  // this.mousedown = function(event) {
-  //   if (this.domElement !== document) {
-  //     // console.log('mousedown')
-  //     this.domElement.focus()
-  //   }
-
-  //   event.preventDefault()
-  //   event.stopPropagation()
-
-  //   if (this.dragToLook) {
-  //     this.mouseStatus++
-  //   } else {
-  //     switch (event.button) {
-  //       case 0:
-  //         this.moveState.forward = 1
-  //         break
-  //       case 2:
-  //         this.moveState.back = 1
-  //         break
-  //     }
-
-  //     this.updateMovementVector()
-  //   }
-  // }
-
-  // this.mousemove = function(event) {
-  //   if (!this.dragToLook || this.mouseStatus > 0) {
-  //     var container = this.getContainerDimensions()
-  //     var halfWidth = container.size[0] / 2
-  //     var halfHeight = container.size[1] / 2
-
-  //     this.moveState.yawLeft =
-  //       -(event.pageX - container.offset[0] - halfWidth) / halfWidth
-  //     this.moveState.pitchDown =
-  //       (event.pageY - container.offset[1] - halfHeight) / halfHeight
-
-  //     this.updateRotationVector()
-  //   }
-  // }
-
-  // this.mouseup = function(event) {
-  //   event.preventDefault()
-  //   event.stopPropagation()
-
-  //   if (this.dragToLook) {
-  //     this.mouseStatus--
-
-  //     this.moveState.yawLeft = this.moveState.pitchDown = 0
-  //   } else {
-  //     switch (event.button) {
-  //       case 0:
-  //         this.moveState.forward = 0
-  //         break
-  //       case 2:
-  //         this.moveState.back = 0
-  //         break
-  //     }
-  //     this.updateMovementVector()
-  //   }
-  //   this.updateRotationVector()
-  // }
 
   this.update = function(delta) {
-    var moveMult = delta * this.movementSpeed;
-		var rotMult = delta * this.rollSpeed;
-    // this.object.position.x += 1000;
-    // this.object.translateX(1000);
+
+    // pressing forward
+    if (this.pressed[87]) {
+      this.moveState.forward *= 1 + (.03 * (this.moveState.forward/15) )
+      if (this.moveState.forward < 3) 
+        this.moveState.forward = 3
+    }
+    
+    // no input going fast
+    if (!this.pressed[83] && !this.pressed[87] && this.moveState.forward > 3) {
+      this.moveState.forward *= 1 - (.009 * (this.moveState.forward/15) )
+      if (this.moveState.forward < 3) 
+        this.moveState.forward = 3
+    }
+
+    // no input, going slow
+    if (!this.pressed[83] && !this.pressed[87] && this.moveState.forward < 3) {
+      this.moveState.forward *= 1 + (.08 * (this.moveState.forward/15) )
+    }
+
+    // pressing backwards
+    if (this.pressed[83] && this.moveState.forward > 1) {
+      this.moveState.forward *= 1 - (.15 * ((this.moveState.forward)/15) )
+    }
+
+    this.updateMovementVector()
+    
+    var moveMult = this.speed
+
+
+    var rotMult = this.rollSpeed
 
     this.object.translateX(this.moveVector.x * moveMult)
     this.object.translateY(this.moveVector.y * moveMult)

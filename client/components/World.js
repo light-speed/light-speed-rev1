@@ -539,6 +539,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var delta = clock.getDelta()
     controls.update(delta)
 
+    console.log(controls.pressed[87], controls.pressed[83], 'speed:', controls.moveState.forward)
+
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
       asteroids[i].update(ring.position.z)
     }
