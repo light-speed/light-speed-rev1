@@ -5,6 +5,7 @@ class Menu extends React.Component {
     render () {
         return (
             <div className='Menu'>
+            <h1>LIGHT SPEED</h1>
                 <div>
                     <button>PLAY GAME</button>
                 </div>
