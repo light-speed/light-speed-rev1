@@ -209,6 +209,7 @@ THREE.FlyControls = function(camera, object, domElement) {
 
     // console.log('event.movement', event.movementX, event.movementY)
     if (control.isLocked === true) {
+      // console.log('event.movement', event.movementX, event.movementY)
       if (event.movementX < 0) {
         // console.log('-x',x)
         this.moveState.yawLeft = -event.movementX * (this.yawDamper * 0.10)
@@ -244,14 +245,14 @@ THREE.FlyControls = function(camera, object, domElement) {
     // pressing forward
     if (this.pressed[87]) {
       this.moveState.forward *= 1 + (.03 * (this.moveState.forward/15) )
-      if (this.moveState.forward < 3) 
+      if (this.moveState.forward < 3)
         this.moveState.forward = 3
     }
-    
+
     // no input going fast
     if (!this.pressed[83] && !this.pressed[87] && this.moveState.forward > 3) {
       this.moveState.forward *= 1 - (.009 * (this.moveState.forward/15) )
-      if (this.moveState.forward < 3) 
+      if (this.moveState.forward < 3)
         this.moveState.forward = 3
     }
 
@@ -266,7 +267,7 @@ THREE.FlyControls = function(camera, object, domElement) {
     }
 
     this.updateMovementVector()
-    
+
     var moveMult = this.speed
 
 

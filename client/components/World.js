@@ -391,6 +391,11 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       return mesh
     }
 
+    // this.destroy = function() {
+    //   scene.remove(this.name)
+    //   asteroids.splice(this.index, 1)
+    // }
+
     return this
   }
 
@@ -398,6 +403,8 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   let asteroids = []
   for (var i = 0; i < NUM_ASTEROIDS; i++) {
     asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
+    // asteroids[i].name = `asteroid${i}`
+    // asteroids[i].index = i
     scene.add(asteroids[i].getMesh())
   }
 
@@ -510,6 +517,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       return true
     }
   }
+
   function ringPlanetCollision() {
     //ring vs earth collision
     var earthBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
@@ -520,6 +528,20 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       // console.log(counter)
       return true
     }
+  }
+
+  function shotAsteroidCollision(shot) {
+    asteroids.forEach(a => {
+      var asteroidBBox = new THREE.Box3(
+        new THREE.Vector3(),
+        new THREE.Vector3()
+      )
+      asteroidBBox.setFromObject(a.getMesh())
+      if (shot.BBox.intersectsBox(asteroidBBox)) {
+        console.log('HIT')
+        return true
+      }
+    })
   }
 
   //Add clouds to earth
@@ -545,11 +567,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   var length = 2
   var hex = 0xffff00
 
-
   // var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0); // it's up to you how you will create THREE.Plane(), there are several methods
   //   var raycaster = new THREE.Raycaster(); //for reuse
   //   var intersectPoint = new THREE.Vector3(); //for reuse
-
 
   //   raycaster.setFromCamera(mouse, camera);//set raycaster
   //       raycaster.ray.intersectPlane(plane, intersectPoint); // find the point of intersection
@@ -561,18 +581,12 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // var pointerGeometry = new THREE.ConeGeometry( 3, 20, 9 );
   var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
   var pointerMaterial = new THREE.MeshBasicMaterial({color: 0xffff00})
-  var pointerMesh= new THREE.Mesh(pointerGeometry, pointerMaterial)
-
-
-
+  var pointerMesh = new THREE.Mesh(pointerGeometry, pointerMaterial)
 
   pointerMesh.position.set(-110, 1, 0)
 
   scene.add(pointerMesh)
   player.getMesh().add(pointerMesh)
-
-
-
 
   /*********************************
    * Render To Screen
@@ -598,7 +612,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
-
     pointerMesh.lookAt(ring.position)
     moveRing()
     playerPlanetCollision()
@@ -613,7 +626,10 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
       // shots[index].position.add(shots[index].velocity)
       var shotVector = new THREE.Vector3()
       player.getMesh().getWorldDirection(shotVector)
-      shots[index].translateOnAxis(shotVector, -75)
+      shots[index].translateOnAxis(shotVector, -100)
+      shots[index].update()
+      // console.log(shots[index].BBox)
+      shotAsteroidCollision(shots[index])
     }
     if (player.canShoot > 0) player.canShoot -= 1
 
@@ -675,7 +691,7 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
           })
 
           const shot = new THREE.Mesh(
-            new THREE.SphereGeometry(0.7, 16, 16),
+            new THREE.SphereGeometry(3, 16, 16),
             shotMaterial
           )
 
@@ -689,6 +705,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
             0,
             Math.cos(camera.rotation.y)
           )
+
+          shot.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+          shot.BBox.setFromObject(shot)
+
+          shot.update = function() {
+            this.BBox.setFromObject(this)
+          }
 
           // after 1000ms, set alive to false and remove from scene
           // setting alive to false flags our update code to remove
