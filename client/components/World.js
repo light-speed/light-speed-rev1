@@ -545,11 +545,9 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   var length = 2
   var hex = 0xffff00
 
-
   // var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0); // it's up to you how you will create THREE.Plane(), there are several methods
   //   var raycaster = new THREE.Raycaster(); //for reuse
   //   var intersectPoint = new THREE.Vector3(); //for reuse
-
 
   //   raycaster.setFromCamera(mouse, camera);//set raycaster
   //       raycaster.ray.intersectPlane(plane, intersectPoint); // find the point of intersection
@@ -560,19 +558,13 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   // var pointerGeometry = new THREE.ConeGeometry( 3, 20, 9 );
   var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
-  var pointerMaterial = new THREE.MeshBasicMaterial({color: 0xffff00})
-  var pointerMesh= new THREE.Mesh(pointerGeometry, pointerMaterial)
-
-
-
+  var pointerMaterial = new THREE.MeshPhongMaterial({color: 0x00cccc})
+  var pointerMesh = new THREE.Mesh(pointerGeometry, pointerMaterial)
 
   pointerMesh.position.set(-110, 1, 0)
 
   scene.add(pointerMesh)
   player.getMesh().add(pointerMesh)
-
-
-
 
   /*********************************
    * Render To Screen
@@ -597,7 +589,6 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
     var rotationSpeed = 0.01
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
-
 
     pointerMesh.lookAt(ring.position)
     moveRing()
