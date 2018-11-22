@@ -50,13 +50,15 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
   // progress.appendChild(progressBar);
   // document.body.appendChild(progress);
 
+  let resources = 0
   loadingManager.onProgress = function(item, loaded, total) {
     // progressBar.style.width = (loaded / total * 100) + '%';
-    console.log(`loaded resource ${loaded}/${total}`)
+    // console.log(`loaded resource ${loaded}/${total}`)
+    resources++
   }
 
   loadingManager.onLoad = function() {
-    console.log('loaded all resources')
+    console.log(`loaded ${resources} resources`)
     RESOURCES_LOADED = true
     // progressBar.style.display = 'none'
     progress.style.display = 'none'
@@ -638,51 +640,18 @@ function generateWorld(/*world, currentUser, guestAvatar*/) {
 
   function animate() {
     if (isPaused) return
-
-    // loading screen stuff
-    if (RESOURCES_LOADED === false) {
-      requestAnimationFrame(animate)
-
-      loadingScreen.box.position.x -= 0.05
-      if (loadingScreen.box.position.x < -10) loadingScreen.box.position.x = 10
-      loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x)
-
-      renderer.render(loadingScreen.scene, loadingScreen.camera)
-      return
-    }
-
     requestAnimationFrame(animate)
-    render()
+    if (RESOURCES_LOADED) render()
   }
 
-  // window.addEventListener('keydown', function(e) {
-  //   switch (e.keyCode) {
-  //     case 32: // Space
-  //       console.log('scene', player.getMesh().position)
-  //       e.preventDefault()
-  //       var playerPos = player.getMesh().position
-  //       // playerPos.sub(new THREE.Vector3(0, 0, 0))
-  //       var shot = new Shot(playerPos)
-  //       shots.push(shot)
-  //       scene.add(shot.getMesh())
-  //       // console.log('p', player.getMesh())
-  //       // console.log('s', shot.getMesh().position)
-  //       break
-  //     default:
-  //   }
-  // })
   window.addEventListener('keydown', function(e) {
     if (player.canShoot <= 0) {
       switch (e.keyCode) {
         case 32: // Space
           e.preventDefault()
 
-          // var cameraPos = control.getObject().position
           var playerPos = player.getMesh().position
-          // console.log('camera', cameraPos)
-          // console.log('player', playerPos)
-          // console.log('player const', player)
-          // // console.log('player mesh vertex array', player.getMesh().children[1].children[0].geometry.attributes.position.array)
+
 
           const shotMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
@@ -826,24 +795,24 @@ class World extends Component {
         <div id="pause-screen">
           <div id="progress-container">
             <div>
-              <div class="preloader-1">
+              <div className="preloader-1">
                 <div>Loading</div>
-                <span class="line line-1" />
-                <span class="line line-2" />
-                <span class="line line-3" />
-                <span class="line line-4" />
-                <span class="line line-5" />
-                <span class="line line-6" />
-                <span class="line line-7" />
-                <span class="line line-8" />
-                <span class="line line-9" />
-                <span class="line line-10" />
-                <span class="line line-11" />
-                <span class="line line-12" />
-                <span class="line line-13" />
-                <span class="line line-14" />
-                <span class="line line-15" />
-                <span class="line line-16" />
+                <span className="line line-1" />
+                <span className="line line-2" />
+                <span className="line line-3" />
+                <span className="line line-4" />
+                <span className="line line-5" />
+                <span className="line line-6" />
+                <span className="line line-7" />
+                <span className="line line-8" />
+                <span className="line line-9" />
+                <span className="line line-10" />
+                <span className="line line-11" />
+                <span className="line line-12" />
+                <span className="line line-13" />
+                <span className="line line-14" />
+                <span className="line line-15" />
+                <span className="line line-16" />
               </div>
               <img src="./loading.gif" />
             </div>
