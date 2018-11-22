@@ -14,8 +14,8 @@ let onEsc
 export default function generateWorld() {
   getDomElements()
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
-  loadSkybox(scene)
   loadPlayer(scene, camera, renderer)
+  loadSkybox(scene)
   loadRing(scene)
   loadAsteroids(scene)
   loadPlanet(scene)

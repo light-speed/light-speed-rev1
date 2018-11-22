@@ -16,7 +16,7 @@ cube.name = 'cube'
 
 var Player = function(scene) {
   let spaceship = null
-  var playerObj = new THREE.Object3D()
+  this.mesh = new THREE.Object3D()
   this.loaded = false
   const self = this
 
@@ -24,7 +24,7 @@ var Player = function(scene) {
   scene.add(this.hitbox)
   this.canShoot = 0
 
-  playerObj.add(this.hitbox)
+  this.mesh.add(this.hitbox)
 
   var onProgress = function(xhr) {
     if (xhr.lengthComputable) {
@@ -72,7 +72,7 @@ var Player = function(scene) {
             spaceship = mesh
 
             self.player = spaceship
-            playerObj.add(self.player)
+            self.mesh.add(self.player)
             self.loaded = true
           },
           onProgress,
@@ -89,7 +89,7 @@ var Player = function(scene) {
   }
 
   this.getMesh = function() {
-    return playerObj
+    return this.mesh
   }
   return this
 }
