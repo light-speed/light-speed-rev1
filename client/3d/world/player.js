@@ -94,9 +94,17 @@ var Player = function(scene) {
   return this
 }
 
-export let player 
+export let player, controls
 
-export default (scene) => {
+export default (scene, camera, renderer) => {
   player = new Player(scene)
   scene.add(player.getMesh())
+  camera.position.set(0, 45, 90) // <-- this is relative to the player's position
+  player.getMesh().add(camera)
+  
+  controls = new THREE.FlyControls(
+    camera,
+    player.getMesh(),
+    renderer.domElement
+  )
 }

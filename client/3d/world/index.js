@@ -1,279 +1,24 @@
-import store, {addPoints} from '../../store'
 import {configureRenderer} from './configure'
 import {showInstructions} from '../../utilities'
 import getDomElements from './domElements'
 import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'
-import loadPlayer, {player} from './player'
+import loadPlayer, {player, controls} from './player'
+import loadRing, {ring} from './ring'
+import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
+import loadPlanet, {earth} from './planet'
 
 let isPaused = false
 let onEsc
 
 export default function generateWorld() {
-  const {renderer, camera, scene, disposeOfResize} = configureRenderer()
   getDomElements()
+  const {renderer, camera, scene, disposeOfResize} = configureRenderer()
   loadSkybox(scene)
-  loadPlayer(scene)
-
-  
-
-  /// experimental ring array
-  // var ringArray = []
-
-  // for (let i = 0; i < 8; i++) {
-  //   var ring = new THREE.Mesh(geometry, material)
-  //   ring.position.x = Math.floor(Math.random() * 10 - 250)
-  //   ring.position.y = Math.floor(Math.random() * 1000 - 3000)
-  //   ring.position.z = Math.floor(Math.random() * 100 - 200)
-  //   ringArray.push(ring)
-  // }
-  // ringArray.forEach(r => scene.add(r))
-
-  //Add Controls
-  //add pointerlock to camera
-  // const control = new THREE.PointerLockControls(camera)
-  // scene.add(control.getObject())
-
-  // window.addEventListener(
-  //   'click',
-  //   function() {
-  //     control.lock()
-  //   },
-  //   false
-  // )
-  var controls = new THREE.FlyControls(
-    camera,
-    player.getMesh(),
-    renderer.domElement
-  )
-
-  // control.getObject().position.set(0, 30, 70) // <-- this is relative to the player's position
-  camera.position.set(0, 45, 90) // <-- this is relative to the player's position
-  player.getMesh().add(camera)
-  // camera.add(skybox.getMesh())
-  // player.getMesh().add(cube)
-  // player.getMesh().add(control.getObject())
-
-  // Add Rings for Racing
-
-  // var geometry = new THREE.TorusGeometry(20, 2, 20, 70)
-  // var material = new THREE.MeshBasicMaterial({
-  //   color: 0x7dd2d8,
-  //   side: THREE.DoubleSide
-  // })
-
-  // var ring = new THREE.Mesh(geometry, material)
-  // ring.position.z = -200
-  // scene.add(ring)
-  /////////////////////
-  // ADD INITIAL RING
-  var geometry = new THREE.TorusGeometry(60, 2, 20, 100)
-  var material = new THREE.MeshBasicMaterial({
-    color: 0x7dd2d8,
-    side: THREE.DoubleSide
-  })
-  var ring = new THREE.Mesh(geometry, material)
-  ring.position.set(0, 0, -500)
-  scene.add(ring)
-
-  // ring sound
-  function ringSound() {
-    var listener = new THREE.AudioListener()
-    camera.add(listener)
-    var audioLoader = new THREE.AudioLoader()
-    var sound1 = new THREE.PositionalAudio(listener)
-    audioLoader.load('./sounds/sweep2.wav', function(buffer) {
-      sound1.setBuffer(buffer)
-      sound1.setRefDistance(20)
-      sound1.play()
-    })
-    ring.add(sound1)
-  }
-
-  //Load Asteroids
-  var loader = new THREE.OBJLoader(loadingManager)
-
-  var Asteroid = function(rockType) {
-    var mesh = new THREE.Object3D(),
-      self = this
-    this.loaded = false
-
-    // Speed of motion and rotation
-    mesh.velocity = Math.random() * 2 + 1
-    mesh.vRotation = new THREE.Vector3(
-      Math.random(),
-      Math.random(),
-      Math.random()
-    )
-
-    this.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-
-    var rockMtl = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader(loadingManager).load(
-        'textures/lunarrock.png'
-      )
-    })
-
-    loader.load('models/rock' + rockType + '.obj', function(obj) {
-      obj.traverse(function(child) {
-        if (child instanceof THREE.Mesh) {
-          child.material = rockMtl
-        }
-      })
-
-      obj.scale.set(30, 30, 30)
-
-      mesh.add(obj)
-
-      mesh.position.set(
-        Math.random() * (ring.position.x + 250 - (ring.position.x - 250)) +
-          (ring.position.x - 250),
-        Math.random() * (ring.position.y + 250 - (ring.position.y - 250)) +
-          (ring.position.y - 250),
-        Math.random() * (ring.position.z + 100 - (ring.position.z - 100)) +
-          (ring.position.z - 100)
-      )
-      self.loaded = true
-      self.BBox.setFromObject(obj)
-    })
-
-    this.reset = function(z) {
-      mesh.velocity = Math.random() * 2 + 1
-      mesh.position.set(
-        Math.random() * (ring.position.x + 250 - (ring.position.x - 250)) +
-          (ring.position.x - 250),
-        Math.random() * (ring.position.y + 250 - (ring.position.y - 250)) +
-          (ring.position.y - 250),
-        Math.random() * (z + 100 - (z - 100)) + (z - 100)
-      )
-    }
-
-    this.update = function(z) {
-      // mesh.position.z += mesh.velocity
-      mesh.rotation.x += mesh.vRotation.x * 0.02
-      mesh.rotation.y += mesh.vRotation.y * 0.02
-      mesh.rotation.z += mesh.vRotation.z * 0.02
-
-      if (mesh.children.length > 0) this.BBox.setFromObject(mesh.children[0])
-    }
-
-    this.getMesh = function() {
-      return mesh
-    }
-
-    // this.destroy = function() {
-    //   scene.remove(this.name)
-    //   asteroids.splice(this.index, 1)
-    // }
-
-    return this
-  }
-
-  let NUM_ASTEROIDS = 5
-  let asteroids = []
-  for (var i = 0; i < NUM_ASTEROIDS; i++) {
-    asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
-    // asteroids[i].name = `asteroid${i}`
-    // asteroids[i].index = i
-    scene.add(asteroids[i].getMesh())
-  }
-
-  function moveRing() {
-    if (detectRingCollision() === true || ringPlanetCollision() === true) {
-      ring.position.x =
-        Math.random() *
-          (player.getMesh().position.x +
-            500 -
-            (player.getMesh().position.x - 500)) +
-        (player.getMesh().position.x - 500)
-      ring.position.y =
-        Math.random() *
-          (player.getMesh().position.y +
-            500 -
-            (player.getMesh().position.y - 500)) +
-        (player.getMesh().position.y - 500)
-      ring.position.z =
-        Math.random() *
-          (player.getMesh().position.z +
-            500 -
-            (player.getMesh().position.z - 500)) +
-        (player.getMesh().position.z - 500)
-
-      asteroids.forEach(e => {
-        e.reset(ring.position.z)
-      })
-    }
-  }
-
-  var counter = 0
-
-  function detectRingCollision() {
-    var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    cubeBBox.setFromObject(player.getHitbox())
-    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    ringBBox.setFromObject(ring)
-    if (cubeBBox.intersectsBox(ringBBox)) {
-      store.dispatch(addPoints(100))
-      // counter += 1
-      // console.log(counter)
-      ringSound()
-      return true
-    }
-  }
-
-  //Add Planet
-  var Planet = function() {
-    var planetObj = new THREE.Object3D()
-    planetObj.name = 'EARTH'
-    // Speed of motion and rotation
-
-    var radius = 4000
-    var geometry = new THREE.SphereBufferGeometry(radius, 100, 50)
-    var materialNormalMap = new THREE.MeshPhongMaterial({
-      specular: 0x333333,
-      shininess: 15,
-      map: new THREE.TextureLoader(loadingManager).load(
-        'textures/planets/earth_atmos_2048.jpg'
-      ),
-      specularMap: new THREE.TextureLoader(loadingManager).load(
-        'textures/planets/earth_specular_2048.jpg'
-      ),
-      normalMap: new THREE.TextureLoader(loadingManager).load(
-        'textures/planets/earth_normal_2048.jpg'
-      ),
-      normalScale: new THREE.Vector2(0.85, 0.85)
-    })
-    var meshPlanet = new THREE.Mesh(geometry, materialNormalMap)
-
-    planetObj.add(meshPlanet)
-    planetObj.rotation.y = 0
-    planetObj.rotation.z = 0.41
-
-    planetObj.position.set(5000, -1000, -8000)
-
-    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    this.hitbox.setFromObject(meshPlanet)
-
-    this.getMesh = function() {
-      return planetObj
-    }
-
-    this.getMeshPlanet = function() {
-      return meshPlanet
-    }
-
-    this.getPlanetRadius = function() {
-      return radius
-    }
-
-    return this
-  }
-  var earth = new Planet()
-  scene.add(earth.getMesh())
-  // skybox.getMesh().add(earth.getMesh())
-
-  // console.log(earth.getPlanetMesh())
-  // console.log(earth.getPlanetMesh().geometry.boundingSphere.radius)
+  loadPlayer(scene, camera, renderer)
+  loadRing(scene)
+  loadAsteroids(scene)
+  loadPlanet(scene)
 
   function playerPlanetCollision() {
     //player vs earth collision
@@ -284,18 +29,6 @@ export default function generateWorld() {
     )
     if (earthBSphere.containsPoint(playerPos)) {
       console.log('DEATH')
-      return true
-    }
-  }
-
-  function ringPlanetCollision() {
-    //ring vs earth collision
-    var earthBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    earthBBox.setFromObject(earth.getMeshPlanet())
-    var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    ringBBox.setFromObject(ring)
-    if (earthBBox.intersectsBox(ringBBox)) {
-      // console.log(counter)
       return true
     }
   }
@@ -331,24 +64,7 @@ export default function generateWorld() {
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
 
-  //add arrow helper
-  var dir = ring.position
-  var origin = camera.position
-  var length = 2
-  var hex = 0xffff00
 
-  // var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0); // it's up to you how you will create THREE.Plane(), there are several methods
-  //   var raycaster = new THREE.Raycaster(); //for reuse
-  //   var intersectPoint = new THREE.Vector3(); //for reuse
-
-  //   raycaster.setFromCamera(mouse, camera);//set raycaster
-  //       raycaster.ray.intersectPlane(plane, intersectPoint); // find the point of intersection
-  //       obj.position.set(0, 0, -20)
-  //       obj.lookAt(intersectPoint); // face our arrow to this point
-  //       console.log(intersectPoint)
-  //     }
-
-  // var pointerGeometry = new THREE.ConeGeometry( 3, 20, 9 );
   var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
   var pointerMaterial = new THREE.MeshPhongMaterial({color: 0x00cccc})
   var pointerMesh = new THREE.Mesh(pointerGeometry, pointerMaterial)
@@ -373,15 +89,15 @@ export default function generateWorld() {
 
 
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
-      asteroids[i].update(ring.position.z)
+      asteroids[i].update(ring.getMesh().position.z)
     }
 
     var rotationSpeed = 0.01
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
-    pointerMesh.lookAt(ring.position)
-    moveRing()
+    pointerMesh.lookAt(ring.getMesh().position)
+    ring.move()
     playerPlanetCollision()
 
     ///shooting function
@@ -391,12 +107,10 @@ export default function generateWorld() {
         shots.splice(index, 1)
         continue
       }
-      // shots[index].position.add(shots[index].velocity)
       var shotVector = new THREE.Vector3()
       player.getMesh().getWorldDirection(shotVector)
       shots[index].translateOnAxis(shotVector, -100)
       shots[index].update()
-      // console.log(shots[index].BBox)
       shotAsteroidCollision(shots[index])
     }
     if (player.canShoot > 0) player.canShoot -= 1
@@ -471,10 +185,6 @@ export default function generateWorld() {
   document.getElementById('world').appendChild(renderer.domElement)
   animate()
 
-  /*********************************
-   * Pause The World
-   ********************************/
-
   onEsc = event => {
     if (event.which === 27) {
       isPaused = !isPaused
@@ -485,17 +195,7 @@ export default function generateWorld() {
 
   window.addEventListener('keydown', onEsc, false)
 
-  /*********************************
-   * Dispose functions
-   ********************************/
-
   return function() {
-    // cameraControl.dispose()
-    // motionControl.dispose()
-    // blockControl.dispose()
-    // previewControl.dispose()
-    // horizonControl.dispose()
-    // avatarControl.dispose()
     disposeOfResize()
   }
 }
