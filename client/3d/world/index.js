@@ -3,6 +3,7 @@ import {configureRenderer} from './configure'
 import {showInstructions} from '../../utilities'
 import getDomElements from './domElements'
 import loadingManager, {RESOURCES_LOADED} from './loadingManager'
+import loadSkybox from './skybox'
 
 let isPaused = false
 let onEsc
@@ -10,100 +11,7 @@ let onEsc
 export default function generateWorld() {
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
   getDomElements()
-
-
-  // progressBar.id = 'progress'
-  // progress.appendChild(progressBar);
-  // document.body.appendChild(progress);
-
-  
-
-  // loadingScreen.box.position.set(0,0,5);
-  // loadingScreen.camera.lookAt(loadingScreen.box.position);
-  // loadingScreen.scene.add(loadingScreen.box);
-
-  // const cameraControl = new CameraControl(camera, renderer.domElement)
-  // scene.add(cameraControl.getObject())
-
-  /*
-      EVERYTHING OUTSIDE OF THIS CODE BLOCK IS FROM SPACECRAFT
-      =======>>>>>
-  */
-
-  //this.mesh = new THREE.Mesh(new THREE.SphereGeometry(3, 16, 16), shotMaterial);
-
-  //Light
-  // var dirLight = new THREE.DirectionalLight(0xffffff)
-  // dirLight.position.set(-1, 0, 1).normalize()
-  // scene.add(dirLight)
-
-  //Load Skybox
-  var Skybox = function() {
-    var skyboxObject = new THREE.Object3D()
-
-    var imagePrefix = 'images/customspace-'
-    var directions = ['ypos', 'yneg', 'zpos', 'zneg', 'xpos', 'xneg']
-    var imageSuffix = '.png'
-
-    var loader = new THREE.TextureLoader(loadingManager)
-
-    let materialArray = []
-    // let link
-    let link = 'images/space.png'
-    for (var i = 0; i < 6; i++) {
-      // link = imagePrefix + directions[i] + imageSuffix
-      loader.load(link, function(texture) {
-        materialArray.push(
-          new THREE.MeshBasicMaterial({
-            map: texture,
-            side: THREE.DoubleSide
-          })
-        )
-      })
-    }
-
-    // var cubeMaterials = [
-    //   new THREE.MeshBasicMaterial({
-    //     map: new THREE.TextureLoader().load('images/customspace-front.png'),
-    //     side: THREE.DoubleSide
-    //   }), //front side
-    //   new THREE.MeshBasicMaterial({
-    //     map: new THREE.TextureLoader().load('images/customspace-back.png'),
-    //     side: THREE.DoubleSide
-    //   }), //back side
-    //   new THREE.MeshBasicMaterial({
-    //     map: new THREE.TextureLoader().load('images/customspace-top.png'),
-    //     side: THREE.DoubleSide
-    //   }), //up side
-    //   new THREE.MeshBasicMaterial({
-    //     map: new THREE.TextureLoader().load('images/customspace-bottom.png'),
-    //     side: THREE.DoubleSide
-    //   }), //down side
-    //   new THREE.MeshBasicMaterial({
-    //     map: new THREE.TextureLoader().load('images/customspace-right.png'),
-    //     side: THREE.DoubleSide
-    //   }), //right side
-    //   new THREE.MeshBasicMaterial({
-    //     map: new THREE.TextureLoader().load('images/customspace-left.png'),
-    //     side: THREE.DoubleSide
-    //   }) //left side
-    // ]
-    var skyGeometry = new THREE.CubeGeometry(50000, 50000, 50000)
-    // var cubeMaterial = new THREE.MeshFaceMaterial( cubeMaterials );
-
-    var skyboxMesh = new THREE.Mesh(skyGeometry, materialArray)
-    // skyBox.rotation.x = Math.PI / 2
-    skyboxObject.add(skyboxMesh)
-    // console.log('scene', scene)
-
-    this.getMesh = function() {
-      return skyboxObject
-    }
-  }
-  var skybox = new Skybox()
-  scene.add(skybox.getMesh())
-
-  // scene.registerBeforeRender(function() {skybox.getMesh().position = camera.position})
+  loadSkybox(scene)
 
   // Player Collision Wrapper Cube
 
