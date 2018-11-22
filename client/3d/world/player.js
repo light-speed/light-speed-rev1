@@ -1,0 +1,102 @@
+import loadingManager from './loadingManager'
+
+// Player Collision Wrapper Cube
+
+var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
+var cubeMaterial = new THREE.MeshBasicMaterial({
+  color: 0x003500,
+  opacity: 0,
+  side: THREE.DoubleSide,
+  transparent: true
+})
+var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+
+cube.position.set(0, 0, 0)
+cube.name = 'cube'
+
+var Player = function(scene) {
+  let spaceship = null
+  var playerObj = new THREE.Object3D()
+  this.loaded = false
+  const self = this
+
+  this.hitbox = cube
+  scene.add(this.hitbox)
+  this.canShoot = 0
+
+  playerObj.add(this.hitbox)
+
+  var onProgress = function(xhr) {
+    if (xhr.lengthComputable) {
+      var percentComplete = xhr.loaded / xhr.total * 100
+      // console.log(Math.round(percentComplete, 2) + '% downloaded')
+    }
+  }
+  var onError = function() {}
+
+  var keyLight = new THREE.DirectionalLight(
+    new THREE.Color('hsl(30, 100%, 75%)'),
+    1.0
+  )
+  keyLight.position.set(-100, 0, 100)
+
+  var light = new THREE.AmbientLight(0x404040) // soft white light
+  scene.add(light)
+
+  var fillLight = new THREE.DirectionalLight(
+    new THREE.Color('hsl(240, 100%, 75%)'),
+    0.75
+  )
+  fillLight.position.set(100, 0, 100)
+
+  var backLight = new THREE.DirectionalLight(0xffffff, 1.0)
+  backLight.position.set(100, 0, -100).normalize()
+
+  scene.add(keyLight)
+  scene.add(fillLight)
+  scene.add(backLight)
+
+  new THREE.MTLLoader(loadingManager)
+    // .setPath('../public/models/')
+    .load('models/DevShipT.mtl', function(materials) {
+      materials.preload()
+      new THREE.OBJLoader(loadingManager)
+        .setMaterials(materials)
+        // .setPath('../public/models/')
+        .load(
+          'models/DevShipT.obj',
+          function(mesh) {
+            mesh.scale.set(3, 3, 3)
+            mesh.rotation.set(0, Math.PI, 0)
+            // mesh.position.set(0, -5, 0);
+            spaceship = mesh
+
+            self.player = spaceship
+            playerObj.add(self.player)
+            self.loaded = true
+          },
+          onProgress,
+          onError
+        )
+    })
+
+  // this.update = function() {
+  //   this.hitbox.setFromObject(spaceship)
+  // }
+  
+  this.getHitbox = function() {
+    return this.hitbox
+  }
+
+  this.getMesh = function() {
+    return playerObj
+  }
+  return this
+}
+
+export let player 
+
+export default (scene) => {
+  player = new Player(scene)
+  scene.add(player.getMesh())
+}

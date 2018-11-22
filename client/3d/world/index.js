@@ -4,6 +4,7 @@ import {showInstructions} from '../../utilities'
 import getDomElements from './domElements'
 import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'
+import loadPlayer, {player} from './player'
 
 let isPaused = false
 let onEsc
@@ -12,102 +13,9 @@ export default function generateWorld() {
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
   getDomElements()
   loadSkybox(scene)
+  loadPlayer(scene)
 
-  // Player Collision Wrapper Cube
-
-  var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
-  var cubeMaterial = new THREE.MeshBasicMaterial({
-    color: 0x003500,
-    opacity: 0,
-    side: THREE.DoubleSide,
-    transparent: true
-  })
-  var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-
-  cube.position.set(0, 0, 0)
-  cube.name = 'cube'
-  scene.add(cube)
-
-  //Load Player Ship
-
-  var Player = function() {
-    let spaceship = null
-    var playerObj = new THREE.Object3D()
-    this.loaded = false
-    const self = this
-
-    this.hitbox = cube
-    this.canShoot = 0
-
-    playerObj.add(this.hitbox)
-
-    var onProgress = function(xhr) {
-      if (xhr.lengthComputable) {
-        var percentComplete = xhr.loaded / xhr.total * 100
-        // console.log(Math.round(percentComplete, 2) + '% downloaded')
-      }
-    }
-    var onError = function() {}
-
-    var keyLight = new THREE.DirectionalLight(
-      new THREE.Color('hsl(30, 100%, 75%)'),
-      1.0
-    )
-    keyLight.position.set(-100, 0, 100)
-
-    var light = new THREE.AmbientLight(0x404040) // soft white light
-    scene.add(light)
-
-    var fillLight = new THREE.DirectionalLight(
-      new THREE.Color('hsl(240, 100%, 75%)'),
-      0.75
-    )
-    fillLight.position.set(100, 0, 100)
-
-    var backLight = new THREE.DirectionalLight(0xffffff, 1.0)
-    backLight.position.set(100, 0, -100).normalize()
-
-    scene.add(keyLight)
-    scene.add(fillLight)
-    scene.add(backLight)
-
-    new THREE.MTLLoader(loadingManager)
-      // .setPath('../public/models/')
-      .load('models/DevShipT.mtl', function(materials) {
-        materials.preload()
-        new THREE.OBJLoader(loadingManager)
-          .setMaterials(materials)
-          // .setPath('../public/models/')
-          .load(
-            'models/DevShipT.obj',
-            function(mesh) {
-              mesh.scale.set(3, 3, 3)
-              mesh.rotation.set(0, Math.PI, 0)
-              // mesh.position.set(0, -5, 0);
-              spaceship = mesh
-
-              self.player = spaceship
-              playerObj.add(self.player)
-              self.loaded = true
-            },
-            onProgress,
-            onError
-          )
-      })
-
-    // this.update = function() {
-    //   this.hitbox.setFromObject(spaceship)
-    // }
-    this.getMesh = function() {
-      return playerObj
-    }
-    return this
-  }
-
-  const player = new Player()
-  // player.getMesh().position.set(0, 0, 2)s
-
-  scene.add(player.getMesh())
+  
 
   /// experimental ring array
   // var ringArray = []
@@ -301,7 +209,7 @@ export default function generateWorld() {
 
   function detectRingCollision() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    cubeBBox.setFromObject(cube)
+    cubeBBox.setFromObject(player.getHitbox())
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(ring)
     if (cubeBBox.intersectsBox(ringBBox)) {
