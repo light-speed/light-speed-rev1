@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, World, World2} from './components'
+import {Login, Signup, UserHome, World} from './components'
 import {me} from './store'
 import Menu from './components/Menu';
 import Credits from './components/Credits';
@@ -22,7 +22,6 @@ class App extends Component {
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/world2" component={World2} />
         <Route path='/play' component={World} />
         <Route path='/credits' component={Credits} />
         <Route path='/howtoplay' component={HowToPlay} />
