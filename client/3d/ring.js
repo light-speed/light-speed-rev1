@@ -1,6 +1,6 @@
 import loadingManager from './loadingManager'
 import {player} from './player'
-import store, {addPoints} from '../../store'
+import store, {addPoints} from '../store'
 import {earth} from './planet'
 
 
@@ -13,6 +13,7 @@ const Ring = function(scene) {
     side: THREE.DoubleSide
   })
   this.mesh = new THREE.Mesh(geometry, material)
+  this.mesh.position.set(0, 0, -500)
   
 
   this.getMesh = function() {
@@ -20,18 +21,18 @@ const Ring = function(scene) {
   }
 
   // ring sound
-  this.ringSound = function() {
-    var listener = new THREE.AudioListener()
-    camera.add(listener)
-    var audioLoader = new THREE.AudioLoader(loadingManager)
-    var sound1 = new THREE.PositionalAudio(listener)
-    audioLoader.load('./sounds/sweep2.wav', function(buffer) {
-      sound1.setBuffer(buffer)
-      sound1.setRefDistance(20)
-      sound1.play()
-    })
-    ring.add(sound1)
-  }
+  // this.ringSound = function() {
+  //   var listener = new THREE.AudioListener()
+  //   camera.add(listener)
+  //   var audioLoader = new THREE.AudioLoader(loadingManager)
+  //   var sound1 = new THREE.PositionalAudio(listener)
+  //   audioLoader.load('./sounds/sweep2.wav', function(buffer) {
+  //     sound1.setBuffer(buffer)
+  //     sound1.setRefDistance(20)
+  //     sound1.play()
+  //   })
+  //   this.mesh.add(sound1)
+  // }
 
   this.move = function() {
     if (this.detectRingCollision() === true || this.ringPlanetCollision() === true) {
@@ -87,6 +88,5 @@ const Ring = function(scene) {
 
 export default (scene) => {
   ring = new Ring(scene)
-  ring.getMesh().position.set(0, 0, -500)
-  scene.add(ring.getMesh)
+  scene.add(ring.getMesh())
 }

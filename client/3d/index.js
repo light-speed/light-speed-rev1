@@ -1,5 +1,5 @@
 import {configureRenderer} from './configure'
-import {showInstructions} from '../../utilities'
+import {showInstructions} from '../utilities'
 import getDomElements from './domElements'
 import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'

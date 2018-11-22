@@ -1,4 +1,4 @@
-import generateWorld from '../3d/world'
+import generateWorld from '../3d'
 import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 import HUD from './HUD'
