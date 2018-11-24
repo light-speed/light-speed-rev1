@@ -73,6 +73,7 @@ export default function generateWorld() {
 
   scene.add(pointerMesh)
   player.getMesh().add(pointerMesh)
+  player.getMesh().add(camera)
 
   /*********************************
    * Render To Screen
