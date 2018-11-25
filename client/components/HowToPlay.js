@@ -7,6 +7,7 @@ class HowToPlay extends React.Component {
       <div>
         <MenuButton />
         <div className="HowToPlay" />
+        <img src="./images/instruc.png" />
       </div>
     )
   }
