@@ -1,9 +1,10 @@
 body {
-  background:url("https://i.ytimg.com/vi/aiU22lKiZbA/maxresdefault.jpg") no-repeat center center fixed;
+  background: url('https://i.ytimg.com/vi/aiU22lKiZbA/maxresdefault.jpg')
+    no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover; 
+  background-size: cover;
   font-family: 'Titillium Web', sans-serif;
   width: 100%;
   height: 100%;
@@ -77,7 +78,7 @@ form div {
   z-index: 1337;
   display: none;
   flex-direction: row;
-  background: url('http://orig14.deviantart.net/f7cf/f/2016/093/7/0/header_by_sinithwar-d9xm2hn.png');
+  background: url('/images/hud.png');
   height: 20%;
   width: 100%;
   background-size: 100% 100%;
@@ -126,7 +127,6 @@ form div {
   border: solid 1px black;
 }
 
-
 .Menu {
   display: flex;
   flex-direction: column;
@@ -135,14 +135,13 @@ form div {
   position: relative;
   margin-top: 20vh;
   margin-bottom: 30vh;
-  
 }
-.Menu button{
+.Menu button {
   border: 3px solid rgb(0, 218, 213);
   background: rgb(33, 70, 72);
   color: rgb(0, 218, 213);
   transition: all 0.3s ease-out;
-  border-radius: 7px; 
+  border-radius: 7px;
   font-size: 1.8vw;
   font-weight: bold;
   width: 30vw;
@@ -150,18 +149,17 @@ form div {
   margin: 10px;
   text-align: center;
 }
-.Menu button:hover{
+.Menu button:hover {
   background: rgb(0, 218, 213);
   color: rgb(33, 70, 72);
   border: 3px solid rgb(33, 70, 72);
 }
-.Menu h1  {
+.Menu h1 {
   font-size: 2.8vw;
   font-weight: 500;
   color: rgb(0, 218, 213);
   margin-bottom: 8vh;
   text-shadow: 2px 2px rgb(33, 70, 72);
-
 }
 
 .fade {
@@ -208,11 +206,11 @@ form div {
 }
 
 @keyframes crawl {
-	0% {
+  0% {
     top: -100px;
-    transform: rotateX(20deg)  translateZ(0);
+    transform: rotateX(20deg) translateZ(0);
   }
-	100% { 
+  100% {
     top: -6000px;
     transform: rotateX(25deg) translateZ(-2500px);
   }
@@ -223,7 +221,7 @@ form div {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 99;
 }
 
@@ -245,7 +243,7 @@ form div {
   color: #ffffff;
   text-align: center;
   cursor: pointer;
-} 
+}
 
 .ReturnButton {
   position: absolute;
@@ -263,9 +261,9 @@ form div {
 
   cursor: pointer;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   transform: rotate(180deg);
 
   background: rgb(33, 70, 72);
@@ -275,7 +273,7 @@ form div {
   transition: all 0.3s ease-out;
 
   -webkit-touch-callout: none;
-   -khtml-user-select: none;
+  -khtml-user-select: none;
 }
 .backArrow:hover {
   background: rgb(0, 218, 213);
@@ -293,27 +291,24 @@ form div {
   display: flex;
   flex-direction: row;
   position: absolute;
-  margin-top: 20vh;
+  margin-top: 0vh;
   margin-bottom: 30vh;
   justify-content: center;
   text-align: center;
 }
-.HowToPlay h1  {
+.HowToPlay h1 {
   font-size: 2.8vw;
   font-weight: 500;
   color: rgb(0, 218, 213);
   margin-bottom: 8vh;
   text-shadow: 2px 2px rgb(33, 70, 72);
-
 }
-
-
 
 .preloader-1 {
   /* margin: 100px auto 0; */
   width: 120px;
   height: 55px;
-  color:rgb(0, 218, 213);
+  color: rgb(0, 218, 213);
   margin: 5px;
   text-transform: uppercase;
   text-align: center;
@@ -342,49 +337,94 @@ form div {
   animation: opacity-1 1000ms infinite ease-in-out;
 }
 
-
-
-.preloader-1 .line-1, .preloader-2 .line-1 { animation-delay: 800ms; }
-.preloader-1 .line-2, .preloader-2 .line-2 { animation-delay: 700ms; }
-.preloader-1 .line-3, .preloader-2 .line-3 { animation-delay: 600ms; }
-.preloader-1 .line-4, .preloader-2 .line-4 { animation-delay: 500ms; }
-.preloader-1 .line-5, .preloader-2 .line-5 { animation-delay: 400ms; }
-.preloader-1 .line-6, .preloader-2 .line-6 { animation-delay: 300ms; }
-.preloader-1 .line-7, .preloader-2 .line-7 { animation-delay: 200ms; }
-.preloader-1 .line-8, .preloader-2 .line-8 { animation-delay: 100ms; }
-.preloader-1 .line-9, .preloader-2 .line-9 { animation-delay: 100ms; }
-.preloader-1 .line-10, .preloader-2 .line-10 { animation-delay: 200ms; }
-.preloader-1 .line-11, .preloader-2 .line-11 { animation-delay: 300ms; }
-.preloader-1 .line-12, .preloader-2 .line-12 { animation-delay: 400ms; }
-.preloader-1 .line-13, .preloader-2 .line-13 { animation-delay: 500ms; }
-.preloader-1 .line-14, .preloader-2 .line-14 { animation-delay: 600ms; }
-.preloader-1 .line-15, .preloader-2 .line-15 { animation-delay: 700ms; }
-.preloader-1 .line-16, .preloader-2 .line-16 { animation-delay: 800ms; }
-
-
-@keyframes opacity-1 { 
-  0% { 
-    opacity: 1;
-  }
-  50% { 
-    opacity: 0;
-  }
-  100% { 
-    opacity: 1;
-  }  
+.preloader-1 .line-1,
+.preloader-2 .line-1 {
+  animation-delay: 800ms;
+}
+.preloader-1 .line-2,
+.preloader-2 .line-2 {
+  animation-delay: 700ms;
+}
+.preloader-1 .line-3,
+.preloader-2 .line-3 {
+  animation-delay: 600ms;
+}
+.preloader-1 .line-4,
+.preloader-2 .line-4 {
+  animation-delay: 500ms;
+}
+.preloader-1 .line-5,
+.preloader-2 .line-5 {
+  animation-delay: 400ms;
+}
+.preloader-1 .line-6,
+.preloader-2 .line-6 {
+  animation-delay: 300ms;
+}
+.preloader-1 .line-7,
+.preloader-2 .line-7 {
+  animation-delay: 200ms;
+}
+.preloader-1 .line-8,
+.preloader-2 .line-8 {
+  animation-delay: 100ms;
+}
+.preloader-1 .line-9,
+.preloader-2 .line-9 {
+  animation-delay: 100ms;
+}
+.preloader-1 .line-10,
+.preloader-2 .line-10 {
+  animation-delay: 200ms;
+}
+.preloader-1 .line-11,
+.preloader-2 .line-11 {
+  animation-delay: 300ms;
+}
+.preloader-1 .line-12,
+.preloader-2 .line-12 {
+  animation-delay: 400ms;
+}
+.preloader-1 .line-13,
+.preloader-2 .line-13 {
+  animation-delay: 500ms;
+}
+.preloader-1 .line-14,
+.preloader-2 .line-14 {
+  animation-delay: 600ms;
+}
+.preloader-1 .line-15,
+.preloader-2 .line-15 {
+  animation-delay: 700ms;
+}
+.preloader-1 .line-16,
+.preloader-2 .line-16 {
+  animation-delay: 800ms;
 }
 
-@keyframes opacity-2 { 
-  0% { 
+@keyframes opacity-1 {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes opacity-2 {
+  0% {
     opacity: 1;
     height: 15px;
   }
-  50% { 
+  50% {
     opacity: 0;
     height: 12px;
   }
-  100% { 
+  100% {
     opacity: 1;
     height: 15px;
-  }  
+  }
 }

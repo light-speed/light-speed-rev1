@@ -6,11 +6,7 @@ class HowToPlay extends React.Component {
     return (
       <div>
         <MenuButton />
-        <div className='HowToPlay'>
-            <h1>HOW TO PLAY</h1>
-        </div>
-
-       
+        <div className="HowToPlay" />
       </div>
     )
   }
