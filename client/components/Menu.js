@@ -9,22 +9,32 @@ class Menu extends React.Component {
         </div>
         <div>
           <button onClick={() => this.props.history.push('/play')}>
-            PLAY GAME
+            Play Game
+          </button>
+        </div>
+        <div>
+          <button onClick={() => this.props.history.push('/Login')}>
+            Login
+          </button>
+        </div>
+        <div>
+          <button onClick={() => this.props.history.push('/Signup')}>
+            Sign Up
           </button>
         </div>
         <div>
           <button onClick={() => this.props.history.push('/howtoplay')}>
-            HOW TO PLAY
+            How To Play
           </button>
         </div>
         <div>
           <button onClick={() => this.props.history.push('/topscore')}>
-            TOP SCORES
+            Top Scores
           </button>
         </div>
         <div>
           <button onClick={() => this.props.history.push('/credits')}>
-            CREDITS
+            Credits
           </button>
         </div>
       </div>

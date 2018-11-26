@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import MenuButton from './MenuButton'
 
 /**
  * COMPONENT
@@ -10,13 +11,14 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
+    <div className="Login">
+      <MenuButton />
       <form onSubmit={handleSubmit} name={name}>
         <div>
-          <label htmlFor="email">
-            <small>Email</small>
+          <label htmlFor="username">
+            <small>Username</small>
           </label>
-          <input name="email" type="text" />
+          <input name="username" type="text" />
         </div>
         <div>
           <label htmlFor="password">
@@ -27,9 +29,13 @@ const AuthForm = props => {
         <div>
           <button type="submit">{displayName}</button>
         </div>
+        <div>
+          <button>
+            <a href="/auth/google">{displayName} with Google</a>
+          </button>
+        </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
     </div>
   )
 }
@@ -62,9 +68,9 @@ const mapDispatch = dispatch => {
     handleSubmit(evt) {
       evt.preventDefault()
       const formName = evt.target.name
-      const email = evt.target.email.value
+      const username = evt.target.username.value
       const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
+      dispatch(auth(password, formName, username))
     }
   }
 }
