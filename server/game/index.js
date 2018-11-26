@@ -10,26 +10,24 @@ module.exports = class GameEngine {
     const pauseMs = timeMs => 
       new Promise(resolve => setTimeout(resolve, timeMs))
 
-    let current, last = ''
-    const gamesArr = () => {
-      current = JSON.stringify(this.games)
-      if (last !== current) console.log(current)
-      last = current
-
-      return Object.keys(this.games)
-        .map(key => this.games[key])
-    }
+    const gamesArr = () => Object.keys(this.games)
+      .map(key => this.games[key])
 
     while (true) {
       gamesArr().forEach(game => {
-        console.log(game)
         if (game.ongoing) {
+          // console.log(new Date() - new Date(game.startedAt), game.gameTimeMs)
           const outOfTime = new Date() - new Date(game.startedAt) >= game.gameTimeMs
           if (outOfTime) this.endGame(game.socketId)
         }
       })
       await pauseMs(990)
     }
+  }
+
+  addTime(socketId, timeMs) {
+    if (this.games[socketId]) 
+      this.games[socketId].addTime(timeMs)
   }
 
   newGame(socketId) {

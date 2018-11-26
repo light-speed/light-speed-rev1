@@ -1,5 +1,5 @@
 import {HUD, LOADING_SCREEN} from './domElements'
-import socket from '../socket'
+import store, {startGame} from '../store'
 
 const loadingManager = new THREE.LoadingManager()
 
@@ -14,8 +14,9 @@ loadingManager.onLoad = function () {
   LOADING_SCREEN.style.display = 'none'
   HUD.style.display = 'flex'
 
-  // tell the server to start the game
-  socket.emit('new-game')
+  // tell client/server to start the game
+  if (!store.getState().game.ongoing)
+    store.dispatch(startGame())
 }
 
 export default loadingManager

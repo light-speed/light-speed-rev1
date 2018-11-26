@@ -1,9 +1,8 @@
 import loadingManager from './loadingManager'
 import {player} from './player'
-import store, {addPoints} from '../store'
+import store, {addPoints, addTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
-
 
 
 export let ring, NUM_ASTEROIDS
@@ -82,6 +81,7 @@ const Ring = function(scene) {
       // counter += 1
       // console.log(counter)
       this.ringSound()
+      store.dispatch(addTime(10000))
       return true
     }
   }

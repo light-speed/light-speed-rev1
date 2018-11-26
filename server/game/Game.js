@@ -17,7 +17,7 @@ module.exports = class Game {
   }
 
   end() {
-    console.log('instance ended game')
+    console.log(`instance ${this.socketId} game over`)
     this.gameTimeMs = 0
     this.ongoing = false
   }

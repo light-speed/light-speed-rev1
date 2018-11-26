@@ -4,6 +4,8 @@ import socket from '../socket'
  * ACTION TYPES
  */
 const ADD_POINTS = 'ADD_POINTS'
+const ADD_TIME = 'ADD_TIME'
+const START_GAME = 'START_GAME'
 const END_GAME = 'END_GAME'
 
 /**
@@ -11,7 +13,7 @@ const END_GAME = 'END_GAME'
  */
 const initState = {
   score: 0,
-  ongoing: true,
+  ongoing: false,
   gameTime: 0,
   startedAt: undefined,
   socketId: undefined
@@ -22,8 +24,14 @@ const initState = {
  */
 export const addPoints = amount => ({type: ADD_POINTS, amount})
 
-export const addTime = timeMs => {
-  socket.emit
+export const addTime = (timeMs, emit=true) => {
+  if (emit) socket.emit('add-time', timeMs)
+  return {type: ADD_TIME, timeMs}
+}
+
+export const startGame = () => {
+  socket.emit('new-game')
+  return {type: START_GAME}
 }
 
 export const endGame = () => {
@@ -37,6 +45,19 @@ export const endGame = () => {
  */
 export default function(state = initState, action) {
   switch (action.type) {
+    case ADD_TIME:
+      return {
+        ...state,
+        gameTime: state.gameTime + action.timeMs
+      }
+    case START_GAME:
+      return {
+        ...state,
+        ongoing: true,
+        gameTime: 30000,
+        startedAt: new Date(),
+        score: 0
+      }
     case END_GAME:
       return {
         ...state,
