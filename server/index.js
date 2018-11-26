@@ -5,6 +5,7 @@ const compression = require('compression')
 const session = require('express-session')
 const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
+const GameEngine = require('./game')
 // const db = require('./db')
 // const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
@@ -102,7 +103,9 @@ const startListening = () => {
 
   // set up our socket control center
   const io = socketio(server)
-  require('./socket')(io)
+  const gameEngine = new GameEngine(io.sockets)
+  require('./socket')(io, gameEngine)
+  gameEngine.gameLoop()
 }
 
 const syncDb = () => db.sync()

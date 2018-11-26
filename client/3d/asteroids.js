@@ -20,7 +20,6 @@ export default (scene) => {
     )
 
     this.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-
     var rockMtl = new THREE.MeshBasicMaterial({
       map: new THREE.TextureLoader(loadingManager).load(
         'textures/lunarrock.png'
