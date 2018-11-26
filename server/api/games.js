@@ -6,11 +6,11 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    const users = await Game.findAll({
+    const scores = await Game.findAll({
       include: [User],
       order: [['score', 'DESC']]
     })
-    res.json(users)
+    res.json(scores)
   } catch (err) {
     next(err)
   }
