@@ -3,7 +3,7 @@ const db = require('../db')
 
 const Game = db.define('game', {
   score: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false
   }
 })

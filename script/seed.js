@@ -19,13 +19,31 @@ async function seed() {
       email: 'blessed@email.com',
       username: 'Blez',
       password: 'boom'
+    }),
+    User.create({
+      email: 'asdef@email.com',
+      username: 'Kenny G',
+      password: 'saxophone'
+    }),
+    User.create({
+      email: 'asdef@email.com',
+      username: 'BMG',
+      password: 'saxophone'
     })
   ])
 
   const games = await Promise.all([
-    Game.create({score: '0000003200'}),
-    Game.create({score: '0000005200'}),
-    Game.create({score: '0000023900'})
+    Game.create({score: 3200, userID: 1}),
+    Game.create({score: 5200, userID: 5}),
+    Game.create({score: 23900, userID: 2}),
+    Game.create({score: 93900, userID: 4}),
+    Game.create({score: 88700, userID: 4}),
+    Game.create({score: 18700, userID: 4}),
+    Game.create({score: 8700, userID: 5}),
+    Game.create({score: 8700, userID: 4}),
+    Game.create({score: 700, userID: 4}),
+    Game.create({score: 8700, userID: 3}),
+    Game.create({score: 98700, userID: 4})
   ])
 
   console.log(`seeded ${users.length} users`)
