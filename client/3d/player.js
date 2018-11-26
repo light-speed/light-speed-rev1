@@ -82,10 +82,12 @@ var Player = function(scene) {
   //   })
 
 new THREE.GLTFLoader(loadingManager)
-				.load( "models/Horse.glb", function( gltf ) {
+				// .load( "models/Horse.glb", function( gltf ) {
+				.load( "models/DevShipA.gltf", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
           console.log(gltf)
-          mesh.scale.set( .1, .1, .1 );
+          // mesh.scale.set( .1, .1, .1 );
+          mesh.scale.set( 5, 5, 5 );
           mesh.rotation.set(0, Math.PI, 0)
 
           scene.add( mesh );
@@ -125,6 +127,7 @@ export let player, controls
 export default (scene, camera, renderer) => {
   player = new Player(scene)
   player.getMesh().add(camera)
+  // camera.position.set(0, 45, 90) // <-- this is relative to the player's position
   camera.position.set(0, 45, 90) // <-- this is relative to the player's position
   scene.add(player.getMesh())
   
