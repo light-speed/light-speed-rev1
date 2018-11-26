@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import socket from '../socket'
-=======
 import axios from 'axios'
->>>>>>> master
 
 /**
  * ACTION TYPES
