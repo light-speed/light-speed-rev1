@@ -25,6 +25,11 @@ module.exports = class GameEngine {
     }
   }
 
+  addPoints(socketId, amount) {
+    if (this.games[socketId]) 
+      this.games[socketId].addPoints(amount)
+  }
+
   addTime(socketId, timeMs) {
     if (this.games[socketId]) 
       this.games[socketId].addTime(timeMs)

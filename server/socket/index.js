@@ -9,6 +9,10 @@ module.exports = (io, gameEngine) => {
 
 
     // game logic
+    socket.on('add-points', amount => {
+      gameEngine.addPoints(socket.id, amount)
+    })
+
     socket.on('new-game', () => {
       console.log('client says new game')
       gameEngine.newGame(socket.id)
