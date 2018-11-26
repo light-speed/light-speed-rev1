@@ -23,7 +23,7 @@ const initState = {
 export const addPoints = amount => ({type: ADD_POINTS, amount})
 
 export const addTime = timeMs => {
-  
+  socket.emit
 }
 
 export const endGame = () => {

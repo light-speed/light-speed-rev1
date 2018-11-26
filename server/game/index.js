@@ -6,17 +6,46 @@ module.exports = class GameEngine {
     this.games = {}
   }
 
-  newGame(socketId) {
-    const game = new Game(socketId)
-    this.games[socketId] = game
+  async gameLoop() {
+    const pauseMs = timeMs => 
+      new Promise(resolve => setTimeout(resolve, timeMs))
 
-    // start the game giving it an end game callback
-    game.start(this)
+    let current, last = ''
+    const gamesArr = () => {
+      current = JSON.stringify(this.games)
+      if (last !== current) console.log(current)
+      last = current
+
+      return Object.keys(this.games)
+        .map(key => this.games[key])
+    }
+
+    while (true) {
+      gamesArr().forEach(game => {
+        console.log(game)
+        if (game.ongoing) {
+          const outOfTime = new Date() - new Date(game.startedAt) >= game.gameTimeMs
+          if (outOfTime) this.endGame(game.socketId)
+        }
+      })
+      await pauseMs(990)
+    }
+  }
+
+  newGame(socketId) {
+    this.games[socketId] = new Game(socketId)
+    this.games[socketId].start()
   }
 
   endGame(socketId, serverSays=true) {
-    this.games[socketId].end()
-    if (serverSays) this.sockets.emit('game-over')
+    if (this.games[socketId]) {
+      this.games[socketId].end()
+      if (serverSays) this.sockets.emit('game-over', socketId)
+      
+      // remove the game from the list
+      const {[socketId]: _, ...otherGames} = this.games
+      this.games = otherGames
+    }
   }
 
 }

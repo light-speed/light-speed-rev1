@@ -7,11 +7,8 @@ import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
-<<<<<<< HEAD
 import store, {endGame} from '../store';
-=======
 import loadPointer, {pointer} from './pointer'
->>>>>>> master
 
 let isPaused = false
 let onEsc

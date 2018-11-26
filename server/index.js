@@ -105,6 +105,7 @@ const startListening = () => {
   const io = socketio(server)
   const gameEngine = new GameEngine(io.sockets)
   require('./socket')(io, gameEngine)
+  gameEngine.gameLoop()
 }
 
 const syncDb = () => db.sync()
