@@ -7,7 +7,11 @@ import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
+<<<<<<< HEAD
 import store, {endGame} from '../store';
+=======
+import loadPointer, {pointer} from './pointer'
+>>>>>>> master
 
 let isPaused = false
 let onEsc
@@ -20,6 +24,7 @@ export default function generateWorld() {
   loadRing(scene)
   loadAsteroids(scene)
   loadPlanet(scene)
+  loadPointer(scene, player)
 
   function playerPlanetCollision() {
     //player vs earth collision
@@ -75,149 +80,135 @@ export default function generateWorld() {
   // scene.add(pointerMesh)
   // player.getMesh().add(pointerMesh)
 
-  var pointer = new THREE.MTLLoader(loadingManager)
-  // .setPath('../public/models/')
-  pointer.load('models/arrow.mtl', function(materials) {
-    materials.preload()
-    var pointerObj = new THREE.OBJLoader(loadingManager)
-    pointerObj.setMaterials(materials)
-    // .setPath('../public/models/')
-    pointerObj.load('models/arrow.obj', function(obj) {
-      obj.scale.set(5, 5, 5)
-      obj.position.set(-113, 1, 0)
-      scene.add(obj)
-      player.getMesh().add(obj)
-      // obj.lookAt(0, 0 ,0)
-      var clock = new THREE.Clock()
-      const shots = []
-      function render() {
-        // player.update()
-        obj.lookAt(ring.getMesh().position)
-        // skybox.getMesh.position = camera.position
+/*********************************
+ * Render To Screen
+ ********************************/
+console.log(window)
+player.getMesh().add(camera)
+var clock = new THREE.Clock()
+const shots = []
+function render() {
+  pointer.getMesh().position.set(-((window.innerWidth/13.3)), 1, 0)
+  // player.update()
+  // skybox.getMesh.position = camera.position
 
-        var delta = clock.getDelta()
-        controls.update(delta)
+  var delta = clock.getDelta()
+  controls.update(delta)
 
-        for (var i = 0; i < NUM_ASTEROIDS; i++) {
-          asteroids[i].update(ring.getMesh().position.z)
+  for (var i = 0; i < NUM_ASTEROIDS; i++) {
+    asteroids[i].update(ring.getMesh().position.z)
+  }
+
+  var rotationSpeed = 0.01
+  earth.getMesh().rotation.y += rotationSpeed * delta
+  meshClouds.rotation.y += rotationSpeed * delta
+
+  pointer.getMesh().lookAt(ring.getMesh().position)
+  ring.move()
+  playerPlanetCollision()
+
+  ///shooting function
+  for (var index = 0; index < shots.length; index += 1) {
+    if (shots[index] === undefined) continue
+    if (shots[index].alive === false) {
+      shots.splice(index, 1)
+      continue
+    }
+    var shotVector = new THREE.Vector3()
+    player.getMesh().getWorldDirection(shotVector)
+    shots[index].translateOnAxis(shotVector, -100)
+    shots[index].update()
+    shotAsteroidCollision(shots[index])
+  }
+  if (player.canShoot > 0) player.canShoot -= 1
+
+  renderer.render(scene, camera)
+}
+// scene.add(pointer)
+// player.getMesh().add(pointer)
+
+
+function animate() {
+  if (isPaused) return
+  requestAnimationFrame(animate)
+  if (RESOURCES_LOADED) render()
+}
+
+window.addEventListener('keydown', function(e) {
+  if (player.canShoot <= 0) {
+    switch (e.keyCode) {
+      case 32: // Space
+        e.preventDefault()
+
+        var playerPos = player.getMesh().position
+
+        const shotMaterial = new THREE.MeshBasicMaterial({
+          color: 0xff0000,
+          transparent: true,
+          opacity: 0.5
+        })
+
+        const shot = new THREE.Mesh(
+          new THREE.SphereGeometry(3, 16, 16),
+          shotMaterial
+        )
+
+        // position the bullet to come from the player's weapon
+        // shot.position.set(0, 5, 30)
+        shot.position.set(playerPos.x, playerPos.y, playerPos.z)
+
+        // set the velocity of the bullet
+        shot.velocity = new THREE.Vector3(
+          -Math.sin(camera.rotation.y),
+          0,
+          Math.cos(camera.rotation.y)
+        )
+
+        shot.BBox = new THREE.Box3(
+          new THREE.Vector3(),
+          new THREE.Vector3()
+        )
+        shot.BBox.setFromObject(shot)
+
+        shot.update = function() {
+          this.BBox.setFromObject(this)
         }
 
-        var rotationSpeed = 0.01
-        earth.getMesh().rotation.y += rotationSpeed * delta
-        meshClouds.rotation.y += rotationSpeed * delta
+        // after 1000ms, set alive to false and remove from scene
+        // setting alive to false flags our update code to remove
+        // the bullet from the bullets array
+        shot.alive = true
+        setTimeout(function() {
+          shot.alive = false
+          scene.remove(shot)
+        }, 1000)
 
-        // pointerMesh.lookAt(ring.getMesh().position)
-        ring.move()
-        playerPlanetCollision()
+        // console.log(scene)
 
-        ///shooting function
-        for (var index = 0; index < shots.length; index += 1) {
-          if (shots[index] === undefined) continue
-          if (shots[index].alive === false) {
-            shots.splice(index, 1)
-            continue
-          }
-          var shotVector = new THREE.Vector3()
-          player.getMesh().getWorldDirection(shotVector)
-          shots[index].translateOnAxis(shotVector, -100)
-          shots[index].update()
-          shotAsteroidCollision(shots[index])
-        }
-        if (player.canShoot > 0) player.canShoot -= 1
+        // add to scene, array, and set the delay to 10 frames
+        shots.push(shot)
+        scene.add(shot)
+        player.canShoot = 10
+        break
+      default:
+    }
+  }
+})
+document.getElementById('world').appendChild(renderer.domElement)
+animate()
 
-        renderer.render(scene, camera)
-      }
-      // scene.add(pointer)
-      // player.getMesh().add(pointer)
+onEsc = event => {
+  if (event.which === 27) {
+    isPaused = !isPaused
+    showInstructions(isPaused)
+    animate()
+  }
+}
 
-      player.getMesh().add(camera)
+window.addEventListener('keydown', onEsc, false)
 
-      function animate() {
-        if (isPaused) return
-        requestAnimationFrame(animate)
-        if (RESOURCES_LOADED) render()
-      }
+return function() {
+  disposeOfResize()
+}
 
-      window.addEventListener('keydown', function(e) {
-        if (player.canShoot <= 0) {
-          switch (e.keyCode) {
-            case 32: // Space
-              e.preventDefault()
-
-              var playerPos = player.getMesh().position
-
-              const shotMaterial = new THREE.MeshBasicMaterial({
-                color: 0xff0000,
-                transparent: true,
-                opacity: 0.5
-              })
-
-              const shot = new THREE.Mesh(
-                new THREE.SphereGeometry(3, 16, 16),
-                shotMaterial
-              )
-
-              // position the bullet to come from the player's weapon
-              // shot.position.set(0, 5, 30)
-              shot.position.set(playerPos.x, playerPos.y, playerPos.z)
-
-              // set the velocity of the bullet
-              shot.velocity = new THREE.Vector3(
-                -Math.sin(camera.rotation.y),
-                0,
-                Math.cos(camera.rotation.y)
-              )
-
-              shot.BBox = new THREE.Box3(
-                new THREE.Vector3(),
-                new THREE.Vector3()
-              )
-              shot.BBox.setFromObject(shot)
-
-              shot.update = function() {
-                this.BBox.setFromObject(this)
-              }
-
-              // after 1000ms, set alive to false and remove from scene
-              // setting alive to false flags our update code to remove
-              // the bullet from the bullets array
-              shot.alive = true
-              setTimeout(function() {
-                shot.alive = false
-                scene.remove(shot)
-              }, 1000)
-
-              // console.log(scene)
-
-              // add to scene, array, and set the delay to 10 frames
-              shots.push(shot)
-              scene.add(shot)
-              player.canShoot = 10
-              break
-            default:
-          }
-        }
-      })
-      document.getElementById('world').appendChild(renderer.domElement)
-      animate()
-
-      onEsc = event => {
-        if (event.which === 27) {
-          isPaused = !isPaused
-          showInstructions(isPaused)
-          animate()
-        }
-      }
-
-      window.addEventListener('keydown', onEsc, false)
-
-      return function() {
-        disposeOfResize()
-      }
-    })
-  })
-
-  /*********************************
-   * Render To Screen
-   ********************************/
 }
