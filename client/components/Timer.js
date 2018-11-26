@@ -25,14 +25,10 @@ export default class Timer extends React.Component {
   addTime(extraTime) {
     let clock = this.state.time
     this.setState({
-        time: clock + extraTime
+      time: clock + extraTime
     })
   }
   render() {
-    return (
-      <div>
-        {((this.state.time)/100).toFixed(2)}s
-      </div>
-    )
+    return <div>{(this.state.time / 100).toFixed(2)}s</div>
   }
 }
