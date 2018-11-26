@@ -46,42 +46,26 @@ const Ring = function(scene) {
     ) {
       console.log('move')
 
-      // this.mesh.position.x =
-      //   Math.random() *
-      //     (player.getMesh().position.x +
-      //       500 -
-      //       (player.getMesh().position.x - 500)) +
-      //   (player.getMesh().position.x - 500)
-
-      // this.mesh.position.y =
-      //   Math.random() *
-      //     (player.getMesh().position.y +
-      //       500 -
-      //       (player.getMesh().position.y - 500)) +
-      //   (player.getMesh().position.y - 500)
-
-      // this.mesh.position.z =
-      //   Math.random() *
-      //     (player.getMesh().position.z +
-      //       500 -
-      //       (player.getMesh().position.z - 500)) +
-      //   (player.getMesh().position.z - 500)
-
       this.mesh.position.x =
         Math.random() *
           (player.getMesh().position.x +
-            500 -
-            (player.getMesh().position.x - 500)) +
-        (player.getMesh().position.x - 500)
+            1500 -
+            (player.getMesh().position.x - 1500)) +
+        (player.getMesh().position.x - 1500)
 
       this.mesh.position.y =
         Math.random() *
           (player.getMesh().position.y +
-            500 -
-            (player.getMesh().position.y - 500)) +
-        (player.getMesh().position.y - 500)
+            1500 -
+            (player.getMesh().position.y - 1500)) +
+        (player.getMesh().position.y - 1500)
 
-      this.mesh.position.z = player.getMesh().position.z - (this.counter * 100)
+      this.mesh.position.z =
+        Math.random() *
+          (player.getMesh().position.z +
+            1500 -
+            (player.getMesh().position.z - 1500)) +
+        (player.getMesh().position.z - 1500)
 
       this.mesh.lookAt(prevX, prevY, prevZ)
     }
