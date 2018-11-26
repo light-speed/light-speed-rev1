@@ -1,3 +1,4 @@
+const {User} = require('../db')
 
 module.exports = class Game {
   constructor(socketId) {
@@ -27,5 +28,6 @@ module.exports = class Game {
     console.log(`instance ${this.socketId} game over`)
     this.gameTimeMs = 0
     this.ongoing = false
+    
   }
 }
