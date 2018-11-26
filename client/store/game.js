@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import socket from '../socket'
+=======
+import axios from 'axios'
+>>>>>>> master
 
 /**
  * ACTION TYPES
@@ -7,6 +11,7 @@ const ADD_POINTS = 'ADD_POINTS'
 const ADD_TIME = 'ADD_TIME'
 const START_GAME = 'START_GAME'
 const END_GAME = 'END_GAME'
+const GET_SCORES = 'GET_SCORES'
 
 /**
  * INITIAL STATE
@@ -16,13 +21,15 @@ const initState = {
   ongoing: false,
   gameTime: 0,
   startedAt: undefined,
-  socketId: undefined
+  socketId: undefined,
+  topScores: []
 }
 
 /**
  * ACTION CREATORS
  */
 export const addPoints = amount => ({type: ADD_POINTS, amount})
+const topScores = scores => ({type: GET_SCORES, scores})
 
 export const addTime = (timeMs, emit=true) => {
   if (emit) socket.emit('add-time', timeMs)
@@ -38,7 +45,17 @@ export const endGame = () => {
   socket.emit('game-over')
   return {type: END_GAME}
 }
+// THUNKS
 
+export const getScores = () => async dispatch => {
+  try {
+    const res = await axios.get('/api/games')
+    console.log('RES', res)
+    dispatch(topScores(res.data))
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 /**
  * REDUCER
@@ -64,8 +81,10 @@ export default function(state = initState, action) {
         ongoing: false,
         gameTime: 0
       }
-    case ADD_POINTS: 
-      return { ...state, score: state.score + action.amount }
+   case ADD_POINTS:
+      return {...state, score: state.score + action.amount}
+    case GET_SCORES:
+      return {...state, topScores: [...action.scores]}
     default:
       return state
   }
