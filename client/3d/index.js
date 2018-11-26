@@ -7,6 +7,7 @@ import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
+import store, {endGame} from '../store';
 
 let isPaused = false
 let onEsc
@@ -28,7 +29,8 @@ export default function generateWorld() {
       earth.getPlanetRadius()
     )
     if (earthBSphere.containsPoint(playerPos)) {
-      console.log('DEATH')
+      if (store.getState().game.ongoing) 
+        store.dispatch(endGame())
       return true
     }
   }
