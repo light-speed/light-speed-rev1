@@ -7,6 +7,7 @@ import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
+import loadPointer, {pointer} from './pointer'
 
 let isPaused = false
 let onEsc
@@ -19,6 +20,7 @@ export default function generateWorld() {
   loadRing(scene)
   loadAsteroids(scene)
   loadPlanet(scene)
+  loadPointer(scene, player)
 
   function playerPlanetCollision() {
     //player vs earth collision
@@ -64,32 +66,29 @@ export default function generateWorld() {
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
 
+  // var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
+  // var pointerMaterial = new THREE.MeshPhongMaterial({color: 0x00cccc})
+  // var pointerMesh = new THREE.Mesh(pointerGeometry, pointerMaterial)
 
-  var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
-  var pointerMaterial = new THREE.MeshPhongMaterial({color: 0x00cccc})
-  var pointerMesh = new THREE.Mesh(pointerGeometry, pointerMaterial)
+  // pointerMesh.position.set(-110, 1, 0)
 
-  pointerMesh.position.set(-110, 1, 0)
+  // scene.add(pointerMesh)
+  // player.getMesh().add(pointerMesh)
 
-  scene.add(pointerMesh)
-  player.getMesh().add(pointerMesh)
-  player.getMesh().add(camera)
-
-  console.log(player.getMesh())
   /*********************************
    * Render To Screen
    ********************************/
+
+  player.getMesh().add(camera)
   var clock = new THREE.Clock()
   const shots = []
   function render() {
+    pointer.getMesh().position.set(-(window.innerWidth / 13.3), 1, 0)
     // player.update()
-
-  
     // skybox.getMesh.position = camera.position
 
     var delta = clock.getDelta()
     controls.update(delta)
-
 
     for (var i = 0; i < NUM_ASTEROIDS; i++) {
       asteroids[i].update(ring.getMesh().position.z)
@@ -99,7 +98,7 @@ export default function generateWorld() {
     earth.getMesh().rotation.y += rotationSpeed * delta
     meshClouds.rotation.y += rotationSpeed * delta
 
-    pointerMesh.lookAt(ring.getMesh().position)
+    pointer.getMesh().lookAt(ring.getMesh().position)
     ring.move()
     playerPlanetCollision()
 
@@ -120,6 +119,8 @@ export default function generateWorld() {
 
     renderer.render(scene, camera)
   }
+  // scene.add(pointer)
+  // player.getMesh().add(pointer)
 
   function animate() {
     if (isPaused) return
@@ -134,7 +135,6 @@ export default function generateWorld() {
           e.preventDefault()
 
           var playerPos = player.getMesh().position
-
 
           const shotMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
