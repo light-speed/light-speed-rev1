@@ -21,6 +21,11 @@ const initState = {
  * ACTION CREATORS
  */
 export const addPoints = amount => ({type: ADD_POINTS, amount})
+
+export const addTime = timeMs => {
+  
+}
+
 export const endGame = () => {
   socket.emit('game-over')
   return {type: END_GAME}
