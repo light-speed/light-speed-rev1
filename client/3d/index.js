@@ -73,17 +73,42 @@ export default function generateWorld() {
 
   scene.add(pointerMesh)
   player.getMesh().add(pointerMesh)
-  player.getMesh().add(camera)
 
+
+  var pointer = new THREE.MTLLoader(loadingManager)
+  // .setPath('../public/models/')
+  pointer.load('models/arrow.mtl', function(materials) {
+    materials.preload()
+    var pointerObj = new THREE.OBJLoader(loadingManager)
+      pointerObj.setMaterials(materials)
+      // .setPath('../public/models/')
+      pointerObj.load(
+        'models/arrow.obj',
+        function ( obj ) {
+          var ringPos = ring.getMesh().position
+          obj.scale.set(5, 5, 5)
+          obj.position.set(-50, 1, 0)
+          scene.add( obj );
+          player.getMesh().add(obj)
+          // obj.lookAt(0, 0 ,0)
+          obj.lookAt(ringPos)
+          
+        }
+        )
+      })
+
+      
   /*********************************
    * Render To Screen
    ********************************/
   var clock = new THREE.Clock()
   const shots = []
   function render() {
+    
     // player.update()
 
     // skybox.getMesh.position = camera.position
+
 
     var delta = clock.getDelta()
     controls.update(delta)
@@ -118,6 +143,10 @@ export default function generateWorld() {
 
     renderer.render(scene, camera)
   }
+  // scene.add(pointer)
+  // player.getMesh().add(pointer)
+
+  player.getMesh().add(camera)
 
   function animate() {
     if (isPaused) return
