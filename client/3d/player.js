@@ -14,6 +14,7 @@ var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 cube.position.set(0, 0, 0)
 cube.name = 'cube'
 
+export var mesh, mixer
 var Player = function(scene) {
   let spaceship = null
   this.mesh = new THREE.Object3D()
@@ -56,48 +57,48 @@ var Player = function(scene) {
   scene.add(fillLight)
   scene.add(backLight)
 
-  new THREE.MTLLoader(loadingManager)
-    // .setPath('../public/models/')
-    .load('models/DevShipT.mtl', function(materials) {
-      materials.preload()
-      new THREE.OBJLoader(loadingManager)
-        .setMaterials(materials)
-        // .setPath('../public/models/')
-        .load(
-          'models/DevShipTß.obj',
-          function(mesh) {
-            mesh.scale.set(3, 3, 3)
-            mesh.rotation.set(0, Math.PI, 0)
-            // mesh.position.set(0, -5, 0);
-            spaceship = mesh
+  // new THREE.MTLLoader(loadingManager)
+  //   // .setPath('../public/models/')
+  //   .load('models/DevShipT.mtl', function(materials) {
+  //     materials.preload()
+  //     new THREE.OBJLoader(loadingManager)
+  //       .setMaterials(materials)
+  //       // .setPath('../public/models/')
+  //       .load(
+  //         'models/DevShipTß.obj',
+  //         function(mesh) {
+  //           mesh.scale.set(3, 3, 3)
+  //           mesh.rotation.set(0, Math.PI, 0)
+  //           // mesh.position.set(0, -5, 0);
+  //           spaceship = mesh
 
-            self.player = spaceship
-            self.mesh.add(self.player)
-            self.loaded = true
-          },
-          onProgress,
-          onError
-        )
-    })
-// var mesh, mixer
-// new THREE.GLTFLoader(loadingManager)
-// 				.load( "models/Horse.glb", function( gltf ) {
-//           mesh = gltf.scene.children[ 0 ];
-//           console.log(gltf)
-//           mesh.scale.set( .2, .2, .2 );
-//           mesh.rotation.set(0, Math.PI, 0)
+  //           self.player = spaceship
+  //           self.mesh.add(self.player)
+  //           self.loaded = true
+  //         },
+  //         onProgress,
+  //         onError
+  //       )
+  //   })
 
-//           scene.add( mesh );
-//           spaceship = mesh
+new THREE.GLTFLoader(loadingManager)
+				.load( "models/Horse.glb", function( gltf ) {
+          mesh = gltf.scene.children[ 0 ];
+          console.log(gltf)
+          mesh.scale.set( .1, .1, .1 );
+          mesh.rotation.set(0, Math.PI, 0)
+
+          scene.add( mesh );
+          spaceship = mesh
           
-//           self.player = spaceship
-//           self.mesh.add(self.player)
-//           self.loaded = true
-//           mixer = new THREE.AnimationMixer( mesh );
-// 					mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
-// 					// mixer = new THREE.AnimationMixer( mesh );
-//           // mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
-//         } );
+          self.player = spaceship
+          self.mesh.add(self.player)
+          self.loaded = true
+          mixer = new THREE.AnimationMixer( self.player );
+					mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
+					// mixer = new THREE.AnimationMixer( mesh );
+          // mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
+        } );
 //         var prevTime = Date.now();
 //         if ( mixer ) {
 // 					var time = Date.now();

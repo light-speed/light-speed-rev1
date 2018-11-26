@@ -3,11 +3,12 @@ import {showInstructions} from '../utilities'
 import getDomElements from './domElements'
 import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'
-import loadPlayer, {player, controls} from './player'
+import loadPlayer, {player, controls, mixer} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
 import loadPointer, {pointer} from './pointer'
+
 
 let isPaused = false
 let onEsc
@@ -78,7 +79,7 @@ export default function generateWorld() {
   /*********************************
    * Render To Screen
    ********************************/
-
+  var prevTime = Date.now();
   player.getMesh().add(camera)
   var clock = new THREE.Clock()
   const shots = []
@@ -86,6 +87,13 @@ export default function generateWorld() {
     pointer.getMesh().position.set(-(window.innerWidth / 13.3), 1, 0)
     // player.update()
     // skybox.getMesh.position = camera.position
+
+    if ( mixer ) {
+      var time = Date.now();
+      mixer.update( ( time - prevTime ) * 0.001 );
+      prevTime = time;
+    }
+
 
     var delta = clock.getDelta()
     controls.update(delta)
