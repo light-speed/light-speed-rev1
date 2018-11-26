@@ -44,7 +44,7 @@ const Ring = function(scene) {
       this.detectRingCollision() === true ||
       this.ringPlanetCollision() === true
     ) {
-      console.log('move')
+
 
       this.mesh.position.x =
         Math.random() *
