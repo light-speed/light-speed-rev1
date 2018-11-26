@@ -78,11 +78,13 @@ export default function generateWorld() {
 /*********************************
  * Render To Screen
  ********************************/
+console.log(window)
+player.getMesh().add(camera)
 var clock = new THREE.Clock()
 const shots = []
 function render() {
+  pointer.getMesh().position.set(-((window.innerWidth/13.3)), 1, 0)
   // player.update()
-  
   // skybox.getMesh.position = camera.position
 
   var delta = clock.getDelta()
@@ -96,7 +98,7 @@ function render() {
   earth.getMesh().rotation.y += rotationSpeed * delta
   meshClouds.rotation.y += rotationSpeed * delta
 
-  // pointerMesh.lookAt(ring.getMesh().position)
+  pointer.getMesh().lookAt(ring.getMesh().position)
   ring.move()
   playerPlanetCollision()
 
@@ -120,7 +122,6 @@ function render() {
 // scene.add(pointer)
 // player.getMesh().add(pointer)
 
-player.getMesh().add(camera)
 
 function animate() {
   if (isPaused) return
