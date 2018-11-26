@@ -1,9 +1,13 @@
+import socket from '../socket'
 import axios from 'axios'
 
 /**
  * ACTION TYPES
  */
 const ADD_POINTS = 'ADD_POINTS'
+const ADD_TIME = 'ADD_TIME'
+const START_GAME = 'START_GAME'
+const END_GAME = 'END_GAME'
 const GET_SCORES = 'GET_SCORES'
 
 /**
@@ -11,16 +15,35 @@ const GET_SCORES = 'GET_SCORES'
  */
 const initState = {
   score: 0,
+  ongoing: false,
+  gameTime: 0,
+  startedAt: undefined,
+  socketId: undefined,
   topScores: []
 }
 
-/**
- * ACTION CREATORS
- */
-export const addPoints = amount => ({type: ADD_POINTS, amount})
-const topScores = scores => ({type: GET_SCORES, scores})
 
-// THUNKS
+export const addPoints = amount => {
+  socket.emit('add-points', amount)
+  return {type: ADD_POINTS, amount}
+}
+
+export const addTime = (timeMs, emit=true) => {
+  if (emit) socket.emit('add-time', timeMs)
+  return {type: ADD_TIME, timeMs}
+}
+
+export const startGame = () => {
+  socket.emit('new-game')
+  return {type: START_GAME}
+}
+
+export const endGame = () => {
+  socket.emit('game-over')
+  return {type: END_GAME}
+}
+
+const topScores = scores => ({type: GET_SCORES, scores})
 
 export const getScores = () => async dispatch => {
   try {
@@ -37,7 +60,26 @@ export const getScores = () => async dispatch => {
  */
 export default function(state = initState, action) {
   switch (action.type) {
-    case ADD_POINTS:
+    case ADD_TIME:
+      return {
+        ...state,
+        gameTime: state.gameTime + action.timeMs
+      }
+    case START_GAME:
+      return {
+        ...state,
+        ongoing: true,
+        gameTime: 30000,
+        startedAt: new Date(),
+        score: 0
+      }
+    case END_GAME:
+      return {
+        ...state,
+        ongoing: false,
+        gameTime: 0
+      }
+   case ADD_POINTS:
       return {...state, score: state.score + action.amount}
     case GET_SCORES:
       return {...state, topScores: [...action.scores]}

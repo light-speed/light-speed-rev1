@@ -13,7 +13,7 @@ THREE.FlyControls = function(camera, object, domElement) {
     'click',
     function() {
       control.lock()
-      console.log(control.isLocked)
+      // console.log(control.isLocked)
     },
     false
   )
@@ -26,8 +26,9 @@ THREE.FlyControls = function(camera, object, domElement) {
   this.accelDamper = 0.33
   this.maxSpeed = 15
   this.rollSpeed = 0.01
-  this.pitchDamper = 0.6
-  this.yawDamper = 0.5
+  this.pitchDamper = 0.8
+  this.yawDamper = 0.66
+  this.mouseDamper = 0.05
   this.rollDamper = 0.6
   // this.keypress = false
 
@@ -212,25 +213,25 @@ THREE.FlyControls = function(camera, object, domElement) {
       // console.log('event.movement', event.movementX, event.movementY)
       if (event.movementX < 0) {
         // console.log('-x',x)
-        this.moveState.yawLeft = -event.movementX * (this.yawDamper * 0.10)
+        this.moveState.yawLeft = -event.movementX * (this.yawDamper * this.mouseDamper)
         // this.moveState.yawLeft = mouse.x * this.yawDamper
         this.moveState.yawRight = 0
       }
       if (event.movementX > 0) {
         // console.log('+x',x)
-        this.moveState.yawRight = event.movementX * (this.yawDamper * 0.05)
+        this.moveState.yawRight = event.movementX * (this.yawDamper * this.mouseDamper)
         // this.moveState.yawRight = mouse.x * this.yawDamper
         this.moveState.yawLeft = 0
       }
       if (event.movementY > 0) {
         // console.log('+y',y)
-        this.moveState.pitchUp = -event.movementY * (this.pitchDamper * 0.05)
+        this.moveState.pitchUp = -event.movementY * (this.pitchDamper * this.mouseDamper)
         // this.moveState.pitchUp = mouse.y * 0.004
         this.moveState.pitchDown = 0
       }
       if (event.movementY < 0) {
         // console.log('-y',y)
-        this.moveState.pitchDown = event.movementY * (this.pitchDamper * 0.05)
+        this.moveState.pitchDown = event.movementY * (this.pitchDamper * this.mouseDamper)
         // this.moveState.pitchDown = mouse.y * this.pitchDamper
         this.moveState.pitchUp = 0
       }
