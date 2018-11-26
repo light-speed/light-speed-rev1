@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Timer from './Timer'
 
 const formatScore = score => `${'0'.repeat(10-((''+score).length))}${score}`
 
@@ -12,7 +13,7 @@ export default connect( ({game})=>({game}) ) (
       <h1>{formatScore(score)}</h1>
     </div>
     <div className="hudTime">
-      <h1>00:30s</h1>
+      <h1><Timer/></h1>
     </div>
   </div>
 )
