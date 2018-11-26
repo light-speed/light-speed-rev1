@@ -2,14 +2,30 @@
 
 const db = require('../server/db')
 const {User} = require('../server/db/models')
+const {Game} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({email: 'cody@email.com', username: 'Cody', password: '123'}),
+    User.create({
+      email: 'murphy@email.com',
+      username: 'Murph',
+      password: '123'
+    }),
+    User.create({
+      email: 'blessed@email.com',
+      username: 'Blez',
+      password: 'boom'
+    })
+  ])
+
+  const games = await Promise.all([
+    Game.create({score: '0000003200'}),
+    Game.create({score: '0000005200'}),
+    Game.create({score: '0000023900'})
   ])
 
   console.log(`seeded ${users.length} users`)
