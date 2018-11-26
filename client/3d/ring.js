@@ -1,9 +1,13 @@
 import loadingManager from './loadingManager'
 import {player} from './player'
-import store, {addPoints} from '../store'
+import store, {addPoints, addTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4a9a9fdc0cc121e3c245ae408a8abb2e23b8da43
 export let ring, NUM_ASTEROIDS
 
 const {camera} = configureRenderer()
@@ -96,8 +100,12 @@ const Ring = function(scene) {
     if (cubeBBox.intersectsBox(ringBBox)) {
       store.dispatch(addPoints(100))
       this.ringSound()
+<<<<<<< HEAD
       this.counter++
       console.log('ring collision', this.counter)
+=======
+      store.dispatch(addTime(10000))
+>>>>>>> 4a9a9fdc0cc121e3c245ae408a8abb2e23b8da43
       return true
     }
   }
