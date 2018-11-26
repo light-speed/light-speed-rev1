@@ -149,6 +149,7 @@ form div {
   height: 7vh;
   margin: 10px;
   text-align: center;
+  font-family: 'Titillium Web', sans-serif;
 }
 .Menu button:hover {
   background: rgb(0, 218, 213);
@@ -174,8 +175,10 @@ form div {
 }
 
 .Login button,
-.Login input {
-  border: 3px solid rgb(0, 218, 213);
+.Login input,
+.Login a:visited,
+.Login a {
+  border: 2px solid rgb(0, 218, 213);
   background: rgb(33, 70, 72);
   color: rgb(0, 218, 213);
   transition: all 0.3s ease-out;
@@ -188,9 +191,16 @@ form div {
   margin: 10px;
   text-align: center;
   justify-content: center;
+  font-family: 'Titillium Web', sans-serif;
 }
 
-.Login small {
+.Login a:visited,
+.Login a {
+  border: none;
+}
+
+.Login small,
+.Login a:link {
   color: rgb(0, 218, 213);
   font-size: 1.8vw;
   font-weight: bold;
@@ -202,10 +212,11 @@ form div {
   text-align: center;
 }
 
-.Login button:hover {
+.Login button:hover,
+.Login a:hover {
   background: rgb(0, 218, 213);
   color: rgb(33, 70, 72);
-  border: 3px solid rgb(33, 70, 72);
+  /* border: 3px solid rgb(33, 70, 72); */
 }
 
 .fade {
@@ -384,7 +395,7 @@ th {
   margin: 5px;
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Arial', sans-serif;
+
   font-size: 26px;
   letter-spacing: 1px;
   margin-left: 30%;

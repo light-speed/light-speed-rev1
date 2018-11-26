@@ -14,14 +14,6 @@ const AuthForm = props => {
     <div className="Login">
       <MenuButton />
       <form onSubmit={handleSubmit} name={name}>
-        {displayName === 'Sign Up' && (
-          <div>
-            <label htmlFor="email">
-              <small>Email</small>
-            </label>
-            <input name="email" type="text" />
-          </div>
-        )}
         <div>
           <label htmlFor="username">
             <small>Username</small>
@@ -37,9 +29,13 @@ const AuthForm = props => {
         <div>
           <button type="submit">{displayName}</button>
         </div>
+        <div>
+          <button>
+            <a href="/auth/google">{displayName} with Google</a>
+          </button>
+        </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
     </div>
   )
 }
@@ -73,9 +69,8 @@ const mapDispatch = dispatch => {
       evt.preventDefault()
       const formName = evt.target.name
       const username = evt.target.username.value
-      const email = evt.target.email.value
       const password = evt.target.password.value
-      dispatch(auth(email, password, formName, username))
+      dispatch(auth(password, formName, username))
     }
   }
 }
