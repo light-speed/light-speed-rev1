@@ -82,12 +82,12 @@ var Player = function(scene) {
   //   })
 
 new THREE.GLTFLoader(loadingManager)
-				// .load( "models/Horse.glb", function( gltf ) {
-				.load( "models/DevShipA.gltf", function( gltf ) {
+				.load( "models/Horse.glb", function( gltf ) {
+				// .load( "models/DevShipA.gltf", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
           console.log(gltf)
-          // mesh.scale.set( .1, .1, .1 );
-          mesh.scale.set( 5, 5, 5 );
+          mesh.scale.set( .1, .1, .1 );
+          // mesh.scale.set( 5, 5, 5 );
           mesh.rotation.set(0, Math.PI, 0)
 
           scene.add( mesh );
