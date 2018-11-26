@@ -13,7 +13,7 @@ THREE.FlyControls = function(camera, object, domElement) {
     'click',
     function() {
       control.lock()
-      console.log(control.isLocked)
+      // console.log(control.isLocked)
     },
     false
   )

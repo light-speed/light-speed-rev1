@@ -4,8 +4,6 @@ import store, {addPoints} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
 
-
-
 export let ring, NUM_ASTEROIDS
 
 const {camera} = configureRenderer()
@@ -16,8 +14,8 @@ const Ring = function(scene) {
     side: THREE.DoubleSide
   })
   this.mesh = new THREE.Mesh(geometry, material)
-  this.mesh.position.set(0, 0, -500)
-
+  // this.mesh.position.set(0, 0, -500)
+  this.counter = 0
 
   this.getMesh = function() {
     return this.mesh
@@ -38,36 +36,69 @@ const Ring = function(scene) {
   }
 
   this.move = function() {
-    if (this.detectRingCollision() === true || this.ringPlanetCollision() === true) {
+    let prevX = this.mesh.position.x
+    let prevY = this.mesh.position.y
+    let prevZ = this.mesh.position.z
+
+    if (
+      this.detectRingCollision() === true ||
+      this.ringPlanetCollision() === true
+    ) {
+      console.log('move')
+
+      // this.mesh.position.x =
+      //   Math.random() *
+      //     (player.getMesh().position.x +
+      //       500 -
+      //       (player.getMesh().position.x - 500)) +
+      //   (player.getMesh().position.x - 500)
+
+      // this.mesh.position.y =
+      //   Math.random() *
+      //     (player.getMesh().position.y +
+      //       500 -
+      //       (player.getMesh().position.y - 500)) +
+      //   (player.getMesh().position.y - 500)
+
+      // this.mesh.position.z =
+      //   Math.random() *
+      //     (player.getMesh().position.z +
+      //       500 -
+      //       (player.getMesh().position.z - 500)) +
+      //   (player.getMesh().position.z - 500)
+
       this.mesh.position.x =
         Math.random() *
           (player.getMesh().position.x +
             500 -
             (player.getMesh().position.x - 500)) +
         (player.getMesh().position.x - 500)
+
       this.mesh.position.y =
         Math.random() *
           (player.getMesh().position.y +
             500 -
             (player.getMesh().position.y - 500)) +
         (player.getMesh().position.y - 500)
-      this.mesh.position.z =
-        Math.random() *
-          (player.getMesh().position.z +
-            500 -
-            (player.getMesh().position.z - 500)) +
-        (player.getMesh().position.z - 500)
+
+      this.mesh.position.z = player.getMesh().position.z - (this.counter * 100)
+
+      this.mesh.lookAt(prevX, prevY, prevZ)
     }
   }
 
   this.ringPlanetCollision = function() {
     //ring vs earth collision
     var earthBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    earthBBox.setFromObject(earth.getMeshPlanet())
+    // earthBBox.setFromObject(earth.getMeshPlanet())
+    earthBBox.setFromObject(earth.getHitbox())
+
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(this.mesh)
-    if (earthBBox.intersectsBox(ringBBox)) {
-      // console.log(counter)
+
+    if (earth.sphereBBox.intersectsBox(ringBBox)) {
+      console.log('ring-planet collision', this.counter)
+      console.log('earthBBox', earthBBox, 'ringBBox', ringBBox, 'ring pos', ring.getMesh().position, 'sphereBBox', earth.sphereBBox)
       return true
     }
   }
@@ -77,19 +108,19 @@ const Ring = function(scene) {
     cubeBBox.setFromObject(player.getHitbox())
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(this.mesh)
+
     if (cubeBBox.intersectsBox(ringBBox)) {
       store.dispatch(addPoints(100))
-      // counter += 1
-      // console.log(counter)
       this.ringSound()
+      this.counter++
+      console.log('ring collision', this.counter)
       return true
     }
   }
   return this
 }
 
-
-export default (scene) => {
+export default scene => {
   ring = new Ring(scene)
   scene.add(ring.getMesh())
 }

@@ -83,7 +83,7 @@ var Player = function(scene) {
   // this.update = function() {
   //   this.hitbox.setFromObject(spaceship)
   // }
-  
+
   this.getHitbox = function() {
     return this.hitbox
   }
@@ -101,7 +101,7 @@ export default (scene, camera, renderer) => {
   player.getMesh().add(camera)
   camera.position.set(0, 45, 90) // <-- this is relative to the player's position
   scene.add(player.getMesh())
-  
+
   controls = new THREE.FlyControls(
     camera,
     player.getMesh(),
