@@ -4,7 +4,9 @@ class Menu extends React.Component {
   render() {
     return (
       <div className="Menu">
-        <h1>LIGHT SPEED</h1>
+        <div>
+          <img src="./images/lightGif.gif" />
+        </div>
         <div>
           <button onClick={() => this.props.history.push('/play')}>
             PLAY GAME
