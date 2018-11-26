@@ -1,19 +1,19 @@
 import loadingManager from './loadingManager'
 
-export default (scene) => {
+export default scene => {
   //Load Skybox
   var Skybox = function() {
     var skyboxObject = new THREE.Object3D()
 
-    var imagePrefix = 'images/customspace-'
+    var imagePrefix = 'images/spc3'
     var directions = ['ypos', 'yneg', 'zpos', 'zneg', 'xpos', 'xneg']
-    var imageSuffix = '.png'
+    var imageSuffix = '.jpg'
 
     var loader = new THREE.TextureLoader(loadingManager)
 
     let materialArray = []
     // let link
-    let link = 'images/space.png'
+    let link = 'images/spc3.jpg'
     for (var i = 0; i < 6; i++) {
       // link = imagePrefix + directions[i] + imageSuffix
       loader.load(link, function(texture) {
