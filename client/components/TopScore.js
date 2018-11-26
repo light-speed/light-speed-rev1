@@ -62,12 +62,14 @@ class TopScore extends React.Component {
               <tr key="init">
                 <th> Player </th>
                 <th> Top Scores </th>
+                <th> Date Played </th>
               </tr>
               {topScores.map(p => {
                 return (
                   <tr key={p.id}>
                     <td>{p.user.username}</td>
                     <td>{p.score}</td>
+                    <td>{p.createdAt.slice(0, 10)}</td>
                   </tr>
                 )
               })}
