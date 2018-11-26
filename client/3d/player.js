@@ -56,29 +56,51 @@ var Player = function(scene) {
   scene.add(fillLight)
   scene.add(backLight)
 
-  new THREE.MTLLoader(loadingManager)
-    // .setPath('../public/models/')
-    .load('models/DevShipT.mtl', function(materials) {
-      materials.preload()
-      new THREE.OBJLoader(loadingManager)
-        .setMaterials(materials)
-        // .setPath('../public/models/')
-        .load(
-          'models/DevShipT.obj',
-          function(mesh) {
-            mesh.scale.set(3, 3, 3)
-            mesh.rotation.set(0, Math.PI, 0)
-            // mesh.position.set(0, -5, 0);
-            spaceship = mesh
+  // new THREE.MTLLoader(loadingManager)
+  //   // .setPath('../public/models/')
+  //   .load('models/DevShipT.mtl', function(materials) {
+  //     materials.preload()
+  //     new THREE.OBJLoader(loadingManager)
+  //       .setMaterials(materials)
+  //       // .setPath('../public/models/')
+  //       .load(
+  //         'models/DevShipTß.obj',
+  //         function(mesh) {
+  //           mesh.scale.set(3, 3, 3)
+  //           mesh.rotation.set(0, Math.PI, 0)
+  //           // mesh.position.set(0, -5, 0);
+  //           spaceship = mesh
 
-            self.player = spaceship
-            self.mesh.add(self.player)
-            self.loaded = true
-          },
-          onProgress,
-          onError
-        )
-    })
+  //           self.player = spaceship
+  //           self.mesh.add(self.player)
+  //           self.loaded = true
+  //         },
+  //         onProgress,
+  //         onError
+  //       )
+  //   })
+var mesh, mixer
+new THREE.GLTFLoader(loadingManager)
+				.load( "models/Horse.glb", function( gltf ) {
+          mesh = gltf.scene.children[ 0 ];
+          mesh.scale.set( .2, .2, .2 );
+          mesh.rotation.set(0, Math.PI, 0)
+
+          scene.add( mesh );
+          spaceship = mesh
+          
+          self.player = spaceship
+          self.mesh.add(self.player)
+          self.loaded = true
+					// mixer = new THREE.AnimationMixer( mesh );
+          // mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
+        } );
+        // var prevTime = Date.now();
+        // if ( mixer ) {
+				// 	var time = Date.now();
+				// 	mixer.update( ( time - prevTime ) * 0.001 );
+				// 	prevTime = time;
+				// }
 
   // this.update = function() {
   //   this.hitbox.setFromObject(spaceship)

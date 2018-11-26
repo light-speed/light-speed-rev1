@@ -75,6 +75,7 @@ export default function generateWorld() {
   player.getMesh().add(pointerMesh)
   player.getMesh().add(camera)
 
+  console.log(player.getMesh())
   /*********************************
    * Render To Screen
    ********************************/
@@ -83,6 +84,7 @@ export default function generateWorld() {
   function render() {
     // player.update()
 
+  
     // skybox.getMesh.position = camera.position
 
     var delta = clock.getDelta()
