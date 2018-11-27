@@ -4,7 +4,7 @@ module.exports = class GameInstance {
   constructor(socketId, userId) {
     this.socketId = socketId
     this.startedAt = undefined
-    this.gameTimeMs = 3000000
+    this.gameTimeMs = 30000
     this.ongoing = false
     this.score = 0
     this.userId = userId
