@@ -10,6 +10,8 @@ import loadPlanet, {earth} from './planet'
 import store, {addPoints, endGame, addTime, toggleOngoing} from '../store'
 import loadPointer, {pointer} from './pointer'
 import {formatScore} from '../components/HUD'
+import Proton from 'three.proton.js'
+import addStars from './particles.js'
 import socket from '../socket';
 
 let isPaused = false
@@ -33,6 +35,7 @@ export default function generateWorld() {
   loadAsteroids(scene)
   loadPlanet(scene)
   loadPointer(scene, player)
+  addStars(scene)
 
   function playerPlanetCollision() {
     //player vs earth collision
@@ -94,6 +97,8 @@ export default function generateWorld() {
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
 
+
+
   /*********************************
    * Render To Screen
    ********************************/
@@ -102,6 +107,90 @@ export default function generateWorld() {
   player.getMesh().add(camera)
   player.getMesh().lookAt(100, 0, 500)
   ring.getMesh().lookAt(player.getMesh().position)
+
+
+
+
+
+  // var emitter1, emitter2, R, proton
+
+  // function addProton() {
+  //   proton = new Proton()
+
+  //   R = 5
+  //   emitter1 = createEmitter(R, 0, '#4F1500', '#0029FF')
+  //   emitter2 = createEmitter(-R, 0, '#004CFE', '#6600FF')
+
+  //   proton.addEmitter(emitter1)
+  //   proton.addEmitter(emitter2)
+  //   proton.addRender(new Proton.SpriteRender(scene))
+
+  //   console.log('proton', proton)
+  // }
+
+  // // player.getMesh().add(proton)
+  // // proton.position.set(0,0,-5)
+
+  // var tha = 0
+  // function animateEmitter() {
+  //   tha += 0.13
+  //   emitter1.p.x = R * Math.cos(tha)
+  //   emitter1.p.y = R * Math.sin(tha)
+
+  //   emitter2.p.x = R * Math.cos(tha + Math.PI / 2)
+  //   emitter2.p.y = R * Math.sin(tha + Math.PI / 2)
+  // }
+
+  // function createEmitter(x, y, color1, color2) {
+  //   var emitter = new Proton.FollowEmitter()
+  //   emitter.rate = new Proton.Rate(
+  //     new Proton.Span(5, 7),
+  //     new Proton.Span(0.01, 0.02)
+  //   )
+  //   emitter.addInitialize(new Proton.Mass(1))
+  //   emitter.addInitialize(new Proton.Life(2))
+  //   emitter.addInitialize(new Proton.Body(createSprite()))
+  //   emitter.addInitialize(new Proton.Radius(10))
+  //   // emitter.addInitialize(new Proton.V(200, new Proton.Vector3D(0, 0, -1), 0))
+  //   // emitter.addInitialize(new Proton.Velocity(new Proton.Span(-1, 1), new Proton.Span(-3, 0), 'vector'));
+
+
+  //   // emitter.addBehaviour(new Proton.Alpha(1, 0))
+  //   emitter.addBehaviour(new Proton.Color(color1, color2))
+  //   // emitter.addBehaviour(new Proton.Scale(1, 0.5))
+  //   // emitter.addBehaviour(
+  //     // new Proton.CrossZone(new Proton.ScreenZone(camera, renderer), 'dead')
+  //   // )
+
+  //   // emitter.addBehaviour(new Proton.Force(0, 0, -20))
+  //   // emitter.addBehaviour(new Proton.Attraction({
+  //   //     x: 0,
+  //   //     y: 0,
+  //   //     z: 0
+  //   // }, 5, 250));
+
+  //   // emitter.p.x = x
+  //   // emitter.p.y = y
+
+  //   emitter.emit()
+
+  //   return emitter
+  // }
+
+  // function createSprite() {
+  //   var map = new THREE.TextureLoader().load('/images/dot.png')
+  //   var material = new THREE.SpriteMaterial({
+  //     map: map,
+  //     color: 0xff0000,
+  //     blending: THREE.AdditiveBlending,
+  //     fog: true
+  //   })
+
+  //   console.log('material', material)
+  //   return new THREE.Sprite(material)
+  // }
+
+  // addProton()
 
   var clock = new THREE.Clock()
   const shots = []
@@ -121,7 +210,16 @@ export default function generateWorld() {
     }
   }
 
+
+
   function render() {
+
+    // proton.update();
+    // animateEmitter()
+
+    // proton.emitters[0].p = player.getMesh().position
+    // proton.emitters[1].p = player.getMesh().position
+
     isGameOver = store.getState().game.gameOver
     isGameOngoing = store.getState().game.ongoing
 
@@ -191,10 +289,10 @@ export default function generateWorld() {
           e.preventDefault()
           var playerPos = player.getMesh().position
 
-          const shotMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff0000,
-            transparent: true,
-            opacity: 0.5
+          const shotMaterial = new THREE.MeshPhongMaterial({
+            color: 0xffa500
+            // transparent: true,
+            // opacity: 0.5
           })
 
           const shot = new THREE.Mesh(
