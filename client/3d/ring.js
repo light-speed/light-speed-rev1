@@ -4,6 +4,7 @@ import store, {addPoints, addTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
 import {asteroids, NUM_ASTEROIDS, Asteroid} from './asteroids'
+import {HUDalert} from './HUDalert.js'
 
 export let ring
 
@@ -85,7 +86,7 @@ const Ring = function(scene) {
 
       // NUM_ASTEROIDS++
       if (asteroids.length < 15) {
-        asteroids.push(new Asteroid((Math.floor(Math.random() + 5) + 1), scene))
+        asteroids.push(new Asteroid(Math.floor(Math.random() + 5) + 1, scene))
         scene.add(asteroids[asteroids.length - 1].getMesh())
       }
     }

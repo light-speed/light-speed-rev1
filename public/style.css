@@ -10,7 +10,6 @@ body {
   height: 100%;
   overflow: hidden;
   color: rgb(49, 182, 206);
-  background-color: #000000;
 }
 
 a {
@@ -45,17 +44,7 @@ nav a {
 #progress-container {
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(
-    45deg,
-    rgb(10, 10, 10),
-    rgb(15, 15, 15),
-    rgb(20, 20, 20),
-    rgb(30, 30, 30),
-    rgb(40, 40, 40),
-    rgb(50, 50, 50)
-  );
   display: flex;
-  /* background: #000; */
   border: 2px solid #000;
   position: absolute;
   justify-self: center;
@@ -125,6 +114,16 @@ form div {
   width: 100%;
   justify-content: flex-end;
   margin-left: -13%;
+}
+
+#alert {
+  display: flex;
+  color: rgb(0, 218, 213);
+  font-size: 1vw;
+  margin-top: 45px;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
 }
 
 #pause-screen img {
@@ -490,16 +489,6 @@ th {
   letter-spacing: 1px;
   margin-left: 30%;
 }
-
-/* div {
-  color: #fff;
-  margin: 5px 0;
-  text-transform: uppercase;
-  text-align: center;
-  font-family: 'Arial', sans-serif;
-  font-size: 10px;
-  letter-spacing: 2px;
-} */
 
 .preloader-1 .line {
   width: 5px;

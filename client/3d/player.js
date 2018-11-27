@@ -1,7 +1,6 @@
 import loadingManager from './loadingManager'
 
 // Player Collision Wrapper Cube
-
 var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
 var cubeMaterial = new THREE.MeshBasicMaterial({
   color: 0x003500,
@@ -55,19 +54,16 @@ var Player = function(scene) {
     new THREE.OBJLoader(loadingManager)
       .setMaterials(materials)
 
-      .load(
-        'models/DevShipT.obj',
-        function(mesh) {
-          mesh.scale.set(3, 3, 3)
-          mesh.rotation.set(0, Math.PI, 0)
+      .load('models/DevShipT.obj', function(mesh) {
+        mesh.scale.set(3, 3, 3)
+        mesh.rotation.set(0, Math.PI, 0)
 
-          spaceship = mesh
+        spaceship = mesh
 
-          self.player = spaceship
-          self.mesh.add(self.player)
-          self.loaded = true
-        }
-      )
+        self.player = spaceship
+        self.mesh.add(self.player)
+        self.loaded = true
+      })
   })
 
   this.getHitbox = function() {
