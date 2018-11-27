@@ -20,7 +20,7 @@ class World extends Component {
   render() {
     return (
       <div id="world" className="no-cursor">
-        <GameOver />
+        {/* <GameOver /> */}
 
         <HUD />
         <div id="pause-screen">

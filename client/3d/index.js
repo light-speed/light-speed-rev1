@@ -133,7 +133,11 @@ export default function generateWorld() {
     pointer.getMesh().position.set(-(window.innerWidth / 14), 1, 0)
 
     var delta = clock.getDelta()
-    controls.update(delta)
+    if (isGameOver !== true) {
+      controls.update(delta)
+    } else if (isGameOver === true) {
+      return
+    }
 
     // for (var i = 0; i < NUM_ASTEROIDS; i++) {
     //   asteroids[i].update(ring.getMesh().position.z)
@@ -240,7 +244,7 @@ export default function generateWorld() {
   animate()
 
   onEsc = event => {
-    if (event.which === 27 && isGameOver === false) {
+    if (event.which === 27 && isGameOver !== true) {
       isPaused = !isPaused
       showInstructions(isPaused)
       animate()
