@@ -143,6 +143,7 @@ form div {
   margin-bottom: 30vh;
 }
 .Menu button {
+  text-transform: uppercase;
   border: 3px solid rgb(0, 218, 213);
   background: rgb(33, 70, 72);
   color: rgb(0, 218, 213);
