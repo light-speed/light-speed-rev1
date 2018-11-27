@@ -1,6 +1,3 @@
-/**
- * @author James Baicoianu / http://www.baicoianu.com/
- */
 
 THREE.FlyControls = function(camera, object, domElement) {
   this.object = object
@@ -26,10 +23,10 @@ THREE.FlyControls = function(camera, object, domElement) {
   this.accelDamper = 0.33
   this.maxSpeed = 15
   this.rollSpeed = 0.01
-  this.pitchDamper = 0.8
-  this.yawDamper = 0.66
-  this.mouseDamper = 0.05
-  this.rollDamper = 0.6
+  this.pitchDamper = 1.2
+  this.yawDamper = 1.2
+  this.mouseDamper = 0.08
+  this.rollDamper = 0.52
   // this.keypress = false
 
   this.dragToLook = true

@@ -35,8 +35,8 @@ module.exports = class GameEngine {
       this.games[socketId].addTime(timeMs)
   }
 
-  newGame(socketId) {
-    this.games[socketId] = new Game(socketId)
+  newGame(socketId, userId) {
+    this.games[socketId] = new Game(socketId, userId)
     this.games[socketId].start()
   }
 
