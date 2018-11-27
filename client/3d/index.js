@@ -18,11 +18,11 @@ let isGameOver
 let isGameOngoing
 
 
-this.add = function() {
-  NUM_ASTEROIDS++
-  asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
-  scene.add(asteroids[NUM_ASTEROIDS-1].getMesh())
-}
+// this.add = function() {
+//   NUM_ASTEROIDS++
+//   asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
+//   scene.add(asteroids[NUM_ASTEROIDS-1].getMesh())
+// }
 
 export default function generateWorld() {
   getDomElements()
@@ -129,6 +129,7 @@ export default function generateWorld() {
     asteroids.forEach(e => {
       e.reset(player)
     })
+    console.log(asteroids)
 
     gameOverScreen()
 

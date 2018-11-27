@@ -3,10 +3,10 @@ import {player} from './player'
 import store, {addPoints, addTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
-import {asteroids} from './asteroids'
+import {asteroids, NUM_ASTEROIDS, Asteroid} from './asteroids'
 
 
-export let ring, NUM_ASTEROIDS
+export let ring
 
 const {camera} = configureRenderer()
 const Ring = function(scene) {
@@ -84,6 +84,11 @@ const Ring = function(scene) {
         e.getOldY(player.getMesh().position.y)
         e.getOldZ(player.getMesh().position.z)
       })
+
+        // NUM_ASTEROIDS++
+        asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
+        scene.add(asteroids[asteroids.length-1].getMesh())
+
 
     }
 

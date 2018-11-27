@@ -26,18 +26,6 @@ class App extends Component {
         <Route path="/credits" component={Credits} />
         <Route path="/howtoplay" component={HowToPlay} />
         <Route path="/topscore" component={TopScore} />
-<<<<<<< HEAD
-        {/* <Route exact path="/gameover" component={GameOver} /> */}
-
-        {isLoggedIn && (
-          <Switch>
-            {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
-          </Switch>
-        )}
-        {/* Displays our Login component as a fallback */}
-=======
->>>>>>> master
         <Route component={Menu} />
       </Switch>
     )

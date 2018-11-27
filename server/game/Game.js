@@ -29,14 +29,10 @@ module.exports = class GameInstance {
     console.log(`instance ${this.socketId} game over`)
     this.gameTimeMs = 0
     this.ongoing = false
-<<<<<<< HEAD
-
-=======
     Game.create({
       score: this.score,
       userId: this.userId,
       date: this.startedAt
     })
->>>>>>> master
   }
 }
