@@ -24,6 +24,13 @@ module.exports = (io, gameEngine) => {
       gameEngine.addTime(socket.id, timeMs)
     })
 
+    socket.on('pause-game', () => {
+      gameEngine.pauseGame(socket.id)
+    })
+
+    socket.on('unpause-game', () => {
+      gameEngine.unpauseGame(socket.id)
+    })
 
   })
 }

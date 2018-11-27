@@ -10,6 +10,20 @@ module.exports = class GameInstance {
     this.userId = userId
   }
 
+  pause() {
+    this.ongoing = false
+    
+    const timeSoFar = new Date - new Date(this.startedAt)
+    const timeRemaining = this.gameTimeMs - timeSoFar
+
+    this.gameTimeMs = timeRemaining
+  }
+
+  unpause() {
+    this.ongoing = true
+    this.startedAt = new Date()
+  }
+
   addPoints(amount) {
     if (amount > 100) amount = 0
     this.score += amount

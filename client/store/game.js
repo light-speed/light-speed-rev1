@@ -13,6 +13,8 @@ const ADD_TIME = 'ADD_TIME'
 const START_GAME = 'START_GAME'
 const END_GAME = 'END_GAME'
 const GET_SCORES = 'GET_SCORES'
+const SET_TIME = 'SET_TIME'
+const TOGGLE_ONGOING = 'TOGGLE_ONGOING'
 
 /**
  * INITIAL STATE
@@ -27,10 +29,14 @@ const initState = {
   topScores: []
 }
 
+export const setTime = time => ({type: SET_TIME, time})
+
 export const addPoints = amount => {
   socket.emit('add-points', amount)
   return {type: ADD_POINTS, amount}
 }
+
+export const toggleOngoing = () => ({type: TOGGLE_ONGOING})
 
 export const addTime = (timeMs, emit = true) => {
   if (emit) socket.emit('add-time', timeMs)
@@ -70,6 +76,16 @@ export const getScores = () => async dispatch => {
  */
 export default function(state = initState, action) {
   switch (action.type) {
+    case TOGGLE_ONGOING:
+      return {
+        ...state,
+        ongoing: !state.ongoing
+      }
+    case SET_TIME:
+      return {
+        ...state,
+        gameTime: action.time
+      }
     case ADD_TIME:
       return {
         ...state,

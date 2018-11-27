@@ -14,13 +14,15 @@ class Timer extends React.Component {
 
   tick() {
     let clock = this.props.game.gameTime
-    if (clock > 0) {
+    if (clock > 0 && this.props.game.ongoing) {
       this.props.addTime(-100, false)
     }
   }
 
   render() {
-    return <div>{(this.props.game.gameTime / 1000).toFixed(1)}s</div>
+    let displayTime = (this.props.game.gameTime / 1000).toFixed(1)
+    if (displayTime < 0.1) displayTime = 0
+    return <div>{displayTime}s</div>
   }
 }
 
