@@ -3,7 +3,6 @@ module.exports = (io, gameEngine) => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
 
     socket.on('disconnect', () => {
-      console.log(`Connection ${socket.id} has left the building`)
       gameEngine.endGame(socket.id)
     })
 
@@ -14,12 +13,10 @@ module.exports = (io, gameEngine) => {
     })
 
     socket.on('new-game', userId => {
-      console.log('client says new game')
       gameEngine.newGame(socket.id, userId)
     })
 
     socket.on('game-over', () => {
-      console.log('client says game over')
       gameEngine.endGame(socket.id, false)
     })
 
@@ -27,6 +24,13 @@ module.exports = (io, gameEngine) => {
       gameEngine.addTime(socket.id, timeMs)
     })
 
+    socket.on('pause-game', () => {
+      gameEngine.pauseGame(socket.id)
+    })
+
+    socket.on('unpause-game', () => {
+      gameEngine.unpauseGame(socket.id)
+    })
 
   })
 }

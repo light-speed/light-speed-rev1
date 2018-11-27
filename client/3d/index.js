@@ -7,11 +7,12 @@ import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
-import store, {addPoints, endGame, addTime} from '../store'
+import store, {addPoints, endGame, addTime, toggleOngoing} from '../store'
 import loadPointer, {pointer} from './pointer'
 import {formatScore} from '../components/HUD'
 import Proton from 'three.proton.js'
 import addStars from './particles.js'
+import socket from '../socket';
 
 let isPaused = false
 
@@ -45,7 +46,6 @@ export default function generateWorld() {
     )
     if (earthBSphere.containsPoint(playerPos)) {
       if (store.getState().game.ongoing) store.dispatch(endGame())
-      console.log('earth death')
       return true
     }
   }
@@ -58,7 +58,6 @@ export default function generateWorld() {
       Math.abs(player.getMesh().position.z) > 10000
     ) {
       if (store.getState().game.ongoing) store.dispatch(endGame())
-      console.log('skybox death')
       return true
     }
   }
@@ -73,8 +72,7 @@ export default function generateWorld() {
         asteroidBBox.setFromObject(a.getMesh())
         if (shot.BBox.intersectsBox(asteroidBBox)) {
           store.dispatch(addPoints(10))
-          store.dispatch(addTime(3000))
-          console.log('HIT')
+          store.dispatch(addTime(500))
           a.destroy()
           return true
         }
@@ -225,15 +223,11 @@ export default function generateWorld() {
     isGameOver = store.getState().game.gameOver
     isGameOngoing = store.getState().game.ongoing
 
-    // console.log('isGameOver', isGameOver)
-    // console.log('isGameOngoing', isGameOngoing)
-
     asteroids.forEach(e => {
       if (e.asteroidMesh) {
         e.reset(player)
       }
     })
-    // console.log(asteroids)
 
     gameOverScreen()
 
@@ -293,7 +287,6 @@ export default function generateWorld() {
       switch (e.keyCode) {
         case 32: // Space
           e.preventDefault()
-          console.log(asteroids)
           var playerPos = player.getMesh().position
 
           const shotMaterial = new THREE.MeshPhongMaterial({
@@ -334,8 +327,6 @@ export default function generateWorld() {
             scene.remove(shot)
           }, 1000)
 
-          // console.log(scene)
-
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
           scene.add(shot)
@@ -350,6 +341,8 @@ export default function generateWorld() {
 
   onEsc = event => {
     if (event.which === 27 && isGameOver !== true) {
+      isPaused ? socket.emit('unpause-game') : socket.emit('pause-game')
+      store.dispatch(toggleOngoing())
       isPaused = !isPaused
       showInstructions(isPaused)
       animate()

@@ -4,6 +4,7 @@ import store, {addPoints, addTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
 import {asteroids, NUM_ASTEROIDS, Asteroid} from './asteroids'
+import {HUDalert} from './HUDalert.js'
 
 export let ring
 
@@ -85,7 +86,7 @@ const Ring = function(scene) {
 
       // NUM_ASTEROIDS++
       if (asteroids.length < 15) {
-        asteroids.push(new Asteroid((Math.floor(Math.random() + 5) + 1), scene))
+        asteroids.push(new Asteroid(Math.floor(Math.random() + 5) + 1, scene))
         scene.add(asteroids[asteroids.length - 1].getMesh())
       }
     }
@@ -101,17 +102,15 @@ const Ring = function(scene) {
     ringBBox.setFromObject(this.mesh)
 
     if (earth.sphereBBox.intersectsBox(ringBBox)) {
-      // console.log('ring-planet collision', this.counter)
-      // console.log('earthBBox', earthBBox, 'ringBBox', ringBBox, 'ring pos', ring.getMesh().position, 'sphereBBox', earth.sphereBBox)
       return true
     }
   }
 
   this.ringSkyboxCollision = function() {
     if (
-      Math.abs(this.getMesh().position.x) > 10000 ||
-      Math.abs(this.getMesh().position.y) > 10000 ||
-      Math.abs(this.getMesh().position.z) > 10000
+      Math.abs(this.getMesh().position.x) > 9000 ||
+      Math.abs(this.getMesh().position.y) > 9000 ||
+      Math.abs(this.getMesh().position.z) > 9000
     ) {
       return true
     }
@@ -126,7 +125,7 @@ const Ring = function(scene) {
     if (cubeBBox.intersectsBox(ringBBox)) {
       store.dispatch(addPoints(100))
       this.ringSound()
-      store.dispatch(addTime(5000))
+      store.dispatch(addTime(3000))
       return true
     }
   }

@@ -1,7 +1,6 @@
 import loadingManager from './loadingManager'
 
 // Player Collision Wrapper Cube
-
 var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
 var cubeMaterial = new THREE.MeshBasicMaterial({
   color: 0x003500,
@@ -25,14 +24,6 @@ var Player = function(scene) {
   this.canShoot = 0
 
   this.mesh.add(this.hitbox)
-
-  var onProgress = function(xhr) {
-    if (xhr.lengthComputable) {
-      var percentComplete = xhr.loaded / xhr.total * 100
-      // console.log(Math.round(percentComplete, 2) + '% downloaded')
-    }
-  }
-  var onError = function() {}
 
   var keyLight = new THREE.DirectionalLight(
     new THREE.Color('hsl(30, 100%, 75%)'),
@@ -63,21 +54,16 @@ var Player = function(scene) {
     new THREE.OBJLoader(loadingManager)
       .setMaterials(materials)
 
-      .load(
-        'models/DevShipT.obj',
-        function(mesh) {
-          mesh.scale.set(3, 3, 3)
-          mesh.rotation.set(0, Math.PI, 0)
+      .load('models/DevShipT.obj', function(mesh) {
+        mesh.scale.set(3, 3, 3)
+        mesh.rotation.set(0, Math.PI, 0)
 
-          spaceship = mesh
+        spaceship = mesh
 
-          self.player = spaceship
-          self.mesh.add(self.player)
-          self.loaded = true
-        },
-        onProgress,
-        onError
-      )
+        self.player = spaceship
+        self.mesh.add(self.player)
+        self.loaded = true
+      })
   })
 
   this.getHitbox = function() {

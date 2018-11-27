@@ -1,15 +1,19 @@
 import io from 'socket.io-client'
-import store, {endGame} from './store'
+import store, {endGame, setTime} from './store'
 
 const socket = io(window.location.origin)
 
 socket.on('connect', () => {
-  console.log('Connected!')
 
   socket.on('game-over', socketId => {
     if (socket.id === socketId) {
-      console.log('server says game over')
       store.dispatch(endGame())
+    }
+  })
+
+  socket.on('update-time', (socketId, time) => {
+    if (socket.id === socketId) {
+      store.dispatch(setTime(time))
     }
   })
 })
