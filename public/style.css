@@ -10,6 +10,7 @@ body {
   height: 100%;
   overflow: hidden;
   color: rgb(49, 182, 206);
+  background-color: #000000;
 }
 
 a {
@@ -23,6 +24,10 @@ label {
 nav a {
   display: inline-block;
   margin: 1em;
+}
+
+#loading {
+  background: url('./images/spc3.jpg');
 }
 
 #pause-screen {
