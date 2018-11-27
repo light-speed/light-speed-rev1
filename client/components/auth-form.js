@@ -11,8 +11,9 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div className="Login">
+    <div>
       <MenuButton />
+    <div className="Login">
       <form onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="username">
@@ -35,8 +36,9 @@ const AuthForm = props => {
           </button>
         </div>
         <br></br>
-        {error && error.response && <div> {error.response.data} </div>}
+        {error && error.response && <div> <h1>{error.response.data}</h1> </div>}
       </form>
+    </div>
     </div>
   )
 }
