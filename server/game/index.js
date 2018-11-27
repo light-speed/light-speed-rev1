@@ -16,7 +16,7 @@ module.exports = class GameEngine {
     while (true) {
       gamesArr().forEach(game => {
         if (game.ongoing) {
-          // console.log(new Date() - new Date(game.startedAt), game.gameTimeMs)
+          // (new Date() - new Date(game.startedAt), game.gameTimeMs)
           const outOfTime = new Date() - new Date(game.startedAt) >= game.gameTimeMs
           if (outOfTime) this.endGame(game.socketId)
         }

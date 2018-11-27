@@ -9,7 +9,6 @@ let resources = 0
 loadingManager.onProgress = () => resources++
 
 loadingManager.onLoad = function () {
-  console.log(`loaded ${resources} resources`)
   RESOURCES_LOADED = true
   LOADING_SCREEN.style.display = 'none'
   HUD.style.display = 'flex'

@@ -40,7 +40,6 @@ export const addTime = (timeMs, emit = true) => {
 export const startGame = () => async dispatch => {
   try {
     const {data: me} = await axios.get('/auth/me')
-    console.log('me', me)
     const userId = me ? me.id : 1
     socket.emit('new-game', userId)
     dispatch({type: START_GAME})

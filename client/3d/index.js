@@ -42,7 +42,6 @@ export default function generateWorld() {
     )
     if (earthBSphere.containsPoint(playerPos)) {
       if (store.getState().game.ongoing) store.dispatch(endGame())
-      console.log('earth death')
       return true
     }
   }
@@ -55,7 +54,6 @@ export default function generateWorld() {
       Math.abs(player.getMesh().position.z) > 10000
     ) {
       if (store.getState().game.ongoing) store.dispatch(endGame())
-      console.log('skybox death')
       return true
     }
   }
@@ -71,7 +69,6 @@ export default function generateWorld() {
         if (shot.BBox.intersectsBox(asteroidBBox)) {
           store.dispatch(addPoints(10))
           store.dispatch(addTime(3000))
-          console.log('HIT')
           a.destroy()
           return true
         }
@@ -127,15 +124,11 @@ export default function generateWorld() {
     isGameOver = store.getState().game.gameOver
     isGameOngoing = store.getState().game.ongoing
 
-    // console.log('isGameOver', isGameOver)
-    // console.log('isGameOngoing', isGameOngoing)
-
     asteroids.forEach(e => {
       if (e.asteroidMesh) {
         e.reset(player)
       }
     })
-    // console.log(asteroids)
 
     gameOverScreen()
 
@@ -195,7 +188,6 @@ export default function generateWorld() {
       switch (e.keyCode) {
         case 32: // Space
           e.preventDefault()
-          console.log(asteroids)
           var playerPos = player.getMesh().position
 
           const shotMaterial = new THREE.MeshBasicMaterial({
@@ -235,8 +227,6 @@ export default function generateWorld() {
             shot.alive = false
             scene.remove(shot)
           }, 1000)
-
-          // console.log(scene)
 
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
