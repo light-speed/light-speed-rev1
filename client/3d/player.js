@@ -56,33 +56,29 @@ var Player = function(scene) {
   scene.add(fillLight)
   scene.add(backLight)
 
-  new THREE.MTLLoader(loadingManager)
-    // .setPath('../public/models/')
-    .load('models/DevShipT.mtl', function(materials) {
-      materials.preload()
-      new THREE.OBJLoader(loadingManager)
-        .setMaterials(materials)
-        // .setPath('../public/models/')
-        .load(
-          'models/DevShipT.obj',
-          function(mesh) {
-            mesh.scale.set(3, 3, 3)
-            mesh.rotation.set(0, Math.PI, 0)
-            // mesh.position.set(0, -5, 0);
-            spaceship = mesh
+  new THREE.MTLLoader(loadingManager).load('models/DevShipT.mtl', function(
+    materials
+  ) {
+    materials.preload()
+    new THREE.OBJLoader(loadingManager)
+      .setMaterials(materials)
 
-            self.player = spaceship
-            self.mesh.add(self.player)
-            self.loaded = true
-          },
-          onProgress,
-          onError
-        )
-    })
+      .load(
+        'models/DevShipT.obj',
+        function(mesh) {
+          mesh.scale.set(3, 3, 3)
+          mesh.rotation.set(0, Math.PI, 0)
 
-  // this.update = function() {
-  //   this.hitbox.setFromObject(spaceship)
-  // }
+          spaceship = mesh
+
+          self.player = spaceship
+          self.mesh.add(self.player)
+          self.loaded = true
+        },
+        onProgress,
+        onError
+      )
+  })
 
   this.getHitbox = function() {
     return this.hitbox
