@@ -108,9 +108,9 @@ const Ring = function(scene) {
 
   this.ringSkyboxCollision = function() {
     if (
-      Math.abs(this.getMesh().position.x) > 10000 ||
-      Math.abs(this.getMesh().position.y) > 10000 ||
-      Math.abs(this.getMesh().position.z) > 10000
+      Math.abs(this.getMesh().position.x) > 9000 ||
+      Math.abs(this.getMesh().position.y) > 9000 ||
+      Math.abs(this.getMesh().position.z) > 9000
     ) {
       return true
     }
@@ -125,7 +125,7 @@ const Ring = function(scene) {
     if (cubeBBox.intersectsBox(ringBBox)) {
       store.dispatch(addPoints(100))
       this.ringSound()
-      store.dispatch(addTime(5000))
+      store.dispatch(addTime(3000))
       return true
     }
   }

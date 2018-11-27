@@ -7,9 +7,10 @@ import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
-import store, {addPoints, endGame, addTime} from '../store'
+import store, {addPoints, endGame, addTime, toggleOngoing} from '../store'
 import loadPointer, {pointer} from './pointer'
 import {formatScore} from '../components/HUD'
+import socket from '../socket';
 
 let isPaused = false
 
@@ -68,7 +69,7 @@ export default function generateWorld() {
         asteroidBBox.setFromObject(a.getMesh())
         if (shot.BBox.intersectsBox(asteroidBBox)) {
           store.dispatch(addPoints(10))
-          store.dispatch(addTime(3000))
+          store.dispatch(addTime(500))
           a.destroy()
           return true
         }
@@ -242,6 +243,8 @@ export default function generateWorld() {
 
   onEsc = event => {
     if (event.which === 27 && isGameOver !== true) {
+      isPaused ? socket.emit('unpause-game') : socket.emit('pause-game')
+      store.dispatch(toggleOngoing())
       isPaused = !isPaused
       showInstructions(isPaused)
       animate()
