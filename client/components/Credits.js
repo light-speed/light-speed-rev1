@@ -5,21 +5,15 @@ class Credits extends React.Component {
   render() {
     return (
       <div>
-        {/* <div className="ReturnButton">
-          <div onClick={() => this.props.history.push('/')} class="backArrow">
-            &#10140;
-          </div>
-        </div> */}
         <MenuButton />
-
         <div className="fade" />
-
         <section className="star-wars">
           <div className="crawl">
             <div className="title">
-              <p>Episode I</p>
+              <p>Episode 0</p>
               <h1>LIGHT SPEED</h1>
             </div>
+            A JavaScript story in zero gravity
             <p>Benjamin Wagner</p>
             <p>Dalton Saffe</p>
             <p>Jason Hang</p>
