@@ -48,7 +48,6 @@ const topScores = scores => ({type: GET_SCORES, scores})
 export const getScores = () => async dispatch => {
   try {
     const res = await axios.get('/api/games')
-    console.log('RES', res)
     dispatch(topScores(res.data))
   } catch (err) {
     console.error(err)
