@@ -15,7 +15,6 @@ module.exports = (io, gameEngine) => {
 
     socket.on('new-game', userId => {
       console.log('client says new game')
-      console.log('userid:', userId)
       gameEngine.newGame(socket.id, userId)
     })
 
