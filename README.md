@@ -10,4 +10,6 @@ By:
 
 Built during the 2018 autumn cohort of Fullstack Academy.
 
-![light-speed](https://github.com/light-speed/light-speed-rev1/blob/master/public/images/instruc.png)
+How To Play
+
+![light-speed](https://github.com/light-speed/light-speed-rev1/blob/master/public/images/readme.png)
