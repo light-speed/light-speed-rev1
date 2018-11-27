@@ -1,5 +1,9 @@
 import socket from '../socket'
 import axios from 'axios'
+// import { browserHistory } from 'react-router'
+import history from './history'
+
+// this should change the url and re-render Test component
 
 /**
  * ACTION TYPES
@@ -36,16 +40,17 @@ export const addTime = (timeMs, emit = true) => {
 export const startGame = () => async dispatch => {
   try {
     const {data: me} = await axios.get('/auth/me')
-    console.log('me',me)
+    console.log('me', me)
     const userId = me ? me.id : 1
     socket.emit('new-game', userId)
     dispatch({type: START_GAME})
-  } catch(e) {
+  } catch (e) {
     console.log(e)
   }
 }
 
 export const endGame = () => {
+  // history.push('/gameover')
   socket.emit('game-over')
   return {type: END_GAME}
 }

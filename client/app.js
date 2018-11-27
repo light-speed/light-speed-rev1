@@ -8,6 +8,7 @@ import Menu from './components/Menu'
 import Credits from './components/Credits'
 import HowToPlay from './components/HowToPlay'
 import TopScore from './components/TopScore'
+import GameOver from './components/GameOver'
 
 class App extends Component {
   componentDidMount() {
@@ -21,14 +22,11 @@ class App extends Component {
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/play" component={World} />
+        <Route exact path="/play" component={World} />
         <Route path="/credits" component={Credits} />
         <Route path="/howtoplay" component={HowToPlay} />
         <Route path="/topscore" component={TopScore} />
         <Route component={Menu} />
-        <Route path="/play" component={World} />
-        <Route path="/credits" component={Credits} />
-        <Route path="/howtoplay" component={HowToPlay} />
       </Switch>
     )
   }

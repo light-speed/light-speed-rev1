@@ -20,7 +20,7 @@ module.exports = class GameInstance {
   }
 
   start() {
-    this.ongoing = true 
+    this.ongoing = true
     this.score = 0
     this.startedAt = new Date()
   }

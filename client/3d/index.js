@@ -17,13 +17,19 @@ let onEsc
 let isGameOver
 let isGameOngoing
 
+// this.add = function() {
+//   NUM_ASTEROIDS++
+//   asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
+//   scene.add(asteroids[NUM_ASTEROIDS-1].getMesh())
+// }
+
 export default function generateWorld() {
   getDomElements()
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
   loadPlayer(scene, camera, renderer)
   loadSkybox(scene)
   loadRing(scene)
-  // loadAsteroids(scene)
+  loadAsteroids(scene)
   loadPlanet(scene)
   loadPointer(scene, player)
 
@@ -36,7 +42,6 @@ export default function generateWorld() {
     )
     if (earthBSphere.containsPoint(playerPos)) {
       if (store.getState().game.ongoing) store.dispatch(endGame())
-
       return true
     }
   }
@@ -53,19 +58,19 @@ export default function generateWorld() {
     }
   }
 
-  // function shotAsteroidCollision(shot) {
-  //   asteroids.forEach(a => {
-  //     var asteroidBBox = new THREE.Box3(
-  //       new THREE.Vector3(),
-  //       new THREE.Vector3()
-  //     )
-  //     asteroidBBox.setFromObject(a.getMesh())
-  //     if (shot.BBox.intersectsBox(asteroidBBox)) {
-  //       console.log('HIT')
-  //       return true
-  //     }
-  //   })
-  // }
+  function shotAsteroidCollision(shot) {
+    asteroids.forEach(a => {
+      var asteroidBBox = new THREE.Box3(
+        new THREE.Vector3(),
+        new THREE.Vector3()
+      )
+      asteroidBBox.setFromObject(a.getMesh())
+      if (shot.BBox.intersectsBox(asteroidBBox)) {
+        console.log('HIT')
+        return true
+      }
+    })
+  }
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -75,32 +80,22 @@ export default function generateWorld() {
     transparent: true
   })
   var meshClouds = new THREE.Mesh(
-    new THREE.SphereBufferGeometry(4000, 100, 50),
+    new THREE.SphereBufferGeometry(1500, 100, 50),
     materialClouds
   )
   meshClouds.scale.set(1.005, 1.005, 1.005)
-  meshClouds.position.set(5000, -1000, -8000)
+  meshClouds.position.set(2000, -1000, -2000)
   meshClouds.rotation.z = 0.41
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
-
-  // var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
-  // var pointerMaterial = new THREE.MeshPhongMaterial({color: 0x00cccc})
-  // var pointerMesh = new THREE.Mesh(pointerGeometry, pointerMaterial)
-
-  // pointerMesh.position.set(-110, 1, 0)
-
-  // scene.add(pointerMesh)
-  // player.getMesh().add(pointerMesh)
 
   /*********************************
    * Render To Screen
    ********************************/
   //Positioning/Adding
-  ring.getMesh().position.set(-400, 0, -500)
-  // ring.getMesh().position.set(5000, -1000, -8000)
+  ring.getMesh().position.set(-100, 0, -500)
   player.getMesh().add(camera)
-  player.getMesh().lookAt(400, 0, 500)
+  player.getMesh().lookAt(100, 0, 500)
   ring.getMesh().lookAt(player.getMesh().position)
 
   var clock = new THREE.Clock()
@@ -128,6 +123,11 @@ export default function generateWorld() {
     // console.log('isGameOver', isGameOver)
     // console.log('isGameOngoing', isGameOngoing)
 
+    asteroids.forEach(e => {
+      e.reset(player)
+    })
+    console.log(asteroids)
+
     gameOverScreen()
 
     pointer.getMesh().position.set(-(window.innerWidth / 14), 1, 0)
@@ -139,9 +139,9 @@ export default function generateWorld() {
       return
     }
 
-    // for (var i = 0; i < NUM_ASTEROIDS; i++) {
-    //   asteroids[i].update(ring.getMesh().position.z)
-    // }
+    for (var i = 0; i < NUM_ASTEROIDS; i++) {
+      asteroids[i].update(ring.getMesh().position.z)
+    }
 
     var rotationSpeed = 0.01
     earth.getMesh().rotation.y += rotationSpeed * delta
@@ -164,14 +164,12 @@ export default function generateWorld() {
       player.getMesh().getWorldDirection(shotVector)
       shots[index].translateOnAxis(shotVector, -100)
       shots[index].update()
-      // shotAsteroidCollision(shots[index])
+      shotAsteroidCollision(shots[index])
     }
     if (player.canShoot > 0) player.canShoot -= 1
 
     renderer.render(scene, camera)
   }
-  // scene.add(pointer)
-  // player.getMesh().add(pointer)
 
   function animate() {
     if (isPaused) return
