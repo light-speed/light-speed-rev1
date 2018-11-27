@@ -33,9 +33,16 @@ export const addTime = (timeMs, emit=true) => {
   return {type: ADD_TIME, timeMs}
 }
 
-export const startGame = () => {
-  socket.emit('new-game')
-  return {type: START_GAME}
+export const startGame = () => async dispatch => {
+  try {
+    const {data: me} = await axios.get('/auth/me')
+    console.log('me',me)
+    const userId = me ? me.id : 1
+    socket.emit('new-game', userId)
+    dispatch({type: START_GAME})
+  } catch(e) {
+    console.log(e)
+  }
 }
 
 export const endGame = () => {
@@ -48,7 +55,6 @@ const topScores = scores => ({type: GET_SCORES, scores})
 export const getScores = () => async dispatch => {
   try {
     const res = await axios.get('/api/games')
-    console.log('RES', res)
     dispatch(topScores(res.data))
   } catch (err) {
     console.error(err)

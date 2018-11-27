@@ -19,21 +19,13 @@ class App extends Component {
 
     return (
       <Switch>
-        {/* Routes placed here are available to all visitors */}
+        <Route path="/home" component={UserHome} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/play" component={World} />
         <Route path="/credits" component={Credits} />
         <Route path="/howtoplay" component={HowToPlay} />
         <Route path="/topscore" component={TopScore} />
-
-        {isLoggedIn && (
-          <Switch>
-            {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
-          </Switch>
-        )}
-        {/* Displays our Login component as a fallback */}
         <Route component={Menu} />
         <Route path="/play" component={World} />
         <Route path="/credits" component={Credits} />
