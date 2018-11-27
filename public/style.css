@@ -157,7 +157,6 @@ form div {
   border: 3px solid rgb(33, 70, 72);
 }
 #blocker a {
-  display: flex;
   border: 3px solid rgb(0, 218, 213);
   background: rgb(33, 70, 72);
   color: rgb(0, 218, 213);

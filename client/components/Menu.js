@@ -17,8 +17,7 @@ class Menu extends React.Component {
           >
             PLAY GAME
           </button>
-        </div>
-        <div>
+        
           <button
             type="button"
             onClick={() => this.props.history.push('/howtoplay')}
@@ -33,8 +32,7 @@ class Menu extends React.Component {
           >
             TOP SCORES
           </button>
-        </div>
-        <div>
+     
           <button
             type="button"
             onClick={() => this.props.history.push('/credits')}
