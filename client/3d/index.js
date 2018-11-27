@@ -9,7 +9,7 @@ import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
 import store, {endGame} from '../store'
 import loadPointer, {pointer} from './pointer'
-import GameOver from '../components/GameOver'
+// import GameOver from '../components/GameOver'
 
 let isPaused = false
 
@@ -17,13 +17,20 @@ let onEsc
 let isGameOver
 let isGameOngoing
 
+
+this.add = function() {
+  NUM_ASTEROIDS++
+  asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
+  scene.add(asteroids[NUM_ASTEROIDS-1].getMesh())
+}
+
 export default function generateWorld() {
   getDomElements()
   const {renderer, camera, scene, disposeOfResize} = configureRenderer()
   loadPlayer(scene, camera, renderer)
   loadSkybox(scene)
   loadRing(scene)
-  // loadAsteroids(scene)
+  loadAsteroids(scene)
   loadPlanet(scene)
   loadPointer(scene, player)
 
@@ -53,19 +60,19 @@ export default function generateWorld() {
     }
   }
 
-  // function shotAsteroidCollision(shot) {
-  //   asteroids.forEach(a => {
-  //     var asteroidBBox = new THREE.Box3(
-  //       new THREE.Vector3(),
-  //       new THREE.Vector3()
-  //     )
-  //     asteroidBBox.setFromObject(a.getMesh())
-  //     if (shot.BBox.intersectsBox(asteroidBBox)) {
-  //       console.log('HIT')
-  //       return true
-  //     }
-  //   })
-  // }
+  function shotAsteroidCollision(shot) {
+    asteroids.forEach(a => {
+      var asteroidBBox = new THREE.Box3(
+        new THREE.Vector3(),
+        new THREE.Vector3()
+      )
+      asteroidBBox.setFromObject(a.getMesh())
+      if (shot.BBox.intersectsBox(asteroidBBox)) {
+        console.log('HIT')
+        return true
+      }
+    })
+  }
 
   //Add clouds to earth
   var materialClouds = new THREE.MeshLambertMaterial({
@@ -84,21 +91,12 @@ export default function generateWorld() {
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
 
-  // var pointerGeometry = new THREE.BoxGeometry(2, 2, 15)
-  // var pointerMaterial = new THREE.MeshPhongMaterial({color: 0x00cccc})
-  // var pointerMesh = new THREE.Mesh(pointerGeometry, pointerMaterial)
-
-  // pointerMesh.position.set(-110, 1, 0)
-
-  // scene.add(pointerMesh)
-  // player.getMesh().add(pointerMesh)
 
   /*********************************
    * Render To Screen
    ********************************/
   //Positioning/Adding
   ring.getMesh().position.set(-100, 0, -500)
-  // ring.getMesh().position.set(5000, -1000, -8000)
   player.getMesh().add(camera)
   player.getMesh().lookAt(100, 0, 500)
   ring.getMesh().lookAt(player.getMesh().position)
@@ -124,9 +122,13 @@ export default function generateWorld() {
     isGameOver = store.getState().game.gameOver
     isGameOngoing = store.getState().game.ongoing
 
-    console.log('isGameOver', isGameOver)
-    console.log('isGameOngoing', isGameOngoing)
+    // console.log('isGameOver', isGameOver)
+    // console.log('isGameOngoing', isGameOngoing)
 
+
+    asteroids.forEach(e => {
+      e.reset(player)
+    })
 
     gameOverScreen()
 
@@ -139,9 +141,9 @@ export default function generateWorld() {
       return
     }
 
-    // for (var i = 0; i < NUM_ASTEROIDS; i++) {
-    //   asteroids[i].update(ring.getMesh().position.z)
-    // }
+    for (var i = 0; i < NUM_ASTEROIDS; i++) {
+      asteroids[i].update(ring.getMesh().position.z)
+    }
 
     var rotationSpeed = 0.01
     earth.getMesh().rotation.y += rotationSpeed * delta
@@ -149,6 +151,8 @@ export default function generateWorld() {
 
     pointer.getMesh().lookAt(ring.getMesh().position)
     ring.move()
+
+
 
     playerPlanetCollision()
     playerSkyboxCollision()
@@ -164,14 +168,13 @@ export default function generateWorld() {
       player.getMesh().getWorldDirection(shotVector)
       shots[index].translateOnAxis(shotVector, -100)
       shots[index].update()
-      // shotAsteroidCollision(shots[index])
+      shotAsteroidCollision(shots[index])
     }
     if (player.canShoot > 0) player.canShoot -= 1
 
     renderer.render(scene, camera)
   }
-  // scene.add(pointer)
-  // player.getMesh().add(pointer)
+
 
   function animate() {
     if (isPaused) return

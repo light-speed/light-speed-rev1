@@ -3,17 +3,17 @@ import loadingManager from './loadingManager'
 export let earth
 
 
-var cubeGeometry = new THREE.BoxGeometry(8000, 8000, 8000)
-var cubeMaterial = new THREE.MeshBasicMaterial({
-  color: 0x003500,
-  opacity: 0,
-  side: THREE.DoubleSide,
-  transparent: true
-})
-var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+// var cubeGeometry = new THREE.BoxGeometry(3000, 3000, 3000)
+// var cubeMaterial = new THREE.MeshBasicMaterial({
+//   color: 0x003500,
+//   opacity: 0,
+//   side: THREE.DoubleSide,
+//   transparent: true
+// })
+// var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
-cube.position.set(5000, -1000, -8000)
-cube.name = 'cube'
+// cube.position.set(2000, -1000, -2000)
+// cube.name = 'cube'
 
 export default (scene) => {
   //Add Planet
@@ -21,9 +21,9 @@ export default (scene) => {
     var planetObj = new THREE.Object3D()
     planetObj.name = 'EARTH'
 
-    this.hitbox = cube
-    scene.add(this.hitbox)
-    planetObj.add(this.hitbox)
+    // this.hitbox = cube
+    // scene.add(this.hitbox)
+    // planetObj.add(this.hitbox)
 
 
 
@@ -56,7 +56,7 @@ export default (scene) => {
 
     this.sphereBBox = new THREE.Sphere(
       planetObj.position,
-      4000)
+      radius)
 
     this.getMesh = function() {
       return planetObj

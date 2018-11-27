@@ -3,6 +3,7 @@ import {player} from './player'
 import store, {addPoints, addTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
+import {asteroids} from './asteroids'
 
 
 export let ring, NUM_ASTEROIDS
@@ -69,21 +70,39 @@ const Ring = function(scene) {
         (player.getMesh().position.z - 1500)
 
       this.mesh.lookAt(prevX, prevY, prevZ)
+
+      asteroids.forEach(e => {
+        // e.reset(this.mesh, player)
+        e.getNewX(this.mesh)
+        e.getNewY(this.mesh)
+        e.getNewZ(this.mesh)
+        e.getNewT()
+        // e.getOldX(prevX)
+        // e.getOldY(prevY)
+        // e.getOldZ(prevZ)
+        e.getOldX(player.getMesh().position.x)
+        e.getOldY(player.getMesh().position.y)
+        e.getOldZ(player.getMesh().position.z)
+      })
+
     }
+
+
+
   }
 
   this.ringPlanetCollision = function() {
     //ring vs earth collision
-    var earthBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    // earthBBox.setFromObject(earth.getMeshPlanet())
-    earthBBox.setFromObject(earth.getHitbox())
+    // var earthBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+    // // earthBBox.setFromObject(earth.getMeshPlanet())
+    // earthBBox.setFromObject(earth.getHitbox())
 
     var ringBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     ringBBox.setFromObject(this.mesh)
 
     if (earth.sphereBBox.intersectsBox(ringBBox)) {
-      console.log('ring-planet collision', this.counter)
-      console.log('earthBBox', earthBBox, 'ringBBox', ringBBox, 'ring pos', ring.getMesh().position, 'sphereBBox', earth.sphereBBox)
+      // console.log('ring-planet collision', this.counter)
+      // console.log('earthBBox', earthBBox, 'ringBBox', ringBBox, 'ring pos', ring.getMesh().position, 'sphereBBox', earth.sphereBBox)
       return true
     }
   }

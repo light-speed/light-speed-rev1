@@ -4,7 +4,7 @@ module.exports = class Game {
   constructor(socketId) {
     this.socketId = socketId
     this.startedAt = undefined
-    this.gameTimeMs = 30000
+    this.gameTimeMs = 3000000
     this.ongoing = false
     this.score = 0
   }
@@ -19,7 +19,7 @@ module.exports = class Game {
   }
 
   start() {
-    this.ongoing = true 
+    this.ongoing = true
     this.score = 0
     this.startedAt = new Date()
   }
@@ -28,6 +28,6 @@ module.exports = class Game {
     console.log(`instance ${this.socketId} game over`)
     this.gameTimeMs = 0
     this.ongoing = false
-    
+
   }
 }

@@ -20,10 +20,10 @@ const HUD = ({game: {score}}) => {
         </h1>
       </div>
     </div>
-      <div>
+      {/* <div>
         <div className='flame1' />
         <div className='flame2' />
-      </div>
+      </div> */}
       </div>
   )
 }
