@@ -26,7 +26,6 @@ module.exports = class GameInstance {
   }
 
   end() {
-    console.log(`instance ${this.socketId} game over`)
     this.gameTimeMs = 0
     this.ongoing = false
     Game.create({

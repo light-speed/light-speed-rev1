@@ -101,8 +101,6 @@ const Ring = function(scene) {
     ringBBox.setFromObject(this.mesh)
 
     if (earth.sphereBBox.intersectsBox(ringBBox)) {
-      // console.log('ring-planet collision', this.counter)
-      // console.log('earthBBox', earthBBox, 'ringBBox', ringBBox, 'ring pos', ring.getMesh().position, 'sphereBBox', earth.sphereBBox)
       return true
     }
   }

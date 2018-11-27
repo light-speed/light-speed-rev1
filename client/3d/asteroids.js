@@ -60,7 +60,6 @@ export var Asteroid = function(rockType, scene) {
   const getHit = () => {
     store.dispatch(addPoints(-100))
     store.dispatch(addTime(-5000))
-    console.log('PLAYER COLLISION')
   }
 
   const once = func => {
@@ -161,9 +160,6 @@ export var Asteroid = function(rockType, scene) {
     this.mesh.position.set(newX, newY, newZ) // set new position
     self.newAsteroidPos.t += dt
     if (t <= 0 || t >= 1) dt = -dt // ping-pong for demo
-
-    // example easing function (quadInOut, see link above)
-    // console.log('t', t)
   }
 
   this.update = function(z) {
@@ -185,18 +181,13 @@ export var Asteroid = function(rockType, scene) {
   }
 
   this.destroy = function() {
-    // scene.remove(this.getMesh().name)
-    // asteroids.splice(this.index, 1)
     asteroids = [
       ...asteroids.slice(0, this.index),
       ...asteroids.slice(this.index+1).map(a => ({...a, index: a.index - 1}))
     ]
-    // console.log(this.getMesh().name)
 
     scene.remove(this.getMesh())
     scene.remove(this.getAsteroidMesh())
-    // this.getAsteroidMesh().geometry.dispose()
-    // this.getAsteroidMesh().material.dispose()
     this.asteroidMesh = undefined
     this.mesh = undefined
   }

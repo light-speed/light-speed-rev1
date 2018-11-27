@@ -26,14 +26,6 @@ var Player = function(scene) {
 
   this.mesh.add(this.hitbox)
 
-  var onProgress = function(xhr) {
-    if (xhr.lengthComputable) {
-      var percentComplete = xhr.loaded / xhr.total * 100
-      // console.log(Math.round(percentComplete, 2) + '% downloaded')
-    }
-  }
-  var onError = function() {}
-
   var keyLight = new THREE.DirectionalLight(
     new THREE.Color('hsl(30, 100%, 75%)'),
     1.0
@@ -74,9 +66,7 @@ var Player = function(scene) {
           self.player = spaceship
           self.mesh.add(self.player)
           self.loaded = true
-        },
-        onProgress,
-        onError
+        }
       )
   })
 
