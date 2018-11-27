@@ -6,8 +6,11 @@ import user from './user'
 import game from './game'
 
 const reducer = combineReducers({user, game})
+// const middleware = composeWithDevTools(
+//   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
+// )
 const middleware = composeWithDevTools(
-  applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
+  applyMiddleware(thunkMiddleware)
 )
 const store = createStore(reducer, middleware)
 

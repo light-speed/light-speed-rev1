@@ -1,5 +1,10 @@
 import socket from '../socket'
 import axios from 'axios'
+// import { browserHistory } from 'react-router'
+import history from './history'
+
+ // this should change the url and re-render Test component
+
 
 /**
  * ACTION TYPES
@@ -16,6 +21,7 @@ const GET_SCORES = 'GET_SCORES'
 const initState = {
   score: 0,
   ongoing: false,
+  gameOver: null,
   gameTime: 0,
   startedAt: undefined,
   socketId: undefined,
@@ -46,8 +52,10 @@ export const startGame = () => async dispatch => {
 }
 
 export const endGame = () => {
+  // history.push('/gameover')
   socket.emit('game-over')
   return {type: END_GAME}
+
 }
 
 const topScores = scores => ({type: GET_SCORES, scores})
@@ -76,6 +84,7 @@ export default function(state = initState, action) {
         ...state,
         ongoing: true,
         gameTime: 30000,
+        gameOver: null,
         startedAt: new Date(),
         score: 0
       }
@@ -83,6 +92,7 @@ export default function(state = initState, action) {
       return {
         ...state,
         ongoing: false,
+        gameOver: true,
         gameTime: 0
       }
    case ADD_POINTS:
