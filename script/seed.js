@@ -9,38 +9,38 @@ async function seed() {
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({username: 'Cody', password: '123'}),
+    // User.create({username: 'Cody', password: '123'}),
     User.create({
-      username: 'Murph',
-      password: '123'
+      username: 'Anonymous',
+      password: 'lightspeedisthebestgameever'
     }),
-    User.create({
-      username: 'Blez',
-      password: 'boom'
-    }),
-    User.create({
-      username: 'Kenny G',
-      password: 'saxophone'
-    }),
-    User.create({
-      username: 'BMG',
-      password: 'saxophone'
-    })
+    // User.create({
+    //   username: 'Blez',
+    //   password: 'boom'
+    // }),
+    // User.create({
+    //   username: 'Kenny G',
+    //   password: 'saxophone'
+    // }),
+    // User.create({
+    //   username: 'BMG',
+    //   password: 'saxophone'
+    // })
   ])
 
-  const games = await Promise.all([
-    Game.create({score: 3200, userId: 1}),
-    Game.create({score: 5200, userId: 5}),
-    Game.create({score: 3900, userId: 2}),
-    Game.create({score: 3900, userId: 4}),
-    Game.create({score: 8700, userId: 4}),
-    Game.create({score: 8800, userId: 4}),
-    Game.create({score: 8700, userId: 5}),
-    Game.create({score: 800, userId: 4}),
-    Game.create({score: 700, userId: 4}),
-    Game.create({score: 8700, userId: 3}),
-    Game.create({score: 7700, userId: 4})
-  ])
+  // const games = await Promise.all([
+  //   Game.create({score: 3200, userId: 1}),
+  //   Game.create({score: 5200, userId: 5}),
+  //   Game.create({score: 3900, userId: 2}),
+  //   Game.create({score: 3900, userId: 4}),
+  //   Game.create({score: 8700, userId: 4}),
+  //   Game.create({score: 8800, userId: 4}),
+  //   Game.create({score: 8700, userId: 5}),
+  //   Game.create({score: 800, userId: 4}),
+  //   Game.create({score: 700, userId: 4}),
+  //   Game.create({score: 8700, userId: 3}),
+  //   Game.create({score: 7700, userId: 4})
+  // ])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
