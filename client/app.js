@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, World} from './components'
+import {Login, Signup, World} from './components'
 import {me} from './store'
 import Menu from './components/Menu'
 import Credits from './components/Credits'
@@ -20,13 +20,13 @@ class App extends Component {
 
     return (
       <Switch>
-        {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route exact path="/play" component={World} />
         <Route path="/credits" component={Credits} />
         <Route path="/howtoplay" component={HowToPlay} />
         <Route path="/topscore" component={TopScore} />
+<<<<<<< HEAD
         {/* <Route exact path="/gameover" component={GameOver} /> */}
 
         {isLoggedIn && (
@@ -36,6 +36,8 @@ class App extends Component {
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
+=======
+>>>>>>> master
         <Route component={Menu} />
       </Switch>
     )

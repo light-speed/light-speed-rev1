@@ -1,12 +1,13 @@
-const {User} = require('../db')
+const {Game} = require('../db/models')
 
-module.exports = class Game {
-  constructor(socketId) {
+module.exports = class GameInstance {
+  constructor(socketId, userId) {
     this.socketId = socketId
     this.startedAt = undefined
     this.gameTimeMs = 3000000
     this.ongoing = false
     this.score = 0
+    this.userId = userId
   }
 
   addPoints(amount) {
@@ -28,6 +29,14 @@ module.exports = class Game {
     console.log(`instance ${this.socketId} game over`)
     this.gameTimeMs = 0
     this.ongoing = false
+<<<<<<< HEAD
 
+=======
+    Game.create({
+      score: this.score,
+      userId: this.userId,
+      date: this.startedAt
+    })
+>>>>>>> master
   }
 }

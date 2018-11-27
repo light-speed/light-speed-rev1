@@ -1,4 +1,6 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import axios from 'axios'
 
 class Menu extends React.Component {
   render() {
@@ -7,6 +9,7 @@ class Menu extends React.Component {
         <div>
           <img src="./images/lightGif.gif" />
         </div>
+
         <div>
           <button
             type="button"
@@ -39,9 +42,40 @@ class Menu extends React.Component {
             CREDITS
           </button>
         </div>
+        {!this.props.user.username ? (
+          <div>
+            <div>
+              <button
+                type="button"
+                onClick={() => this.props.history.push('/login')}
+              >
+                Login
+              </button>
+
+              <button
+                type="button"
+                onClick={() => this.props.history.push('/signup')}
+              >
+                Sign Up
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <button
+              type="button"
+              onClick={() => {
+                axios.post('/auth/logout')
+                location.reload()
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     )
   }
 }
 
-export default Menu
+export default connect(({user}) => ({user}))(Menu)
