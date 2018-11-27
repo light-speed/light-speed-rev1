@@ -28,11 +28,11 @@ const initState = {
   topScores: []
 }
 
-/**
- * ACTION CREATORS
- */
-export const addPoints = amount => ({type: ADD_POINTS, amount})
-const topScores = scores => ({type: GET_SCORES, scores})
+
+export const addPoints = amount => {
+  socket.emit('add-points', amount)
+  return {type: ADD_POINTS, amount}
+}
 
 export const addTime = (timeMs, emit=true) => {
   if (emit) socket.emit('add-time', timeMs)
@@ -50,7 +50,8 @@ export const endGame = () => {
   return {type: END_GAME}
 
 }
-// THUNKS
+
+const topScores = scores => ({type: GET_SCORES, scores})
 
 export const getScores = () => async dispatch => {
   try {
