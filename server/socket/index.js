@@ -13,9 +13,9 @@ module.exports = (io, gameEngine) => {
       gameEngine.addPoints(socket.id, amount)
     })
 
-    socket.on('new-game', () => {
+    socket.on('new-game', userId => {
       console.log('client says new game')
-      gameEngine.newGame(socket.id)
+      gameEngine.newGame(socket.id, userId)
     })
 
     socket.on('game-over', () => {

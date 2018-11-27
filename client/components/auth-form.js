@@ -18,7 +18,7 @@ const AuthForm = props => {
           <label htmlFor="username">
             <small>Username</small>
           </label>
-          <input name="username" type="text" />
+          <input name="username" maxLength='16' type="text" />
         </div>
         <div>
           <label htmlFor="password">
@@ -34,6 +34,7 @@ const AuthForm = props => {
             <a href="/auth/google">{displayName} with Google</a>
           </button>
         </div>
+        <br></br>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
     </div>
