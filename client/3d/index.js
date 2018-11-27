@@ -7,7 +7,7 @@ import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
-import store, {endGame} from '../store'
+import store, {addPoints, endGame, addTime} from '../store'
 import loadPointer, {pointer} from './pointer'
 import {formatScore} from '../components/HUD'
 
@@ -42,6 +42,7 @@ export default function generateWorld() {
     )
     if (earthBSphere.containsPoint(playerPos)) {
       if (store.getState().game.ongoing) store.dispatch(endGame())
+      console.log('earth death')
       return true
     }
   }
@@ -49,25 +50,31 @@ export default function generateWorld() {
   function playerSkyboxCollision() {
     //player vs skybox collision
     if (
-      Math.abs(player.getMesh().position.x) > 12500 ||
-      Math.abs(player.getMesh().position.y) > 12500 ||
-      Math.abs(player.getMesh().position.z) > 12500
+      Math.abs(player.getMesh().position.x) > 10000 ||
+      Math.abs(player.getMesh().position.y) > 10000 ||
+      Math.abs(player.getMesh().position.z) > 10000
     ) {
       if (store.getState().game.ongoing) store.dispatch(endGame())
+      console.log('skybox death')
       return true
     }
   }
 
   function shotAsteroidCollision(shot) {
     asteroids.forEach(a => {
-      var asteroidBBox = new THREE.Box3(
-        new THREE.Vector3(),
-        new THREE.Vector3()
-      )
-      asteroidBBox.setFromObject(a.getMesh())
-      if (shot.BBox.intersectsBox(asteroidBBox)) {
-        console.log('HIT')
-        return true
+      if (a.asteroidMesh) {
+        var asteroidBBox = new THREE.Box3(
+          new THREE.Vector3(),
+          new THREE.Vector3()
+        )
+        asteroidBBox.setFromObject(a.getMesh())
+        if (shot.BBox.intersectsBox(asteroidBBox)) {
+          store.dispatch(addPoints(10))
+          store.dispatch(addTime(3000))
+          console.log('HIT')
+          a.destroy()
+          return true
+        }
       }
     })
   }
@@ -124,9 +131,11 @@ export default function generateWorld() {
     // console.log('isGameOngoing', isGameOngoing)
 
     asteroids.forEach(e => {
-      e.reset(player)
+      if (e.asteroidMesh) {
+        e.reset(player)
+      }
     })
-    console.log(asteroids)
+    // console.log(asteroids)
 
     gameOverScreen()
 
@@ -139,8 +148,11 @@ export default function generateWorld() {
       return
     }
 
-    for (var i = 0; i < NUM_ASTEROIDS; i++) {
-      asteroids[i].update(ring.getMesh().position.z)
+    for (var i = 0; i < asteroids.length; i++) {
+      if (asteroids[i].asteroidMesh) {
+        asteroids[i].update(ring.getMesh().position.z)
+        asteroids[i].detectPlayerCollision()
+      }
     }
 
     var rotationSpeed = 0.01
@@ -178,66 +190,63 @@ export default function generateWorld() {
     if (RESOURCES_LOADED) render()
   }
 
-  // window.addEventListener('keydown', function(e) {
-  //   if (player.canShoot <= 0) {
-  //     switch (e.keyCode) {
-  //       case 32: // Space
-  //         e.preventDefault()
+  window.addEventListener('keydown', function(e) {
+    if (player.canShoot <= 0) {
+      switch (e.keyCode) {
+        case 32: // Space
+          e.preventDefault()
+          console.log(asteroids)
+          var playerPos = player.getMesh().position
 
-  //         var playerPos = player.getMesh().position
+          const shotMaterial = new THREE.MeshBasicMaterial({
+            color: 0xff0000,
+            transparent: true,
+            opacity: 0.5
+          })
 
-  //         const shotMaterial = new THREE.MeshBasicMaterial({
-  //           color: 0xff0000,
-  //           transparent: true,
-  //           opacity: 0.5
-  //         })
+          const shot = new THREE.Mesh(
+            new THREE.SphereGeometry(3, 16, 16),
+            shotMaterial
+          )
 
-  //         const shot = new THREE.Mesh(
-  //           new THREE.SphereGeometry(3, 16, 16),
-  //           shotMaterial
-  //         )
+          // position the bullet to come from the player's weapon
+          // shot.position.set(0, 5, 30)
+          shot.position.set(playerPos.x, playerPos.y, playerPos.z)
 
-  //         // position the bullet to come from the player's weapon
-  //         // shot.position.set(0, 5, 30)
-  //         shot.position.set(playerPos.x, playerPos.y, playerPos.z)
+          // set the velocity of the bullet
+          shot.velocity = new THREE.Vector3(
+            -Math.sin(camera.rotation.y),
+            0,
+            Math.cos(camera.rotation.y)
+          )
 
-  //         // set the velocity of the bullet
-  //         shot.velocity = new THREE.Vector3(
-  //           -Math.sin(camera.rotation.y),
-  //           0,
-  //           Math.cos(camera.rotation.y)
-  //         )
+          shot.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
+          shot.BBox.setFromObject(shot)
 
-  //         shot.BBox = new THREE.Box3(
-  //           new THREE.Vector3(),
-  //           new THREE.Vector3()
-  //         )
-  //         shot.BBox.setFromObject(shot)
+          shot.update = function() {
+            this.BBox.setFromObject(this)
+          }
 
-  //         shot.update = function() {
-  //           this.BBox.setFromObject(this)
-  //         }
+          // after 1000ms, set alive to false and remove from scene
+          // setting alive to false flags our update code to remove
+          // the bullet from the bullets array
+          shot.alive = true
+          setTimeout(function() {
+            shot.alive = false
+            scene.remove(shot)
+          }, 1000)
 
-  //         // after 1000ms, set alive to false and remove from scene
-  //         // setting alive to false flags our update code to remove
-  //         // the bullet from the bullets array
-  //         shot.alive = true
-  //         setTimeout(function() {
-  //           shot.alive = false
-  //           scene.remove(shot)
-  //         }, 1000)
+          // console.log(scene)
 
-  //         // console.log(scene)
-
-  //         // add to scene, array, and set the delay to 10 frames
-  //         shots.push(shot)
-  //         scene.add(shot)
-  //         player.canShoot = 10
-  //         break
-  //       default:
-  //     }
-  //   }
-  // })
+          // add to scene, array, and set the delay to 10 frames
+          shots.push(shot)
+          scene.add(shot)
+          player.canShoot = 10
+          break
+        default:
+      }
+    }
+  })
   document.getElementById('world').appendChild(renderer.domElement)
   animate()
 

@@ -5,7 +5,6 @@ import {earth} from './planet'
 import {configureRenderer} from './configure'
 import {asteroids, NUM_ASTEROIDS, Asteroid} from './asteroids'
 
-
 export let ring
 
 const {camera} = configureRenderer()
@@ -44,30 +43,29 @@ const Ring = function(scene) {
 
     if (
       this.detectRingCollision() === true ||
-      this.ringPlanetCollision() === true
+      this.ringPlanetCollision() === true ||
+      this.ringSkyboxCollision() === true
     ) {
-
-
       this.mesh.position.x =
         Math.random() *
           (player.getMesh().position.x +
-            1500 -
-            (player.getMesh().position.x - 1500)) +
-        (player.getMesh().position.x - 1500)
+            2250 -
+            (player.getMesh().position.x - 2250)) +
+        (player.getMesh().position.x - 2250)
 
       this.mesh.position.y =
         Math.random() *
           (player.getMesh().position.y +
-            1500 -
-            (player.getMesh().position.y - 1500)) +
-        (player.getMesh().position.y - 1500)
+            2250 -
+            (player.getMesh().position.y - 2250)) +
+        (player.getMesh().position.y - 2250)
 
       this.mesh.position.z =
         Math.random() *
           (player.getMesh().position.z +
-            1500 -
-            (player.getMesh().position.z - 1500)) +
-        (player.getMesh().position.z - 1500)
+            2250 -
+            (player.getMesh().position.z - 2250)) +
+        (player.getMesh().position.z - 2250)
 
       this.mesh.lookAt(prevX, prevY, prevZ)
 
@@ -85,15 +83,12 @@ const Ring = function(scene) {
         e.getOldZ(player.getMesh().position.z)
       })
 
-        // NUM_ASTEROIDS++
-        asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
-        scene.add(asteroids[asteroids.length-1].getMesh())
-
-
+      // NUM_ASTEROIDS++
+      if (asteroids.length < 15) {
+        asteroids.push(new Asteroid((Math.floor(Math.random() + 5) + 1), scene))
+        scene.add(asteroids[asteroids.length - 1].getMesh())
+      }
     }
-
-
-
   }
 
   this.ringPlanetCollision = function() {
@@ -112,6 +107,16 @@ const Ring = function(scene) {
     }
   }
 
+  this.ringSkyboxCollision = function() {
+    if (
+      Math.abs(this.getMesh().position.x) > 10000 ||
+      Math.abs(this.getMesh().position.y) > 10000 ||
+      Math.abs(this.getMesh().position.z) > 10000
+    ) {
+      return true
+    }
+  }
+
   this.detectRingCollision = function() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     cubeBBox.setFromObject(player.getHitbox())
@@ -121,7 +126,7 @@ const Ring = function(scene) {
     if (cubeBBox.intersectsBox(ringBBox)) {
       store.dispatch(addPoints(100))
       this.ringSound()
-      store.dispatch(addTime(10000))
+      store.dispatch(addTime(5000))
       return true
     }
   }

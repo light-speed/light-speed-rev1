@@ -52,7 +52,7 @@ export default scene => {
     //     side: THREE.DoubleSide
     //   }) //left side
     // ]
-    var skyGeometry = new THREE.CubeGeometry(10000, 10000, 10000)
+    var skyGeometry = new THREE.CubeGeometry(20000, 20000, 20000)
     // var cubeMaterial = new THREE.MeshFaceMaterial( cubeMaterials );
 
     var skyboxMesh = new THREE.Mesh(skyGeometry, materialArray)

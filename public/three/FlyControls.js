@@ -25,7 +25,7 @@ THREE.FlyControls = function(camera, object, domElement) {
   this.rollSpeed = 0.01
   this.pitchDamper = 1.2
   this.yawDamper = 1.2
-  this.mouseDamper = 0.08
+  this.mouseDamper = 0.02
   this.rollDamper = 0.52
   // this.keypress = false
 
