@@ -5,7 +5,7 @@ import {addTime} from '../store'
 class Timer extends React.Component {
 
   componentDidMount() {
-    this.intervalID = setInterval(() => this.tick(), 10)
+    this.intervalID = setInterval(() => this.tick(), 100)
   }
 
   componentWillUnmount() {
@@ -15,12 +15,12 @@ class Timer extends React.Component {
   tick() {
     let clock = this.props.game.gameTime
     if (clock > 0) {
-      this.props.addTime(-10, false)
+      this.props.addTime(-100, false)
     }
   }
 
   render() {
-    return <div>{(this.props.game.gameTime / 1000).toFixed(2)}s</div>
+    return <div>{(this.props.game.gameTime / 1000).toFixed(1)}s</div>
   }
 }
 
