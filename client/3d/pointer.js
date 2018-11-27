@@ -7,13 +7,13 @@ const Pointer = function(scene, player) {
 
   new THREE.MTLLoader(loadingManager)
     // .setPath('../public/models/')
-    .load('models/arrow.mtl', function(materials) {
+    .load('models/Lightsaber.mtl', function(materials) {
       materials.preload()
       new THREE.OBJLoader(loadingManager)
         .setMaterials(materials)
         // .setPath('../public/models/')
-        .load('models/arrow.obj', function(obj) {
-          obj.scale.set(7, 7, 7)
+        .load('models/Lightsaber.obj', function(obj) {
+          obj.scale.set(3, 3, 3)
           self.mesh.add(obj)
         })
     })

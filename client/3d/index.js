@@ -132,7 +132,7 @@ export default function generateWorld() {
 
     gameOverScreen()
 
-    pointer.getMesh().position.set(-(window.innerWidth / 14), 1, 0)
+    pointer.getMesh().position.set(-(window.innerWidth / 20) -20, 2, 0)
 
     var delta = clock.getDelta()
     if (isGameOver !== true) {
