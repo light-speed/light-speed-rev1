@@ -16,19 +16,19 @@ const GET_SCORES = 'GET_SCORES'
 const initState = {
   score: 0,
   ongoing: false,
+  gameOver: null,
   gameTime: 0,
   startedAt: undefined,
   socketId: undefined,
   topScores: []
 }
 
-
 export const addPoints = amount => {
   socket.emit('add-points', amount)
   return {type: ADD_POINTS, amount}
 }
 
-export const addTime = (timeMs, emit=true) => {
+export const addTime = (timeMs, emit = true) => {
   if (emit) socket.emit('add-time', timeMs)
   return {type: ADD_TIME, timeMs}
 }
@@ -70,6 +70,7 @@ export default function(state = initState, action) {
         ...state,
         ongoing: true,
         gameTime: 30000,
+        gameOver: null,
         startedAt: new Date(),
         score: 0
       }
@@ -77,9 +78,10 @@ export default function(state = initState, action) {
       return {
         ...state,
         ongoing: false,
+        gameOver: true,
         gameTime: 0
       }
-   case ADD_POINTS:
+    case ADD_POINTS:
       return {...state, score: state.score + action.amount}
     case GET_SCORES:
       return {...state, topScores: [...action.scores]}

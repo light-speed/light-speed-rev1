@@ -2,9 +2,9 @@ import generateWorld from '../3d'
 import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 import HUD from './HUD'
- 
-class World extends Component {
+import {connect} from 'react-redux'
 
+class World extends Component {
   componentDidMount() {
     generateWorld()
   }
@@ -51,4 +51,11 @@ class World extends Component {
   }
 }
 
-export default withRouter(World)
+const mapState = state => {
+  return {
+    score: state.game.score,
+    isGameOngoing: state.game.ongoing
+  }
+}
+
+export default withRouter(connect(mapState)(World))
