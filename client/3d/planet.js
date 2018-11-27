@@ -30,7 +30,7 @@ export default (scene) => {
 
 
     // Speed of motion and rotation
-    var radius = 4000
+    var radius = 1500
     var geometry = new THREE.SphereBufferGeometry(radius, 100, 50)
     var materialNormalMap = new THREE.MeshPhongMaterial({
       specular: 0x333333,
@@ -52,7 +52,7 @@ export default (scene) => {
     planetObj.rotation.y = 0
     planetObj.rotation.z = 0.41
 
-    planetObj.position.set(5000, -1000, -8000)
+    planetObj.position.set(2000, -1000, -2000)
 
     this.sphereBBox = new THREE.Sphere(
       planetObj.position,

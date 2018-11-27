@@ -75,11 +75,11 @@ export default function generateWorld() {
     transparent: true
   })
   var meshClouds = new THREE.Mesh(
-    new THREE.SphereBufferGeometry(4000, 100, 50),
+    new THREE.SphereBufferGeometry(1500, 100, 50),
     materialClouds
   )
   meshClouds.scale.set(1.005, 1.005, 1.005)
-  meshClouds.position.set(5000, -1000, -8000)
+  meshClouds.position.set(2000, -1000, -2000)
   meshClouds.rotation.z = 0.41
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
@@ -97,10 +97,10 @@ export default function generateWorld() {
    * Render To Screen
    ********************************/
   //Positioning/Adding
-  ring.getMesh().position.set(-400, 0, -500)
+  ring.getMesh().position.set(-100, 0, -500)
   // ring.getMesh().position.set(5000, -1000, -8000)
   player.getMesh().add(camera)
-  player.getMesh().lookAt(400, 0, 500)
+  player.getMesh().lookAt(100, 0, 500)
   ring.getMesh().lookAt(player.getMesh().position)
 
   var clock = new THREE.Clock()
