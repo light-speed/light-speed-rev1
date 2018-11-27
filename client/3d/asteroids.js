@@ -59,7 +59,7 @@ export var Asteroid = function(rockType, scene) {
 
   const getHit = () => {
     store.dispatch(addPoints(-100))
-    store.dispatch(addTime(-5000))
+    store.dispatch(addTime(-2000))
   }
 
   const once = func => {
@@ -151,7 +151,7 @@ export var Asteroid = function(rockType, scene) {
     // }
 
     var t = self.newAsteroidPos.t
-    var dt = 0.003 // t (dt delta for demo)
+    var dt = 0.004 // t (dt delta for demo)
     var a = self.newAsteroidPos // start position
     var b = self.oldAsteroidPos // end position
     var newX = lerp(a.x, b.x, ease(t)) // interpolate between a and b where

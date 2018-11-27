@@ -6,6 +6,18 @@ module.exports = class GameEngine {
     this.games = {}
   }
 
+  pauseGame(socketId) {
+    if (this.games[socketId]) {
+      this.games[socketId].pause()
+    }
+
+  }
+
+  unpauseGame(socketId) {
+    if (this.games[socketId])
+      this.games[socketId].unpause()
+  }
+
   async gameLoop() {
     const pauseMs = timeMs => 
       new Promise(resolve => setTimeout(resolve, timeMs))
@@ -17,7 +29,10 @@ module.exports = class GameEngine {
       gamesArr().forEach(game => {
         if (game.ongoing) {
           // (new Date() - new Date(game.startedAt), game.gameTimeMs)
-          const outOfTime = new Date() - new Date(game.startedAt) >= game.gameTimeMs
+          const timeSoFar = new Date() - new Date(game.startedAt)
+          const timeRemaining = game.gameTimeMs - timeSoFar
+          const outOfTime = timeSoFar >= game.gameTimeMs
+          this.sockets.emit('update-time', game.socketId, timeRemaining)
           if (outOfTime) this.endGame(game.socketId)
         }
       })
