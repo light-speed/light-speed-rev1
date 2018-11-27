@@ -9,14 +9,13 @@ import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
 import store, {endGame} from '../store'
 import loadPointer, {pointer} from './pointer'
-// import GameOver from '../components/GameOver'
+import {formatScore} from '../components/HUD'
 
 let isPaused = false
 
 let onEsc
 let isGameOver
 let isGameOngoing
-
 
 // this.add = function() {
 //   NUM_ASTEROIDS++
@@ -43,7 +42,6 @@ export default function generateWorld() {
     )
     if (earthBSphere.containsPoint(playerPos)) {
       if (store.getState().game.ongoing) store.dispatch(endGame())
-
       return true
     }
   }
@@ -91,7 +89,6 @@ export default function generateWorld() {
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
 
-
   /*********************************
    * Render To Screen
    ********************************/
@@ -106,16 +103,17 @@ export default function generateWorld() {
 
   function gameOverScreen() {
     const gameOver = document.getElementById('game-over')
-      if (isGameOver === true) {
-        gameOver.style.visibility = 'visible'
-        gameOver.style.display = 'block'
-        gameOver.style.zIndex = '99'
-      } else {
-        gameOver.style.zIndex = ''
-        gameOver.style.visibility = 'hidden'
-
-      }
-
+    if (isGameOver === true) {
+      gameOver.style.visibility = 'visible'
+      gameOver.style.display = 'block'
+      gameOver.style.zIndex = '99'
+      document.getElementById('scoreId').innerHTML = formatScore(
+        store.getState().game.score
+      )
+    } else {
+      gameOver.style.zIndex = ''
+      gameOver.style.visibility = 'hidden'
+    }
   }
 
   function render() {
@@ -124,7 +122,6 @@ export default function generateWorld() {
 
     // console.log('isGameOver', isGameOver)
     // console.log('isGameOngoing', isGameOngoing)
-
 
     asteroids.forEach(e => {
       e.reset(player)
@@ -153,8 +150,6 @@ export default function generateWorld() {
     pointer.getMesh().lookAt(ring.getMesh().position)
     ring.move()
 
-
-
     playerPlanetCollision()
     playerSkyboxCollision()
 
@@ -175,7 +170,6 @@ export default function generateWorld() {
 
     renderer.render(scene, camera)
   }
-
 
   function animate() {
     if (isPaused) return

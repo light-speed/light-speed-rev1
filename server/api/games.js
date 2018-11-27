@@ -10,7 +10,7 @@ router.get('/', async (req, res, next) => {
       include: [User],
       order: [['score', 'DESC']]
     })
-    res.json(scores)
+    res.json(scores.slice(0, 10))
   } catch (err) {
     next(err)
   }

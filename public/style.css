@@ -136,7 +136,6 @@ form div {
   position: relative;
   margin-top: 4vh;
   margin-bottom: 30vh;
-
 }
 .Menu button {
   border: 3px solid rgb(0, 218, 213);
@@ -158,6 +157,7 @@ form div {
   border: 3px solid rgb(33, 70, 72);
 }
 #blocker a {
+  display: flex;
   border: 3px solid rgb(0, 218, 213);
   background: rgb(33, 70, 72);
   color: rgb(0, 218, 213);
@@ -172,6 +172,26 @@ form div {
   padding: 5px;
 }
 #blocker a:hover {
+  background: rgb(0, 218, 213);
+  color: rgb(33, 70, 72);
+  border: 3px solid rgb(33, 70, 72);
+}
+
+#game-over a {
+  border: 3px solid rgb(0, 218, 213);
+  background: rgb(33, 70, 72);
+  color: rgb(0, 218, 213);
+  transition: all 0.3s ease-out;
+  border-radius: 7px;
+  font-size: 1.8vw;
+  font-weight: bold;
+  max-width: 30vw;
+  height: 7vh;
+  margin: 10px;
+  text-align: center;
+  padding: 5px;
+}
+#game-over a:hover {
   background: rgb(0, 218, 213);
   color: rgb(33, 70, 72);
   border: 3px solid rgb(33, 70, 72);
@@ -327,7 +347,6 @@ form div {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: -1;
 }
-
 
 #instructions {
   width: 100%;
@@ -578,106 +597,59 @@ th {
   }
 }
 
-
-
-
-
-.flame1 { 
-  opacity: .8;
-  z-index:99;
-  width:.5em;height:2em;
-  position: absolute; 
+.flame1 {
+  opacity: 0.8;
+  z-index: 99;
+  width: 0.5em;
+  height: 2em;
+  position: absolute;
   /* left:-7em;  */
   bottom: 10vh;
-  right:50.25vw;
-  transform:rotate(0deg);
-  
+  right: 50.25vw;
+  transform: rotate(0deg);
+
   border-radius: 100% 0% 65% 40%/65% 0% 100% 40%;
-  box-shadow:0px 0px 12px white,
-      0px 2px 12px white,
-      0px 10px 20px white,
-      0px 42px 10px skyblue,     
-      0px 10px 15px lightyellow,
-      0px 20px 20px yellow,
-      0px 30px 25px orange,
-      0px 60px 40px orange,
-      0px 34px 30px darkorange,
-      0px 36px 35px red,
-      0px 40px 50px red,
-      0px 60px 40px red,
-      0px 80px 40px red,
-      0px 80px 40px red,
-      0px 120px 60px red,
-      0px 150px 80px black,
-      0px 160px 80px black,
-      0px 200px 100px black,
-      0px 150px 100px black,
-      0px 100px 100px black,
-      0px 220px 100px black,
-      inset 0px 330px 50px white;
+  box-shadow: 0px 0px 12px white, 0px 2px 12px white, 0px 10px 20px white,
+    0px 42px 10px skyblue, 0px 10px 15px lightyellow, 0px 20px 20px yellow,
+    0px 30px 25px orange, 0px 60px 40px orange, 0px 34px 30px darkorange,
+    0px 36px 35px red, 0px 40px 50px red, 0px 60px 40px red, 0px 80px 40px red,
+    0px 80px 40px red, 0px 120px 60px red, 0px 150px 80px black,
+    0px 160px 80px black, 0px 200px 100px black, 0px 150px 100px black,
+    0px 100px 100px black, 0px 220px 100px black, inset 0px 330px 50px white;
   transform-origin: center bottom;
   animation: flame 111ms ease infinite;
 }
-.flame2 { 
-  opacity: .8;
-  z-index:99;
-  width:.5em;height:2em;
-  position: absolute; 
+.flame2 {
+  opacity: 0.8;
+  z-index: 99;
+  width: 0.5em;
+  height: 2em;
+  position: absolute;
   /* left:-7em;  */
   bottom: 10vh;
-  right:48.1vw;
-  transform:rotate(0deg);
-  
+  right: 48.1vw;
+  transform: rotate(0deg);
+
   border-radius: 40% 100% 0% 65%/40% 65% 0% 100%;
-  box-shadow:0px 0px 12px white,
-      0px 2px 12px white,
-      0px 10px 20px white,
-      0px 42px 10px skyblue,     
-      0px 10px 15px lightyellow,
-      0px 20px 20px yellow,
-      0px 30px 25px orange,
-      0px 60px 40px orange,
-      0px 34px 30px darkorange,
-      0px 36px 35px red,
-      0px 40px 50px red,
-      0px 60px 40px red,
-      0px 80px 40px red,
-      0px 80px 40px red,
-      0px 120px 60px red,
-      0px 150px 80px black,
-      0px 160px 80px black,
-      0px 200px 100px black,
-      0px 150px 100px black,
-      0px 100px 100px black,
-      0px 220px 100px black,
-      inset 0px 330px 50px white;
+  box-shadow: 0px 0px 12px white, 0px 2px 12px white, 0px 10px 20px white,
+    0px 42px 10px skyblue, 0px 10px 15px lightyellow, 0px 20px 20px yellow,
+    0px 30px 25px orange, 0px 60px 40px orange, 0px 34px 30px darkorange,
+    0px 36px 35px red, 0px 40px 50px red, 0px 60px 40px red, 0px 80px 40px red,
+    0px 80px 40px red, 0px 120px 60px red, 0px 150px 80px black,
+    0px 160px 80px black, 0px 200px 100px black, 0px 150px 100px black,
+    0px 100px 100px black, 0px 220px 100px black, inset 0px 330px 50px white;
   transform-origin: center bottom;
   animation: flame 111ms ease infinite;
 }
 
 @keyframes flame {
-  50%   {
-    box-shadow:0px 0px 12px white,
-      0px 2px 12px white,
-      0px 0px 20px white,
-      0px 2px 10px skyblue,     
-      0px 0px 15px lightyellow,
-      0px 0px 20px yellow,
-      0px 0px 25px orange,
-      0px 0px 40px orange,
-      0px 4px 30px darkorange,
-      0px 6px 35px red,
-      0px 0px 50px red,
-      0px 0px 40px red,
-      0px 0px 40px red,
-      0px 0px 40px red,
-      0px 20px 60px red,
-      0px 50px 80px black,
-      0px 60px 80px black,
-      0px 00px 100px black,
-      0px 50px 100px black,
-      0px 10px 100px black,
-      0px 20px 100px black,
-      inset 0px 330px 50px white;
+  50% {
+    box-shadow: 0px 0px 12px white, 0px 2px 12px white, 0px 0px 20px white,
+      0px 2px 10px skyblue, 0px 0px 15px lightyellow, 0px 0px 20px yellow,
+      0px 0px 25px orange, 0px 0px 40px orange, 0px 4px 30px darkorange,
+      0px 6px 35px red, 0px 0px 50px red, 0px 0px 40px red, 0px 0px 40px red,
+      0px 0px 40px red, 0px 20px 60px red, 0px 50px 80px black,
+      0px 60px 80px black, 0px 00px 100px black, 0px 50px 100px black,
+      0px 10px 100px black, 0px 20px 100px black, inset 0px 330px 50px white;
   }
 }

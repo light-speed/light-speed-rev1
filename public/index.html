@@ -14,26 +14,25 @@
     <script defer src="/three/objloader.js"></script>
     <script defer src="/three/FlyControls.js"></script>
     <script defer src="/three/PointerLockControls.js"></script>
-    <!-- <script defer src="/three/PlayerControls.js"></script> -->
-    <!-- <script defer src="/three/NewCameraControls.js"></script> -->
     <script defer src="/bundle.js"></script>
   </head>
   <body>
-    <div id="blocker">
+    <div id="blocker" class="Login">
       <div id="instructions">
         <span style="font-size:40px">GAME PAUSED</span> <br />
-        <span>ESC to Resume</span> <br />
+        <span style="font-size:24px">ESC to Resume</span> <br />
         <br />
-        <a href="/">Return To Main Menu</a>
+        <span><a href="/">Return To Main Menu</a></span>
       </div>
     </div>
     <div id="game-over">
       <div class="gameover-details">
-        <div><h1>SCORE</h1></div>
+        </span> <span><h1>GAME OVER</h1></span>
+        <span><h1 id="scoreId"></h1>
+        <span><a href="/">MAIN MENU</a></span> <br />
         <br />
         <br />
-        <div><h1>GAME OVER</h1></div>
-        <div><a href="/">RETURN TO MAIN MENU</a></div>
+        <span><a href="/play">RESTART</a></span>
       </div>
     </div>
     <div id="app"></div>
