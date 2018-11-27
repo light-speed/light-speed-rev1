@@ -79,7 +79,7 @@ export default function(state = initState, action) {
       return {
         ...state,
         ongoing: true,
-        gameTime: 30000,
+        gameTime: 20000,
         gameOver: null,
         startedAt: new Date(),
         score: 0

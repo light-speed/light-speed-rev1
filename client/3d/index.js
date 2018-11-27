@@ -68,7 +68,7 @@ export default function generateWorld() {
         asteroidBBox.setFromObject(a.getMesh())
         if (shot.BBox.intersectsBox(asteroidBBox)) {
           store.dispatch(addPoints(10))
-          store.dispatch(addTime(3000))
+          store.dispatch(addTime(2000))
           a.destroy()
           return true
         }
