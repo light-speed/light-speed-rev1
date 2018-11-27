@@ -13,6 +13,9 @@ const HUD = ({game: {score}, user: {username}}) => {
       </div>
       <div className="hudScore">
         <h1>{formatScore(score)}</h1>
+        <div>
+          <h1 id="alert" />
+        </div>
       </div>
       <div className="hudTime">
         <h1>

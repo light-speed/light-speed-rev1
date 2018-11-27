@@ -116,6 +116,16 @@ form div {
   margin-left: -13%;
 }
 
+#alert {
+  display: flex;
+  color: rgb(0, 218, 213);
+  font-size: 1vw;
+  margin-top: 45px;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+}
+
 #pause-screen img {
   width: 300px;
   height: 300px;
