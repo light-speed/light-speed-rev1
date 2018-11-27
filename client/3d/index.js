@@ -9,7 +9,7 @@ import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
 import loadPlanet, {earth} from './planet'
 import store, {addPoints, endGame, addTime} from '../store'
 import loadPointer, {pointer} from './pointer'
-// import GameOver from '../components/GameOver'
+import {formatScore} from '../components/HUD'
 
 let isPaused = false
 
@@ -114,6 +114,9 @@ export default function generateWorld() {
       gameOver.style.visibility = 'visible'
       gameOver.style.display = 'block'
       gameOver.style.zIndex = '99'
+      document.getElementById('scoreId').innerHTML = formatScore(
+        store.getState().game.score
+      )
     } else {
       gameOver.style.zIndex = ''
       gameOver.style.visibility = 'hidden'
