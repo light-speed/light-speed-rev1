@@ -2,9 +2,10 @@ import generateWorld from '../3d'
 import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 import HUD from './HUD'
- 
-class World extends Component {
+import GameOver from '../components/GameOver'
+import {connect} from 'react-redux'
 
+class World extends Component {
   componentDidMount() {
     generateWorld()
   }
@@ -19,6 +20,8 @@ class World extends Component {
   render() {
     return (
       <div id="world" className="no-cursor">
+        <GameOver />
+
         <HUD />
         <div id="pause-screen">
           <div id="progress-container">
@@ -46,9 +49,17 @@ class World extends Component {
             </div>
           </div>
         </div>
+        {/* {this.props.isGameOngoing? null : <GameOver />} */}
       </div>
     )
   }
 }
 
-export default withRouter(World)
+const mapState = state => {
+  return {
+    score: state.game.score,
+    isGameOngoing: state.game.ongoing
+  }
+}
+
+export default withRouter(connect(mapState)(World))

@@ -8,22 +8,34 @@ class Menu extends React.Component {
           <img src="./images/lightGif.gif" />
         </div>
         <div>
-          <button onClick={() => this.props.history.push('/play')}>
+          <button
+            type="button"
+            onClick={() => this.props.history.push('/play')}
+          >
             PLAY GAME
           </button>
         </div>
         <div>
-          <button onClick={() => this.props.history.push('/howtoplay')}>
+          <button
+            type="button"
+            onClick={() => this.props.history.push('/howtoplay')}
+          >
             HOW TO PLAY
           </button>
         </div>
         <div>
-          <button onClick={() => this.props.history.push('/topscore')}>
+          <button
+            type="button"
+            onClick={() => this.props.history.push('/topscore')}
+          >
             TOP SCORES
           </button>
         </div>
         <div>
-          <button onClick={() => this.props.history.push('/credits')}>
+          <button
+            type="button"
+            onClick={() => this.props.history.push('/credits')}
+          >
             CREDITS
           </button>
         </div>
