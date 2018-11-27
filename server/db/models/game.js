@@ -5,6 +5,10 @@ const Game = db.define('game', {
   score: {
     type: Sequelize.INTEGER,
     allowNull: false
+  },
+  date: {
+    type: Sequelize.DATE,
+    allowNull: false
   }
 })
 
