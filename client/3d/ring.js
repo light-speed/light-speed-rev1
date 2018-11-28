@@ -121,7 +121,7 @@ const Ring = function(scene) {
 
     if (cubeBBox.intersectsBox(ringBBox)) {
       store.dispatch(addPoints(100))
-      this.ringSound()
+      // this.ringSound()
       store.dispatch(addTime(3000))
       return true
     }

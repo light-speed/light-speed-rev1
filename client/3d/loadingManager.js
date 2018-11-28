@@ -6,9 +6,13 @@ const loadingManager = new THREE.LoadingManager()
 export let RESOURCES_LOADED = false
 
 let resources = 0
-loadingManager.onProgress = () => resources++
+loadingManager.onProgress = () => {
+  console.log("I just loaded something into the game")
+  resources++
+}
 
 loadingManager.onLoad = function() {
+  console.log(`there are ${resources} loaded resources`)
   RESOURCES_LOADED = true
   LOADING_SCREEN.style.display = 'none'
   HUD.style.display = 'flex'
