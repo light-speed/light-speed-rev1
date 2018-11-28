@@ -25,6 +25,14 @@ nav a {
   margin: 1em;
 }
 
+#crosshair {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+
 #loading {
   background: url('./images/spc3.jpg');
 }
