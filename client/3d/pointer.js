@@ -13,7 +13,7 @@ const Pointer = function(scene, player) {
         .setMaterials(materials)
         // .setPath('../public/models/')
         .load('models/pointer11.obj', function(obj) {
-          obj.scale.set(3, 3, 3)
+          obj.scale.set(4, 4, 4)
           self.mesh.add(obj)
         })
     })
