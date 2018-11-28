@@ -3,35 +3,72 @@ import {ring} from './ring'
 import {player} from './player'
 import store, {addPoints, addTime} from '../store'
 
-export let NUM_ASTEROIDS = 0
 export let asteroids = []
 
-let counter = 0
 
-export default scene => {
-  //Load Asteroids
-  for (var i = 0; i < NUM_ASTEROIDS; i++) {
-    asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1), scene)
-    // asteroids[i].name = `asteroid${i}`
-    // asteroids[i].index = i
-    scene.add(asteroids[i].getMesh())
+var RockLoader = function() {
+  this.ok = 'ok'
+  var self = this
+  const loader = new THREE.OBJLoader(loadingManager)
+  // this.loader.load = this.loader.load.bind(this)
+  const rockMtl = new THREE.MeshBasicMaterial({
+    map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
+  })
+
+  let wtf = (ree) => this.ok = ree
+  wtf = wtf.bind(this)
+  
+  const loadRockType = async function(id,me) {
+    // await loader.load('models/rock' + id + '.obj', function(obj) {
+    //   console.log('obj',obj)
+    //   obj.traverse(function(child) {
+    //     if (child instanceof THREE.Mesh) 
+    //     child.material = rockMtl
+    //   })
+    //   obj.scale.set(30, 30, 30)
+    //   self[`rock${id}`] = obj
+    //   wtf('not ok')
+    // })
+    await loader.load('models/rock' + id + '.obj', ( ()=> {
+      var self = me
+      return function(obj) {
+        console.log('self',self)
+        obj.traverse(function(child) {
+          if (child instanceof THREE.Mesh) 
+          child.material = rockMtl
+        })
+        obj.scale.set(30, 30, 30)
+        self[`rock${id}`] = obj
+        self.ok = 'wtf'
+      }
+    })() )
+    console.log('reee',self[`rock${id}`])
+    console.log(this.ok)
+  }
+
+  loadRockType(1, this)
+  // console.log(this.ok)
+
+  this.cloneRandomRock = function() {
+    const id = Math.floor(Math.random() * 5) + 1
+    // const rockToClone = this[`rock${id}`]
+    const rockToClone = this['rock1']
+    // return Object.assign( Object.create( Object.getPrototypeOf(rockToClone)), rockToClone)
   }
 }
 
-var loader = new THREE.OBJLoader(loadingManager)
+const loader = new RockLoader()
 
-var rockMtl = new THREE.MeshBasicMaterial({
-  map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
-})
+let uuid = 0
 
-export var Asteroid = function(rockType, scene) {
+export var Asteroid = function(scene) {
   this.mesh = new THREE.Object3D()
   let self = this
   this.loaded = false
   this.index = asteroids.length
-  this.mesh.name = counter++
+  this.mesh.name = uuid++
   this.asteroidMesh = null
-
+  
   // Speed of motion and rotation
   this.mesh.velocity = Math.random() * 2 + 1
   this.mesh.vRotation = new THREE.Vector3(
@@ -39,23 +76,28 @@ export var Asteroid = function(rockType, scene) {
     Math.random(),
     Math.random()
   )
-
+  
   this.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-  loader.load('models/rock' + rockType + '.obj', function(obj) {
-    obj.traverse(function(child) {
-      if (child instanceof THREE.Mesh) {
-        child.material = rockMtl
-      }
-    })
+  
+  const rockObj = loader.cloneRandomRock()
+  this.mesh.add(rockObj)
+  this.mesh.position.set(100, 100, -10000)
+  this.BBox.setFromObject(rockObj)
+  
+      //   loader.load('models/rock' + randomRockType + '.obj', function(obj) {
+        
+        //   obj.traverse(function(child) {
+          //     if (child instanceof THREE.Mesh) {
+            //       child.material = rockMtl
+  //     }
+  //   })
 
-    obj.scale.set(30, 30, 30)
-    self.asteroidMesh = obj
-    self.mesh.add(obj)
-
-    self.mesh.position.set(100, 100, -10000)
-    self.loaded = true
-    self.BBox.setFromObject(obj)
-  })
+  //   obj.scale.set(30, 30, 30)
+  //   self.asteroidMesh = obj
+  //   self.mesh.add(obj)
+  //   self.mesh.position.set(100, 100, -10000)
+  //   self.BBox.setFromObject(obj)
+  // })
 
   const getHit = () => {
     store.dispatch(addPoints(-100))
@@ -63,11 +105,11 @@ export var Asteroid = function(rockType, scene) {
   }
 
   const once = func => {
-    let counter = 0
+    let uuid = 0
     return function(x) {
-      if (counter < 1) {
+      if (uuid < 1) {
         func()
-        counter++
+        uuid++
       }
     }
   }
@@ -180,7 +222,7 @@ export var Asteroid = function(rockType, scene) {
     return this.asteroidMesh
   }
 
-  this.destroy = function() {
+  this.destroy = function(scene) {
     asteroids = [
       ...asteroids.slice(0, this.index),
       ...asteroids.slice(this.index+1).map(a => ({...a, index: a.index - 1}))
@@ -193,4 +235,11 @@ export var Asteroid = function(rockType, scene) {
   }
 
   return this
+}
+
+export default scene => {
+  const asteroid = new Asteroid(scene)
+  asteroids.push(asteroid)
+  scene.add(asteroid.getMesh())
+  return asteroid
 }

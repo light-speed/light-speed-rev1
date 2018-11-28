@@ -5,7 +5,7 @@ import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'
 import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
-import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
+import makeAsteroid, {asteroids} from './asteroids'
 import loadPlanet, {earth} from './planet'
 import store, {addPoints, endGame, addTime, toggleOngoing} from '../store'
 import loadPointer, {pointer} from './pointer'
@@ -14,11 +14,8 @@ import Proton from 'three.proton.js'
 import addStars from './particles.js'
 import socket from '../socket';
 
-let isPaused = false
-
-let onEsc
-let isGameOver
-let isGameOngoing
+let isPaused = false,
+  onEsc, isGameOver, isGameOngoing
 
 // this.add = function() {
 //   NUM_ASTEROIDS++
@@ -32,7 +29,8 @@ export default function generateWorld() {
   loadPlayer(scene, camera, renderer)
   loadSkybox(scene)
   loadRing(scene)
-  loadAsteroids(scene)
+  makeAsteroid(scene)
+  makeAsteroid(scene)
   loadPlanet(scene)
   loadPointer(scene, player)
   addStars(scene)
@@ -73,7 +71,7 @@ export default function generateWorld() {
         if (shot.BBox.intersectsBox(asteroidBBox)) {
           store.dispatch(addPoints(10))
           store.dispatch(addTime(500))
-          a.destroy()
+          a.destroy(scene)
           return true
         }
       }

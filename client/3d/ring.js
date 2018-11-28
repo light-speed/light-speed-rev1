@@ -3,7 +3,7 @@ import {player} from './player'
 import store, {addPoints, addTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
-import {asteroids, NUM_ASTEROIDS, Asteroid} from './asteroids'
+import makeAsteroid, {asteroids} from './asteroids'
 import {HUDalert} from './HUDalert.js'
 
 export let ring
@@ -84,10 +84,8 @@ const Ring = function(scene) {
         e.getOldZ(player.getMesh().position.z)
       })
 
-      // NUM_ASTEROIDS++
       if (asteroids.length < 15) {
-        asteroids.push(new Asteroid(Math.floor(Math.random() + 5) + 1, scene))
-        scene.add(asteroids[asteroids.length - 1].getMesh())
+        makeAsteroid()
       }
     }
   }
