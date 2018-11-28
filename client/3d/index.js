@@ -216,23 +216,10 @@ export default function generateWorld() {
     }
   }
 
-
-  // player.getMesh().children[3].visible = false
-  
-  
-  
-  
-  
-  console.log('NAME',player.getMesh().children)
   function render() {
-    if (store.getState().game.score === 100) {
-      // player.getMesh().children[0].visible = false
-      // player.getMesh().children[1].visible = false
+    if (store.getState().game.score >= 2000) {
       player.getMesh().children[4].visible = false
       player.getMesh().children[3].visible = true
-
-      console.log('k')
-      // player.getMesh().children[3].visible = true
     }
 
 
