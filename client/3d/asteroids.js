@@ -1,5 +1,5 @@
 import loadingManager from './loadingManager'
-import {ring} from './ring'
+import {ring, timesMoved} from './ring'
 import {player} from './player'
 import store, {addPoints, addTime} from '../store'
 
@@ -39,7 +39,7 @@ const Asteroid = function(rocktype) {
       }
     })
 
-    obj.scale.set(50, 50, 50)
+    obj.scale.set(40, 40, 40)
     self.asteroidMesh = obj
     self.mesh.add(obj)
     self.mesh.position.set(100, 100, -10000)
@@ -47,6 +47,7 @@ const Asteroid = function(rocktype) {
   })
 
   const getHit = () => {
+    // console.log('got hit!')
     store.dispatch(addPoints(-100))
     store.dispatch(addTime(-2000))
   }
@@ -70,7 +71,7 @@ const Asteroid = function(rocktype) {
       hitDetection()
       setTimeout(() => {
         hitDetection = once(getHit)
-      }, 1000)
+      }, 3000)
     }
   }
 
@@ -87,37 +88,40 @@ const Asteroid = function(rocktype) {
     z: -10000
   }
 
+  const originRadius = 400
+  const destRadius = 400
+
   this.getOldX = prevX => {
-    let oldX = Math.random() * (prevX + 100 - (prevX - 100)) + (prevX - 100)
+    let oldX = Math.random() * (prevX + destRadius - (prevX - destRadius)) + (prevX - destRadius)
     self.oldAsteroidPos.x = oldX
   }
 
   this.getOldY = prevY => {
-    let oldY = Math.random() * (prevY + 100 - (prevY - 100)) + (prevY - 100)
+    let oldY = Math.random() * (prevY + destRadius - (prevY - destRadius)) + (prevY - destRadius)
     self.oldAsteroidPos.y = oldY
   }
 
   this.getOldZ = prevZ => {
-    let oldZ = Math.random() * (prevZ + 100 - (prevZ - 100)) + (prevZ - 100)
+    let oldZ = Math.random() * (prevZ + destRadius - (prevZ - destRadius)) + (prevZ - destRadius)
     self.oldAsteroidPos.z = oldZ
   }
 
   this.getNewX = ring => {
     let newX =
-      Math.random() * (ring.position.x + 350 - (ring.position.x - 350)) +
-      (ring.position.x - 350)
+      Math.random() * (ring.position.x + originRadius - (ring.position.x - originRadius)) +
+      (ring.position.x - originRadius)
     self.newAsteroidPos.x = newX
   }
   this.getNewY = ring => {
     let newY =
-      Math.random() * (ring.position.y + 350 - (ring.position.y - 350)) +
-      (ring.position.y - 350)
+      Math.random() * (ring.position.y + originRadius - (ring.position.y - originRadius)) +
+      (ring.position.y - originRadius)
     self.newAsteroidPos.y = newY
   }
   this.getNewZ = ring => {
     let newZ =
-      Math.random() * (ring.position.z + 350 - (ring.position.z - 350)) +
-      (ring.position.z - 350)
+      Math.random() * (ring.position.z + originRadius - (ring.position.z - originRadius)) +
+      (ring.position.z - originRadius)
     self.newAsteroidPos.z = newZ
   }
 
@@ -138,7 +142,7 @@ const Asteroid = function(rocktype) {
     // }
 
     var t = self.newAsteroidPos.t
-    var dt = 0.004 // t (dt delta for demo)
+    var dt = 0.005 + 0.0001*(timesMoved/2)// t (dt delta for demo)
     var a = self.newAsteroidPos // start position
     var b = self.oldAsteroidPos // end position
     var newX = lerp(a.x, b.x, ease(t)) // interpolate between a and b where
@@ -195,23 +199,18 @@ export const addAsteroid = (scene) => {
     hiddenAsteroids.shift().activate(scene)
 }
 
+export const increaseAsteroidCap = () => {
+  if (hiddenAsteroids.length + asteroids.length < 20)
+    hiddenAsteroids.push(new Asteroid(Math.floor(Math.random() * 6) + 1))
+}
+
 export default scene => {
   hiddenAsteroids = [
     new Asteroid(1),
     new Asteroid(2),
     new Asteroid(3),
     new Asteroid(4),
-    new Asteroid(5),
-    new Asteroid(1),
-    new Asteroid(2),
-    new Asteroid(3),
-    new Asteroid(4),
-    new Asteroid(5),
-    new Asteroid(1),
-    new Asteroid(2),
-    new Asteroid(3),
-    new Asteroid(4),
-    new Asteroid(5),
+    new Asteroid(5)
   ]
   // addAsteroid(scene)
 }
