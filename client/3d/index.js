@@ -5,7 +5,7 @@ import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'
 import loadPlayer, {player, controls, mixer} from './player'
 import loadRing, {ring} from './ring'
-import loadAsteroids, {asteroids, NUM_ASTEROIDS} from './asteroids'
+import loadAsteroids, {asteroids} from './asteroids'
 import loadPlanet, {earth} from './planet'
 import store, {addPoints, endGame, addTime, toggleOngoing} from '../store'
 import loadPointer, {pointer} from './pointer'
@@ -15,20 +15,11 @@ import addStars from './particles.js'
 import socket from '../socket';
 
 
-let isPaused = false
-
-let onEsc
-let isGameOver
-let isGameOngoing
 export let horseTrigger, shipTrigger
 horseTrigger = false
 shipTrigger = true
-
-// this.add = function() {
-//   NUM_ASTEROIDS++
-//   asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
-//   scene.add(asteroids[NUM_ASTEROIDS-1].getMesh())
-// }
+let isPaused = false,
+  onEsc, isGameOver, isGameOngoing
 
 export default function generateWorld() {
   getDomElements()
@@ -77,7 +68,7 @@ export default function generateWorld() {
         if (shot.BBox.intersectsBox(asteroidBBox)) {
           store.dispatch(addPoints(10))
           store.dispatch(addTime(500))
-          a.destroy()
+          a.destroy(scene)
           return true
         }
       }
@@ -217,7 +208,8 @@ export default function generateWorld() {
   }
 
   function render() {
-    if (store.getState().game.score >= 2000) {
+    // console.log(store.getState().game.score)
+    if (store.getState().game.score === 2000) {
       player.getMesh().children[4].visible = false
       player.getMesh().children[3].visible = true
     }
