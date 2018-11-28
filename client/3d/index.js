@@ -160,9 +160,10 @@ export default function generateWorld() {
     emitter.addInitialize(new Proton.Life(2))
     emitter.addInitialize(new Proton.Body(createSprite()))
     emitter.addInitialize(new Proton.Radius(16.8))
+    // emitter.addInitialize(new Proton.Radius(10))
     // emitter.addInitialize(new Proton.V(200, new Proton.Vector3D(0, 0, -1), 0))
 
-    // emitter.addBehaviour(new Proton.Alpha(1, 0))
+    emitter.addBehaviour(new Proton.Alpha(0.8, 0))
     emitter.addBehaviour(new Proton.Color(color1, color2))
     emitter.addBehaviour(new Proton.Scale(1, 0.5))
     emitter.addBehaviour(
@@ -225,32 +226,26 @@ export default function generateWorld() {
       emitter1.p.x = player.getMesh().position.x
       emitter1.p.y = player.getMesh().position.y
       emitter1.p.z = player.getMesh().position.z
-
     }
-    if (proton && controls.pressed[83] !== true && controls.pressed[87] === true) {
+    if (
+      proton &&
+      controls.pressed[83] !== true &&
+      controls.pressed[87] === true
+    ) {
       proton.update()
       animateEmitter2()
 
       emitter2.p.x = player.getMesh().position.x
       emitter2.p.y = player.getMesh().position.y
       emitter2.p.z = player.getMesh().position.z
-
     }
 
-    if (proton && controls.pressed[83] === true){
+    if (proton && controls.pressed[83] === true) {
       proton.update()
 
       emitter1.p.x = -100000
-      emitter1.p.y = player.getMesh().position.y
-      emitter1.p.z = player.getMesh().position.z
-
       emitter2.p.x = -100000
-      emitter2.p.y = player.getMesh().position.y
-      emitter2.p.z = player.getMesh().position.z
-
     }
-
-
 
     isGameOver = store.getState().game.gameOver
     isGameOngoing = store.getState().game.ongoing
@@ -323,21 +318,21 @@ export default function generateWorld() {
 
           const shotMaterial = new THREE.MeshPhongMaterial({
             color: 0xffa500
-            // transparent: true,
-            // opacity: 0.5
           })
-
-          console.log('player', player)
 
           const shot = new THREE.Mesh(
             new THREE.SphereGeometry(3, 16, 16),
             shotMaterial
           )
-          console.log('proton', proton)
+
+
+
 
           // position the bullet to come from the player's weapon
           // shot.position.set(0, 5, 30)
           shot.position.set(playerPos.x, playerPos.y, playerPos.z)
+
+          console.log('asteroids', asteroids)
 
           // set the velocity of the bullet
           shot.velocity = new THREE.Vector3(

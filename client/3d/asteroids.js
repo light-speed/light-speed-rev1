@@ -45,6 +45,7 @@ export var Asteroid = function(rockType, scene) {
     obj.traverse(function(child) {
       if (child instanceof THREE.Mesh) {
         child.material = rockMtl
+        console.log('rocktype', rockType)
       }
     })
 
