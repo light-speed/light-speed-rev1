@@ -2,7 +2,7 @@
 
 export default scene => {
   var geometry = new THREE.Geometry();
-  for (var i = 0; i < 125000; i++) {
+  for (var i = 0; i < 75000; i++) {
       var vertex = new THREE.Vector3();
       vertex.x = THREE.Math.randFloatSpread(15000);
       vertex.y = THREE.Math.randFloatSpread(15000);
