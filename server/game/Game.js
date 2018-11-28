@@ -8,6 +8,7 @@ module.exports = class GameInstance {
     this.ongoing = false
     this.score = 0
     this.userId = userId
+    this.lastPointGain = new Date()
   }
 
   pause() {
@@ -25,8 +26,11 @@ module.exports = class GameInstance {
   }
 
   addPoints(amount) {
-    if (amount > 100) amount = 0
-    this.score += amount
+    if (new Date() - new Date(this.lastPointGain) > 200) {
+      if (amount > 100) amount = 0
+      this.score += amount
+      this.lastPointGain = new Date()
+    }
   }
 
   addTime(timeMs) {
