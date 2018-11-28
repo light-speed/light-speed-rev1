@@ -26,9 +26,9 @@ nav a {
 }
 
 .crossParent {
+  position: relative;
   height: 0;
   padding-bottom: 56.25%; /* 16:9 */
-  position: relative;
 }
 
 #crosshair {
@@ -41,6 +41,18 @@ nav a {
   height: 100px;
   z-index: 10;
 }
+
+/* #crosshair {
+  position: absolute;
+  justify-content: center;
+  top: 50%;
+  bottom: 50%;
+  left: 5%;
+  right: 50%;
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+} */
 
 #loading {
   background: url('./images/spc3.jpg');
