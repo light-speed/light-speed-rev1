@@ -55,7 +55,7 @@ var Player = function(scene) {
       .setMaterials(materials)
 
       .load('models/DevShipT.obj', function(mesh) {
-        mesh.scale.set(3, 3, 3)
+        mesh.scale.set(6, 6, 6)
         mesh.rotation.set(0, Math.PI, 0)
 
         spaceship = mesh
@@ -81,7 +81,7 @@ export let player, controls
 export default (scene, camera, renderer) => {
   player = new Player(scene)
   player.getMesh().add(camera)
-  camera.position.set(0, 45, 90) // <-- this is relative to the player's position
+  camera.position.set(0, 60, 150) // <-- this is relative to the player's position
   scene.add(player.getMesh())
 
   controls = new THREE.FlyControls(
