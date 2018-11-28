@@ -102,7 +102,6 @@ export default function generateWorld() {
   //Positioning/Adding
   ring.getMesh().position.set(-100, 0, -500)
   player.getMesh().add(camera)
-  // camera.lookAt(player.getMesh().position)
   player.getMesh().lookAt(100, 0, 500)
   ring.getMesh().lookAt(player.getMesh().position)
 
@@ -218,6 +217,23 @@ export default function generateWorld() {
     }
   }
 
+  const once = func => {
+    let ran = 0
+    return function(x) {
+      if (ran < 1) {
+        func()
+        ran++
+      }
+    }
+  }
+
+  const turnTheShipIntoAHorse = () => {
+    player.getMesh().children[4].visible = false
+    player.getMesh().children[5].visible = true
+  }
+
+  const shipToHorse = once(turnTheShipIntoAHorse)
+
   function render() {
     if (proton && controls.pressed[83] !== true) {
       proton.update()
@@ -238,25 +254,10 @@ export default function generateWorld() {
       emitter2.p.x = player.getMesh().position.x
       emitter2.p.y = player.getMesh().position.y
       emitter2.p.z = player.getMesh().position.z
-  const once = func => {
-    let ran = 0
-    return function(x) {
-      if (ran < 1) {
-        func()
-        ran++
-      }
     }
-  }
 
-  const turnTheShipIntoAHorse = () => {
-    player.getMesh().children[3].visible = false
-    player.getMesh().children[4].visible = true
-  }
 
-  const shipToHorse = once(turnTheShipIntoAHorse)
-
-  function render() {
-    console.log(typeof store.getState().game.score)
+    // console.log(typeof store.getState().game.score)
     if (store.getState().game.score >= 2000) {
       shipToHorse()
     }
@@ -360,7 +361,7 @@ export default function generateWorld() {
           // shot.position.set(0, 5, 30)
           shot.position.set(playerPos.x, playerPos.y, playerPos.z)
 
-          console.log('asteroids', asteroids)
+          console.log('player', player)
 
           // set the velocity of the bullet
           shot.velocity = new THREE.Vector3(

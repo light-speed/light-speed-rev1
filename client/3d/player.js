@@ -60,7 +60,7 @@ new THREE.GLTFLoader(loadingManager)
 				.load( "models/Horse.glb", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
           mesh.visible = horseTrigger; // horse visibility
-          mesh.scale.set( .1, .1, .1 );
+          mesh.scale.set( .4, .4, .4 );
           mesh.rotation.set(0, Math.PI, 0)
 
           scene.add( mesh );
