@@ -3,7 +3,7 @@ import {showInstructions} from '../utilities'
 import getDomElements from './domElements'
 import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'
-import loadPlayer, {player, controls} from './player'
+import loadPlayer, {player, controls, mixer} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids} from './asteroids'
 import loadPlanet, {earth} from './planet'
@@ -14,14 +14,12 @@ import Proton from 'three.proton.js'
 import addStars from './particles.js'
 import socket from '../socket';
 
+
+export let horseTrigger, shipTrigger
+horseTrigger = false
+shipTrigger = true
 let isPaused = false,
   onEsc, isGameOver, isGameOngoing
-
-// this.add = function() {
-//   NUM_ASTEROIDS++
-//   asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1))
-//   scene.add(asteroids[NUM_ASTEROIDS-1].getMesh())
-// }
 
 export default function generateWorld() {
   getDomElements()
@@ -94,6 +92,8 @@ export default function generateWorld() {
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
 
+  
+  var prevTime = Date.now();
 
 
   /*********************************
@@ -207,9 +207,19 @@ export default function generateWorld() {
     }
   }
 
-
-
   function render() {
+    // console.log(store.getState().game.score)
+    if (store.getState().game.score === 2000) {
+      player.getMesh().children[4].visible = false
+      player.getMesh().children[3].visible = true
+    }
+
+
+      if ( mixer ) {
+        var time = Date.now();
+        mixer.update( ( time - prevTime ) * 0.001 );
+        prevTime = time;
+      }
 
     // proton.update();
     // animateEmitter()
@@ -228,7 +238,7 @@ export default function generateWorld() {
 
     gameOverScreen()
 
-    pointer.getMesh().position.set(-(window.innerWidth / 14), 1, 0)
+    pointer.getMesh().position.set(-(window.innerWidth / 20) -20, 2, 0)
 
     var delta = clock.getDelta()
     if (isGameOver !== true) {
@@ -344,6 +354,9 @@ export default function generateWorld() {
       showInstructions(isPaused)
       animate()
     }
+    if (player.canShoot > 0) player.canShoot -= 1
+
+    renderer.render(scene, camera)
   }
 
   window.addEventListener('keydown', onEsc, false)
