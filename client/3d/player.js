@@ -78,7 +78,7 @@ new THREE.GLTFLoader(loadingManager)
 
       .load('models/DevShipT.obj', function(mesh) {
         mesh.visible = true; // ship visibility
-        mesh.scale.set(3, 3, 3)
+        mesh.scale.set(7, 7, 7)
         mesh.rotation.set(0, Math.PI, 0)
         spaceship = mesh
         self.player = spaceship
