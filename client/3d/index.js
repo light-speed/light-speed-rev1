@@ -15,9 +15,6 @@ import addStars from './particles.js'
 import socket from '../socket';
 
 
-export let horseTrigger, shipTrigger
-horseTrigger = false
-shipTrigger = true
 let isPaused = false,
   onEsc, isGameOver, isGameOngoing
 
@@ -225,7 +222,6 @@ export default function generateWorld() {
   const shipToHorse = once(turnTheShipIntoAHorse)
 
   function render() {
-    console.log(typeof store.getState().game.score)
     if (store.getState().game.score >= 2000) {
       shipToHorse()
     }
@@ -364,6 +360,7 @@ export default function generateWorld() {
 
   onEsc = event => {
     if (event.which === 27 && isGameOver !== true) {
+      isPaused ? controls.lock() : controls.unlock()
       isPaused ? socket.emit('unpause-game') : socket.emit('pause-game')
       store.dispatch(toggleOngoing())
       isPaused = !isPaused

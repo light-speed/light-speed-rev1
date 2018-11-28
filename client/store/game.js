@@ -1,9 +1,7 @@
 import socket from '../socket'
 import axios from 'axios'
-// import { browserHistory } from 'react-router'
-import history from './history'
+import {controls} from '../3d/player'
 
-// this should change the url and re-render Test component
 
 /**
  * ACTION TYPES
@@ -56,6 +54,7 @@ export const startGame = () => async dispatch => {
 
 export const endGame = () => {
   // history.push('/gameover')
+  controls.unlock()
   socket.emit('game-over')
   return {type: END_GAME}
 }

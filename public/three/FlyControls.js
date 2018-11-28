@@ -6,6 +6,8 @@ THREE.FlyControls = function(camera, object, domElement) {
   if (domElement) this.domElement.setAttribute('tabindex', -1)
 
   const control = new THREE.PointerLockControls(camera)
+  this.unlock = () => control.unlock()
+  this.lock = () => control.lock()
   window.addEventListener(
     'click',
     function() {
