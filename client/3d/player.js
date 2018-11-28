@@ -1,7 +1,8 @@
 import loadingManager from './loadingManager'
 // Player Collision Wrapper Cube
-var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
+var cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
 var cubeMaterial = new THREE.MeshBasicMaterial({
+  // color: 0xff9900,
   color: 0x003500,
   opacity: 0,
   side: THREE.DoubleSide,
@@ -9,7 +10,7 @@ var cubeMaterial = new THREE.MeshBasicMaterial({
 })
 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
-cube.position.set(0, 0, 0)
+// cube.position.set(0, 0, 0)
 cube.name = 'cube'
 
 export var mesh, mixer

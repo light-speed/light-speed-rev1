@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import Timer from './Timer'
 
 export const formatScore = score =>
-  `${'0'.repeat(10 - ('' + score).length)}${score}`
+  `${'0'.repeat(7 - ('' + score).length)}${score}`
 
 const HUD = ({game: {score}, user: {username}}) => {
   return (

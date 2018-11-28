@@ -1,12 +1,13 @@
 import loadingManager from './loadingManager'
 import {player} from './player'
-import store, {addPoints, addTime} from '../store'
+import store, {addPoints, addTime, setTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
-import {asteroids, addAsteroid} from './asteroids'
+import {asteroids, addAsteroid, increaseAsteroidCap} from './asteroids'
 import {HUDalert} from './HUDalert.js'
 
 export let ring
+export let timesMoved = 0
 
 const {camera} = configureRenderer()
 const Ring = function(scene) {
@@ -47,41 +48,48 @@ const Ring = function(scene) {
       this.ringPlanetCollision() === true ||
       this.ringSkyboxCollision() === true
     ) {
+      if (timesMoved % 5 === 0) increaseAsteroidCap()
+      timesMoved++
+      let moveDistance = 1500 + timesMoved * 50
+      if (moveDistance > 4000) moveDistance = 4000
+      // console.log('md',moveDistance)
       this.mesh.position.x =
         Math.random() *
           (player.getMesh().position.x +
-            2250 -
-            (player.getMesh().position.x - 2250)) +
-        (player.getMesh().position.x - 2250)
+            moveDistance -
+            (player.getMesh().position.x - moveDistance)) +
+        (player.getMesh().position.x - moveDistance)
 
       this.mesh.position.y =
         Math.random() *
           (player.getMesh().position.y +
-            2250 -
-            (player.getMesh().position.y - 2250)) +
-        (player.getMesh().position.y - 2250)
+            moveDistance -
+            (player.getMesh().position.y - moveDistance)) +
+        (player.getMesh().position.y - moveDistance)
 
       this.mesh.position.z =
         Math.random() *
           (player.getMesh().position.z +
-            2250 -
-            (player.getMesh().position.z - 2250)) +
-        (player.getMesh().position.z - 2250)
+            moveDistance -
+            (player.getMesh().position.z - moveDistance)) +
+        (player.getMesh().position.z - moveDistance)
 
       this.mesh.lookAt(prevX, prevY, prevZ)
 
       asteroids.forEach(e => {
+        setTimeout(() => {
+          e.getNewX(this.mesh)
+          e.getNewY(this.mesh)
+          e.getNewZ(this.mesh)
+          e.getNewT()
+          // e.getOldX(prevX)
+          // e.getOldY(prevY)
+          // e.getOldZ(prevZ)
+          e.getOldX(player.getMesh().position.x)
+          e.getOldY(player.getMesh().position.y)
+          e.getOldZ(player.getMesh().position.z)
+        }, Math.random() * 1000)
         // e.reset(this.mesh, player)
-        e.getNewX(this.mesh)
-        e.getNewY(this.mesh)
-        e.getNewZ(this.mesh)
-        e.getNewT()
-        // e.getOldX(prevX)
-        // e.getOldY(prevY)
-        // e.getOldZ(prevZ)
-        e.getOldX(player.getMesh().position.x)
-        e.getOldY(player.getMesh().position.y)
-        e.getOldZ(player.getMesh().position.z)
       })
 
       addAsteroid(scene)

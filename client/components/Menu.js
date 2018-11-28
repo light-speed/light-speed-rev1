@@ -15,7 +15,7 @@ class Menu extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('remount')
+    // console.log('remount')
     if (controls) controls.unlock()
     if (this.props.game.ongoing) this.props.endGame()
   }
