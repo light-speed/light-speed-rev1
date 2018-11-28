@@ -138,11 +138,13 @@ export default function generateWorld() {
   // proton.position.set(0,0,-5)
 
   var tha = 0
-  function animateEmitter() {
-    tha += 0.5
+  function animateEmitter1() {
+    tha += 0.25
     emitter1.p.x = R * Math.cos(tha)
     emitter1.p.y = R * Math.sin(tha)
-
+  }
+  function animateEmitter2() {
+    tha += 0.25
     emitter2.p.x = R * Math.cos(tha + Math.PI / 2)
     emitter2.p.y = R * Math.sin(tha + Math.PI / 2)
   }
@@ -174,8 +176,8 @@ export default function generateWorld() {
     //     z: 0
     // }, 5, 250));
 
-    // emitter.p.x = x
-    // emitter.p.y = y
+    emitter.p.x = -100000
+    emitter.p.y = y
 
     emitter.emit()
 
@@ -216,52 +218,40 @@ export default function generateWorld() {
   }
 
   function render() {
-    if (proton) {
+    if (proton && controls.pressed[83] !== true) {
       proton.update()
-      animateEmitter()
+      animateEmitter1()
 
-      //this one works
       emitter1.p.x = player.getMesh().position.x
       emitter1.p.y = player.getMesh().position.y
       emitter1.p.z = player.getMesh().position.z
+
+    }
+    if (proton && controls.pressed[83] !== true && controls.pressed[87] === true) {
+      proton.update()
+      animateEmitter2()
 
       emitter2.p.x = player.getMesh().position.x
       emitter2.p.y = player.getMesh().position.y
       emitter2.p.z = player.getMesh().position.z
 
-      //doesn't work
-      // emitter1.p.x = emitter1Pos.position.x
-      // emitter1.p.y = emitter1Pos.position.y
-      // emitter1.p.z = emitter1Pos.position.z
-
-      // emitter2.p.x = emitter2Pos.position.x
-      // emitter2.p.y = emitter2Pos.position.y
-      // emitter2.p.z = emitter2Pos.position.z
-
-
-      //doesn't work
-      // emitter1.x = new Proton.Position(
-      //   new Proton.PointZone(
-      //     player.getMesh().position.x,
-      //     player.getMesh().position.y,
-      //     player.getMesh().position.z
-      //   )
-      // )
-      // emitter1.y = new Proton.Position(
-      //   new Proton.PointZone(
-      //     player.getMesh().position.x,
-      //     player.getMesh().position.y,
-      //     player.getMesh().position.z
-      //   )
-      // )
-      // emitter1.z = new Proton.Position(
-      //   new Proton.PointZone(
-      //     player.getMesh().position.x,
-      //     player.getMesh().position.y,
-      //     player.getMesh().position.z
-      //   )
-      // )
     }
+
+    if (proton && controls.pressed[83] === true){
+      proton.update()
+
+
+      emitter1.p.x = -100000
+      emitter1.p.y = player.getMesh().position.y
+      emitter1.p.z = player.getMesh().position.z
+
+      emitter2.p.x = -100000
+      emitter2.p.y = player.getMesh().position.y
+      emitter2.p.z = player.getMesh().position.z
+
+    }
+
+
 
     isGameOver = store.getState().game.gameOver
     isGameOngoing = store.getState().game.ongoing
@@ -337,6 +327,8 @@ export default function generateWorld() {
             // transparent: true,
             // opacity: 0.5
           })
+
+          console.log('controls', controls)
 
           const shot = new THREE.Mesh(
             new THREE.SphereGeometry(3, 16, 16),

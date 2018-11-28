@@ -57,9 +57,7 @@ var Player = function(scene) {
       .load('models/DevShipT.obj', function(mesh) {
         mesh.scale.set(6, 6, 6)
         mesh.rotation.set(0, Math.PI, 0)
-
         spaceship = mesh
-
         self.player = spaceship
         self.mesh.add(self.player)
         self.loaded = true
