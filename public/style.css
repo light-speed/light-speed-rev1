@@ -25,6 +25,12 @@ nav a {
   margin: 1em;
 }
 
+.crossParent {
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
+  position: relative;
+}
+
 #crosshair {
   position: absolute;
   top: 44vh;
@@ -33,6 +39,7 @@ nav a {
   right: 46vw;
   width: 100px;
   height: 100px;
+  z-index: 10;
 }
 
 #loading {

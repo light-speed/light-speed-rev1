@@ -22,7 +22,7 @@ const HUD = ({game: {score}, user: {username}}) => {
           <Timer />
         </h1>
       </div>
-      <div>
+      <div className="crossParent">
         <img id="crosshair" src="./images/crosshair.png" />
       </div>
     </div>
