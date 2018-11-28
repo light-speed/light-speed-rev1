@@ -7,7 +7,7 @@ export let RESOURCES_LOADED = false
 
 let resources = 0
 loadingManager.onProgress = () => {
-  console.log("I just loaded something into the game")
+  // console.log("I just loaded something into the game")
   resources++
 }
 

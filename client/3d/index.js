@@ -63,7 +63,7 @@ export default function generateWorld() {
         )
         asteroidBBox.setFromObject(a.getMesh())
         if (shot.BBox.intersectsBox(asteroidBBox)) {
-          store.dispatch(addPoints(10))
+          store.dispatch(addPoints(25))
           store.dispatch(addTime(500))
           a.destroy(scene)
           return true
@@ -225,7 +225,7 @@ export default function generateWorld() {
 
   const turnTheShipIntoAHorse = () => {
     player.changeModel('horse')
-    console.log('turn me into a horse please')
+    // console.log('turn me into a horse please')
   }
 
   const shipToHorse = once(turnTheShipIntoAHorse)
@@ -255,7 +255,7 @@ export default function generateWorld() {
 
 
     // console.log(typeof store.getState().game.score)
-    if (store.getState().game.score >= 100) {
+    if (store.getState().game.score >= 2000) {
       shipToHorse()
     }
 
@@ -339,7 +339,7 @@ export default function generateWorld() {
     if (player.canShoot <= 0) {
       switch (e.keyCode) {
         case 32: // Space
-          console.log('pmesh',player.getMesh())
+          // console.log('pmesh',player.getMesh())
           e.preventDefault()
           var playerPos = player.getMesh().position
 
