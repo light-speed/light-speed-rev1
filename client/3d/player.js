@@ -63,9 +63,27 @@ var Player = function(scene) {
 
 
 new THREE.GLTFLoader(loadingManager)
-				.load( "models/Horse.glb", function( gltf ) {
+				.load( "models/Flamingo.glb", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
-          mesh.visible = false
+          mesh.visible = true
+          mesh.scale.set( .2, .2, .2 );
+          mesh.rotation.set(0, Math.PI, 0)
+
+          scene.add( mesh );
+          spaceship = mesh
+
+          mesh.name = 'horse'
+          self.player = spaceship
+          self.mesh.add(self.player)
+          self.loaded = true
+          mixer = new THREE.AnimationMixer( self.player );
+					mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
+        } );
+
+new THREE.GLTFLoader(loadingManager)
+				.load( "models/Flamingo.glb", function( gltf ) {
+          mesh = gltf.scene.children[ 0 ];
+          mesh.visible = true
           mesh.scale.set( .2, .2, .2 );
           mesh.rotation.set(0, Math.PI, 0)
 
