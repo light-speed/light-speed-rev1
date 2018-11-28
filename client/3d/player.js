@@ -15,7 +15,7 @@ cube.name = 'cube'
 export var mesh, mixer
 
 var Player = function(scene) {
-  
+
   let spaceship = null
   this.mesh = new THREE.Object3D()
   this.loaded = false
@@ -49,18 +49,18 @@ var Player = function(scene) {
   scene.add(fillLight)
   scene.add(backLight)
 
- 
+
 
 new THREE.GLTFLoader(loadingManager)
 				.load( "models/Horse.glb", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
           mesh.visible = false
-          mesh.scale.set( .1, .1, .1 );
+          mesh.scale.set( .4, .4, .4 );
           mesh.rotation.set(0, Math.PI, 0)
 
           scene.add( mesh );
           spaceship = mesh
-          
+
           self.player = spaceship
           self.mesh.add(self.player)
           self.loaded = true
@@ -68,7 +68,7 @@ new THREE.GLTFLoader(loadingManager)
 					mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
         } );
 
-  
+
   new THREE.MTLLoader(loadingManager).load('models/DevShipT.mtl', function(
     materials
   ) {
@@ -80,9 +80,7 @@ new THREE.GLTFLoader(loadingManager)
         mesh.visible = true; // ship visibility
         mesh.scale.set(3, 3, 3)
         mesh.rotation.set(0, Math.PI, 0)
-
         spaceship = mesh
-
         self.player = spaceship
         self.mesh.add(self.player)
         self.loaded = true
@@ -104,8 +102,7 @@ export let player, controls
 export default (scene, camera, renderer) => {
   player = new Player(scene)
   player.getMesh().add(camera)
-  // camera.position.set(0, 45, 90) // <-- this is relative to the player's position
-  camera.position.set(0, 45, 90) // <-- this is relative to the player's position
+  camera.position.set(0, 60, 150) // <-- this is relative to the player's position
   scene.add(player.getMesh())
 
   controls = new THREE.FlyControls(

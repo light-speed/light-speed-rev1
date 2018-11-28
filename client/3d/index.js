@@ -12,7 +12,7 @@ import loadPointer, {pointer} from './pointer'
 import {formatScore} from '../components/HUD'
 import Proton from 'three.proton.js'
 import addStars from './particles.js'
-import socket from '../socket';
+import socket from '../socket'
 
 
 let isPaused = false,
@@ -89,7 +89,7 @@ export default function generateWorld() {
   earth.getMesh().add(meshClouds)
   scene.add(meshClouds)
 
-  
+
   var prevTime = Date.now();
 
 
@@ -102,89 +102,99 @@ export default function generateWorld() {
   player.getMesh().lookAt(100, 0, 500)
   ring.getMesh().lookAt(player.getMesh().position)
 
+  // let emitter1Pos = new THREE.Vector3()
+  // let emitter2Pos = new THREE.Vector3()
 
+  let emitter1Pos = new THREE.Object3D()
+  let emitter2Pos = new THREE.Object3D()
 
+  player.getMesh().add(emitter1Pos)
+  player.getMesh().add(emitter1Pos)
 
+  emitter1Pos.position.set(-3, 0, -2)
+  emitter2Pos.position.set(3, 0, -2)
 
-  // var emitter1, emitter2, R, proton
+  var emitter1, emitter2, R, proton
 
-  // function addProton() {
-  //   proton = new Proton()
+  function addProton() {
+    proton = new Proton()
 
-  //   R = 5
-  //   emitter1 = createEmitter(R, 0, '#4F1500', '#0029FF')
-  //   emitter2 = createEmitter(-R, 0, '#004CFE', '#6600FF')
+    R = 10
+    emitter1 = createEmitter(R, 0, '#4F1500', '#0029FF')
+    emitter2 = createEmitter(-R, 0, '#004CFE', '#6600FF')
 
-  //   proton.addEmitter(emitter1)
-  //   proton.addEmitter(emitter2)
-  //   proton.addRender(new Proton.SpriteRender(scene))
+    proton.addEmitter(emitter1)
+    proton.addEmitter(emitter2)
+    proton.addRender(new Proton.SpriteRender(scene))
 
-  //   console.log('proton', proton)
-  // }
+    console.log('proton', proton)
+  }
 
-  // // player.getMesh().add(proton)
-  // // proton.position.set(0,0,-5)
+  // player.getMesh().add(proton)
+  // proton.position.set(0,0,-5)
 
-  // var tha = 0
-  // function animateEmitter() {
-  //   tha += 0.13
-  //   emitter1.p.x = R * Math.cos(tha)
-  //   emitter1.p.y = R * Math.sin(tha)
+  var tha = 0
+  function animateEmitter1() {
+    tha += 0.25
+    emitter1.p.x = R * Math.cos(tha)
+    emitter1.p.y = R * Math.sin(tha)
+  }
+  function animateEmitter2() {
+    tha += 0.25
+    emitter2.p.x = R * Math.cos(tha + Math.PI / 2)
+    emitter2.p.y = R * Math.sin(tha + Math.PI / 2)
+  }
 
-  //   emitter2.p.x = R * Math.cos(tha + Math.PI / 2)
-  //   emitter2.p.y = R * Math.sin(tha + Math.PI / 2)
-  // }
+  function createEmitter(x, y, color1, color2) {
+    var emitter = new Proton.Emitter()
+    emitter.rate = new Proton.Rate(
+      new Proton.Span(5, 7),
+      new Proton.Span(0.01, 0.02)
+      // new Proton.Span(0.00000, 0.00175)
+    )
+    emitter.addInitialize(new Proton.Mass(1))
+    emitter.addInitialize(new Proton.Life(2))
+    emitter.addInitialize(new Proton.Body(createSprite()))
+    emitter.addInitialize(new Proton.Radius(16.8))
+    // emitter.addInitialize(new Proton.Radius(10))
+    // emitter.addInitialize(new Proton.V(200, new Proton.Vector3D(0, 0, -1), 0))
 
-  // function createEmitter(x, y, color1, color2) {
-  //   var emitter = new Proton.FollowEmitter()
-  //   emitter.rate = new Proton.Rate(
-  //     new Proton.Span(5, 7),
-  //     new Proton.Span(0.01, 0.02)
-  //   )
-  //   emitter.addInitialize(new Proton.Mass(1))
-  //   emitter.addInitialize(new Proton.Life(2))
-  //   emitter.addInitialize(new Proton.Body(createSprite()))
-  //   emitter.addInitialize(new Proton.Radius(10))
-  //   // emitter.addInitialize(new Proton.V(200, new Proton.Vector3D(0, 0, -1), 0))
-  //   // emitter.addInitialize(new Proton.Velocity(new Proton.Span(-1, 1), new Proton.Span(-3, 0), 'vector'));
+    emitter.addBehaviour(new Proton.Alpha(0.8, 0))
+    emitter.addBehaviour(new Proton.Color(color1, color2))
+    emitter.addBehaviour(new Proton.Scale(1, 0.5))
+    emitter.addBehaviour(
+      new Proton.CrossZone(new Proton.ScreenZone(camera, renderer), 'dead')
+    )
 
+    // emitter.addBehaviour(new Proton.Force(0, 0, -20))
+    // emitter.addBehaviour(new Proton.Attraction({
+    //     x: 0,
+    //     y: 0,
+    //     z: 0
+    // }, 5, 250));
 
-  //   // emitter.addBehaviour(new Proton.Alpha(1, 0))
-  //   emitter.addBehaviour(new Proton.Color(color1, color2))
-  //   // emitter.addBehaviour(new Proton.Scale(1, 0.5))
-  //   // emitter.addBehaviour(
-  //     // new Proton.CrossZone(new Proton.ScreenZone(camera, renderer), 'dead')
-  //   // )
+    emitter.p.x = -100000
+    emitter.p.y = y
 
-  //   // emitter.addBehaviour(new Proton.Force(0, 0, -20))
-  //   // emitter.addBehaviour(new Proton.Attraction({
-  //   //     x: 0,
-  //   //     y: 0,
-  //   //     z: 0
-  //   // }, 5, 250));
+    emitter.emit()
 
-  //   // emitter.p.x = x
-  //   // emitter.p.y = y
+    return emitter
+  }
 
-  //   emitter.emit()
+  function createSprite() {
+    var map = new THREE.TextureLoader().load('/images/dot.png')
+    var material = new THREE.SpriteMaterial({
+      map: map,
+      color: 0xff0000,
+      blending: THREE.AdditiveBlending,
+      fog: true
+    })
 
-  //   return emitter
-  // }
+    console.log('material', material)
+    return new THREE.Sprite(material)
+  }
 
-  // function createSprite() {
-  //   var map = new THREE.TextureLoader().load('/images/dot.png')
-  //   var material = new THREE.SpriteMaterial({
-  //     map: map,
-  //     color: 0xff0000,
-  //     blending: THREE.AdditiveBlending,
-  //     fog: true
-  //   })
-
-  //   console.log('material', material)
-  //   return new THREE.Sprite(material)
-  // }
-
-  // addProton()
+  addProton()
 
   var clock = new THREE.Clock()
   const shots = []
@@ -215,13 +225,36 @@ export default function generateWorld() {
   }
 
   const turnTheShipIntoAHorse = () => {
-    player.getMesh().children[3].visible = false
-    player.getMesh().children[4].visible = true
+    player.getMesh().children[4].visible = false
+    player.getMesh().children[5].visible = true
   }
 
   const shipToHorse = once(turnTheShipIntoAHorse)
 
   function render() {
+    if (proton && controls.pressed[83] !== true) {
+      proton.update()
+      animateEmitter1()
+
+      emitter1.p.x = player.getMesh().position.x
+      emitter1.p.y = player.getMesh().position.y
+      emitter1.p.z = player.getMesh().position.z
+    }
+    if (
+      proton &&
+      controls.pressed[83] !== true &&
+      controls.pressed[87] === true
+    ) {
+      proton.update()
+      animateEmitter2()
+
+      emitter2.p.x = player.getMesh().position.x
+      emitter2.p.y = player.getMesh().position.y
+      emitter2.p.z = player.getMesh().position.z
+    }
+
+
+    // console.log(typeof store.getState().game.score)
     if (store.getState().game.score >= 2000) {
       shipToHorse()
     }
@@ -233,11 +266,12 @@ export default function generateWorld() {
       prevTime = time;
     }
 
-    // proton.update();
-    // animateEmitter()
+    if (proton && controls.pressed[83] === true) {
+      proton.update()
 
-    // proton.emitters[0].p = player.getMesh().position
-    // proton.emitters[1].p = player.getMesh().position
+      emitter1.p.x = -100000
+      emitter2.p.x = -100000
+    }
 
     isGameOver = store.getState().game.gameOver
     isGameOngoing = store.getState().game.ongoing
@@ -309,9 +343,7 @@ export default function generateWorld() {
           var playerPos = player.getMesh().position
 
           const shotMaterial = new THREE.MeshPhongMaterial({
-            color: 0xffa500
-            // transparent: true,
-            // opacity: 0.5
+            color: 0xC0C0C0
           })
 
           const shot = new THREE.Mesh(
@@ -319,9 +351,14 @@ export default function generateWorld() {
             shotMaterial
           )
 
+
+
+
           // position the bullet to come from the player's weapon
           // shot.position.set(0, 5, 30)
           shot.position.set(playerPos.x, playerPos.y, playerPos.z)
+
+          console.log('player', player)
 
           // set the velocity of the bullet
           shot.velocity = new THREE.Vector3(
@@ -349,7 +386,8 @@ export default function generateWorld() {
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
           scene.add(shot)
-          player.canShoot = 10
+          player.canShoot = 20
+          console.log('player.canShoot', player.canShoot)
           break
         default:
       }
