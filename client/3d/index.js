@@ -91,6 +91,7 @@ export default function generateWorld() {
 
 
   var prevTime = Date.now();
+  var prevTime2 = Date.now();
 
 
   /*********************************
@@ -262,10 +263,10 @@ export default function generateWorld() {
 
 
     // console.log(typeof store.getState().game.score)
-    if (store.getState().game.score >= 100) {
+    if (store.getState().game.score >= 5000) {
       shipToHorse()
     }
-    if (store.getState().game.score >= 200) {
+    if (store.getState().game.score >= 7000) {
       shipToFlamingo()
     }
 
@@ -278,11 +279,9 @@ export default function generateWorld() {
 
     if ( mixer2 ) {
       var time2 = Date.now();
-      mixer2.update( ( time2 - prevTime ) * 0.001 );
-      prevTime = time2;
+      mixer2.update( ( time - prevTime2 ) * 0.001 );
+      prevTime2 = time2;
     }
-    console.log('playermeshchildren', player.getMesh().children)
-
 
     if (proton && controls.pressed[83] === true) {
       proton.update()
