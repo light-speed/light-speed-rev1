@@ -9,3 +9,5 @@ export const showInstructions = isPaused => {
     blocker.style.zIndex = ''
   }
 }
+
+

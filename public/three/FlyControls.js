@@ -1,6 +1,3 @@
-/**
- * @author James Baicoianu / http://www.baicoianu.com/
- */
 
 THREE.FlyControls = function(camera, object, domElement) {
   this.object = object
@@ -13,7 +10,6 @@ THREE.FlyControls = function(camera, object, domElement) {
     'click',
     function() {
       control.lock()
-      console.log(control.isLocked)
     },
     false
   )
@@ -26,9 +22,10 @@ THREE.FlyControls = function(camera, object, domElement) {
   this.accelDamper = 0.33
   this.maxSpeed = 15
   this.rollSpeed = 0.01
-  this.pitchDamper = 0.6
-  this.yawDamper = 0.5
-  this.rollDamper = 0.6
+  this.pitchDamper = 1.2
+  this.yawDamper = 1.2
+  this.mouseDamper = 0.02
+  this.rollDamper = 0.52
   // this.keypress = false
 
   this.dragToLook = true
@@ -129,8 +126,6 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
       default:
     }
-    // console.log(this.moveState)
-    // console.log(this.keypress)
     this.updateMovementVector()
     this.updateRotationVector()
   }
@@ -186,52 +181,29 @@ THREE.FlyControls = function(camera, object, domElement) {
         break
       default:
     }
-    // console.log(this.moveState)
-    // console.log(this.keypress)
     this.updateMovementVector()
     this.updateRotationVector()
   }
 
-  var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0) // it's up to you how you will create THREE.Plane(), there are several methods
-  var raycaster = new THREE.Raycaster() //for reuse
-  var mouse = new THREE.Vector2() //for reuse
-  var intersectPoint = new THREE.Vector3() //for reuse
-
   this.mousemove = function(event) {
     var container = this.getContainerDimensions()
-    var halfWidth = container.size[0] / 2
-    var halfHeight = container.size[1] / 2
 
-    // console.log('ms', this.moveState.yawLeft, this.moveState.pitchDown)
-    // console.log('event.page', event.pageX, event.pageY)
-    // console.log('container', container.offset)
-    // console.log('e.movement', event.movementX, event.movementY)
 
-    // console.log('event.movement', event.movementX, event.movementY)
     if (control.isLocked === true) {
-      // console.log('event.movement', event.movementX, event.movementY)
       if (event.movementX < 0) {
-        // console.log('-x',x)
-        this.moveState.yawLeft = -event.movementX * (this.yawDamper * 0.10)
-        // this.moveState.yawLeft = mouse.x * this.yawDamper
+        this.moveState.yawLeft = -event.movementX * (this.yawDamper * this.mouseDamper)
         this.moveState.yawRight = 0
       }
       if (event.movementX > 0) {
-        // console.log('+x',x)
-        this.moveState.yawRight = event.movementX * (this.yawDamper * 0.05)
-        // this.moveState.yawRight = mouse.x * this.yawDamper
+        this.moveState.yawRight = event.movementX * (this.yawDamper * this.mouseDamper)
         this.moveState.yawLeft = 0
       }
       if (event.movementY > 0) {
-        // console.log('+y',y)
-        this.moveState.pitchUp = -event.movementY * (this.pitchDamper * 0.05)
-        // this.moveState.pitchUp = mouse.y * 0.004
+        this.moveState.pitchUp = -event.movementY * (this.pitchDamper * this.mouseDamper)
         this.moveState.pitchDown = 0
       }
       if (event.movementY < 0) {
-        // console.log('-y',y)
-        this.moveState.pitchDown = event.movementY * (this.pitchDamper * 0.05)
-        // this.moveState.pitchDown = mouse.y * this.pitchDamper
+        this.moveState.pitchDown = event.movementY * (this.pitchDamper * this.mouseDamper)
         this.moveState.pitchUp = 0
       }
 
@@ -296,11 +268,6 @@ THREE.FlyControls = function(camera, object, domElement) {
   }
 
   this.updateMovementVector = function() {
-    // var forward =
-    //   this.moveState.forward || (this.autoForward && !this.moveState.back)
-    //     ? 1
-    //     : 0
-
 
     if (this.moveState.forward > this.maxSpeed) {
       this.moveState.forward = this.maxSpeed
@@ -317,20 +284,15 @@ THREE.FlyControls = function(camera, object, domElement) {
     this.moveVector.x = -this.moveState.left + this.moveState.right
     this.moveVector.y = -this.moveState.down + this.moveState.up
     this.moveVector.z = -this.moveState.forward + this.moveState.back
-    // console.log('move state', this.moveState)
-    // console.log( 'move vectors:', this.moveVector );
   }
 
   this.updateRotationVector = function() {
-    // console.log(object)
     this.rotationVector.x =
       (-this.moveState.pitchDown + this.moveState.pitchUp) * this.pitchDamper
     this.rotationVector.y =
       (-this.moveState.yawRight + this.moveState.yawLeft) * this.yawDamper
     this.rotationVector.z =
       (-this.moveState.rollRight + this.moveState.rollLeft) * this.rollDamper
-
-    //console.log( 'rotate:', [ this.rotationVector.x, this.rotationVector.y, this.rotationVector.z ] );
   }
 
   this.getContainerDimensions = function() {
@@ -359,48 +321,16 @@ THREE.FlyControls = function(camera, object, domElement) {
 
   this.dispose = function() {
     this.domElement.removeEventListener('contextmenu', contextmenu, false)
-    // this.domElement.removeEventListener('mousedown', _mousedown, false)
-    // this.domElement.removeEventListener('mousemove', _mousemove, false)
-    // this.domElement.removeEventListener('mouseup', _mouseup, false)
 
     window.removeEventListener('keydown', _keydown, false)
     window.removeEventListener('keyup', _keyup, false)
   }
 
-  // this.resetRotation = function(){
-  //   this.moveState.yawLeft = 0
-  //   this.moveState.yawRight = 0
-  //   this.moveState.pitchDown = 0
-  //   this.moveState.pitchUp = 0
-  //   console.log(this.moveState)
-  // }
-
   var _mousemove = bind(this, this.mousemove)
-  // var _mousedown = bind(this, this.mousedown)
-  // var _mouseup = bind(this, this.mouseup)
   var _keydown = bind(this, this.keydown)
   var _keyup = bind(this, this.keyup)
-  // var resetRotation = bind(this, this.resetRotation)
 
   this.domElement.addEventListener('contextmenu', contextmenu, false)
-
-  // control.addEventListener('lock', _mousemove, false)
-
-  // this.domElement.addEventListener('mousemove', _mousemove, false)
-  // this.domElement.addEventListener('mousedown', _mousedown, false)
-  // this.domElement.addEventListener('mouseup', _mouseup, false)
-
-
-
-  // if ('onpointerlockchange' in document) {
-  //   document.addEventListener('pointerlockchange', resetRotation, false)
-  // }
-
-  // if ("onpointerlockchange" in this.domElement) {
-  //   this.domElement.addEventListener('pointerlockchange', function(){
-  //     console.log('exit pointerlock')
-  //   }, false);
-  // }
 
   window.addEventListener('keydown', _keydown, false)
   window.addEventListener('keyup', _keyup, false)

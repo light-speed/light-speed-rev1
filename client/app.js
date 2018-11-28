@@ -2,12 +2,13 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, World} from './components'
+import {Login, Signup, World} from './components'
 import {me} from './store'
-import Menu from './components/Menu';
-import Credits from './components/Credits';
-import HowToPlay from './components/HowToPlay';
-
+import Menu from './components/Menu'
+import Credits from './components/Credits'
+import HowToPlay from './components/HowToPlay'
+import TopScore from './components/TopScore'
+import GameOver from './components/GameOver'
 
 class App extends Component {
   componentDidMount() {
@@ -19,24 +20,13 @@ class App extends Component {
 
     return (
       <Switch>
-        {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path='/play' component={World} />
-        <Route path='/credits' component={Credits} />
-        <Route path='/howtoplay' component={HowToPlay} />
-
-        {isLoggedIn && (
-          <Switch>
-            {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
-          </Switch>
-        )}
-        {/* Displays our Login component as a fallback */}
+        <Route exact path="/play" component={World} />
+        <Route path="/credits" component={Credits} />
+        <Route path="/howtoplay" component={HowToPlay} />
+        <Route path="/topscore" component={TopScore} />
         <Route component={Menu} />
-        <Route path='/play' component={World} />
-        <Route path='/credits' component={Credits} />
-        <Route path='/howtoplay' component={HowToPlay} />
       </Switch>
     )
   }

@@ -9,6 +9,7 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  color: rgb(49, 182, 206);
 }
 
 a {
@@ -22,6 +23,10 @@ label {
 nav a {
   display: inline-block;
   margin: 1em;
+}
+
+#loading {
+  background: url('./images/spc3.jpg');
 }
 
 #pause-screen {
@@ -39,17 +44,7 @@ nav a {
 #progress-container {
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(
-    45deg,
-    rgb(10, 10, 10),
-    rgb(15, 15, 15),
-    rgb(20, 20, 20),
-    rgb(30, 30, 30),
-    rgb(40, 40, 40),
-    rgb(50, 50, 50)
-  );
   display: flex;
-  /* background: #000; */
   border: 2px solid #000;
   position: absolute;
   justify-self: center;
@@ -121,6 +116,16 @@ form div {
   margin-left: -13%;
 }
 
+#alert {
+  display: flex;
+  color: rgb(0, 218, 213);
+  font-size: 1vw;
+  margin-top: 45px;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+}
+
 #pause-screen img {
   width: 300px;
   height: 300px;
@@ -133,10 +138,11 @@ form div {
   justify-content: center;
   text-align: center;
   position: relative;
-  margin-top: 20vh;
+  margin-top: 4vh;
   margin-bottom: 30vh;
 }
 .Menu button {
+  text-transform: uppercase;
   border: 3px solid rgb(0, 218, 213);
   background: rgb(33, 70, 72);
   color: rgb(0, 218, 213);
@@ -148,18 +154,120 @@ form div {
   height: 7vh;
   margin: 10px;
   text-align: center;
+  font-family: 'Titillium Web', sans-serif;
 }
 .Menu button:hover {
   background: rgb(0, 218, 213);
   color: rgb(33, 70, 72);
   border: 3px solid rgb(33, 70, 72);
 }
-.Menu h1 {
+#blocker a {
+  border: 3px solid rgb(0, 218, 213);
+  background: rgb(33, 70, 72);
+  color: rgb(0, 218, 213);
+  transition: all 0.3s ease-out;
+  border-radius: 7px;
+  font-size: 1.8vw;
+  font-weight: bold;
+  width: 30vw;
+  height: 7vh;
+  margin: 10px;
+  text-align: center;
+  padding: 5px;
+}
+#blocker a:hover {
+  background: rgb(0, 218, 213);
+  color: rgb(33, 70, 72);
+  border: 3px solid rgb(33, 70, 72);
+}
+
+#game-over a {
+  border: 3px solid rgb(0, 218, 213);
+  background: rgb(33, 70, 72);
+  color: rgb(0, 218, 213);
+  transition: all 0.3s ease-out;
+  border-radius: 7px;
+  font-size: 1.8vw;
+  font-weight: bold;
+  max-width: 30vw;
+  height: 7vh;
+  margin: 10px;
+  text-align: center;
+  padding: 5px;
+}
+#game-over a:hover {
+  background: rgb(0, 218, 213);
+  color: rgb(33, 70, 72);
+  border: 3px solid rgb(33, 70, 72);
+}
+/* .Menu h1 {
   font-size: 2.8vw;
   font-weight: 500;
   color: rgb(0, 218, 213);
   margin-bottom: 8vh;
   text-shadow: 2px 2px rgb(33, 70, 72);
+} */
+
+.Menu img {
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2vh;
+  width: 30vw;
+}
+
+.Login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  margin-top: 4vh;
+  margin-bottom: 30vh;
+}
+
+.Login button,
+.Login input,
+.Login a:visited,
+.Login a {
+  border: 2px solid rgb(0, 218, 213);
+  background: rgb(33, 70, 72);
+  color: rgb(0, 218, 213);
+  transition: all 0.3s ease-out;
+  border-radius: 7px;
+  font-size: 1.8vw;
+  font-weight: bold;
+  width: 30vw;
+  padding: 5px;
+  height: 7vh;
+  margin: 10px;
+  text-align: center;
+  justify-content: center;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.Login a:visited,
+.Login a {
+  border: none;
+}
+
+.Login small,
+.Login a:link {
+  color: rgb(0, 218, 213);
+  font-size: 1.8vw;
+  font-weight: bold;
+  width: 30vw;
+  padding: 5px;
+  height: 7vh;
+  margin: 10px;
+  justify-content: center;
+  text-align: center;
+}
+
+.Login button:hover,
+.Login a:hover {
+  background: rgb(0, 218, 213);
+  color: rgb(33, 70, 72);
+  /* border: 3px solid rgb(33, 70, 72); */
 }
 
 .fade {
@@ -225,6 +333,25 @@ form div {
   z-index: 99;
 }
 
+#game-over {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  z-index: '';
+}
+
+#game-over-hide {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
 #instructions {
   width: 100%;
   height: 100%;
@@ -243,6 +370,25 @@ form div {
   color: #ffffff;
   text-align: center;
   cursor: pointer;
+}
+
+.gameover-details {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  box-orient: horizontal;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  box-pack: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  box-align: center;
+  color: #ffffff;
+  text-align: center;
 }
 
 .ReturnButton {
@@ -304,6 +450,32 @@ form div {
   text-shadow: 2px 2px rgb(33, 70, 72);
 }
 
+.topScores {
+  width: 100%;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  margin-top: 3vh;
+  margin-bottom: 30vh;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.2vw;
+  color: rgb(0, 218, 213);
+}
+
+td {
+  border: 2px solid rgb(0, 218, 213);
+  background: rgb(33, 70, 72);
+  padding: 1vw;
+}
+
+th {
+  color: rgb(33, 70, 72);
+  background: rgb(0, 218, 213);
+  padding: 1vw;
+}
+
 .preloader-1 {
   /* margin: 100px auto 0; */
   width: 120px;
@@ -312,21 +484,11 @@ form div {
   margin: 5px;
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Arial', sans-serif;
+
   font-size: 26px;
   letter-spacing: 1px;
   margin-left: 30%;
 }
-
-/* div {
-  color: #fff;
-  margin: 5px 0;
-  text-transform: uppercase;
-  text-align: center;
-  font-family: 'Arial', sans-serif;
-  font-size: 10px;
-  letter-spacing: 2px;
-} */
 
 .preloader-1 .line {
   width: 5px;
@@ -426,5 +588,62 @@ form div {
   100% {
     opacity: 1;
     height: 15px;
+  }
+}
+
+.flame1 {
+  opacity: 0.8;
+  z-index: 99;
+  width: 0.5em;
+  height: 2em;
+  position: absolute;
+  /* left:-7em;  */
+  bottom: 10vh;
+  right: 50.25vw;
+  transform: rotate(0deg);
+
+  border-radius: 100% 0% 65% 40%/65% 0% 100% 40%;
+  box-shadow: 0px 0px 12px white, 0px 2px 12px white, 0px 10px 20px white,
+    0px 42px 10px skyblue, 0px 10px 15px lightyellow, 0px 20px 20px yellow,
+    0px 30px 25px orange, 0px 60px 40px orange, 0px 34px 30px darkorange,
+    0px 36px 35px red, 0px 40px 50px red, 0px 60px 40px red, 0px 80px 40px red,
+    0px 80px 40px red, 0px 120px 60px red, 0px 150px 80px black,
+    0px 160px 80px black, 0px 200px 100px black, 0px 150px 100px black,
+    0px 100px 100px black, 0px 220px 100px black, inset 0px 330px 50px white;
+  transform-origin: center bottom;
+  animation: flame 111ms ease infinite;
+}
+.flame2 {
+  opacity: 0.8;
+  z-index: 99;
+  width: 0.5em;
+  height: 2em;
+  position: absolute;
+  /* left:-7em;  */
+  bottom: 10vh;
+  right: 48.1vw;
+  transform: rotate(0deg);
+
+  border-radius: 40% 100% 0% 65%/40% 65% 0% 100%;
+  box-shadow: 0px 0px 12px white, 0px 2px 12px white, 0px 10px 20px white,
+    0px 42px 10px skyblue, 0px 10px 15px lightyellow, 0px 20px 20px yellow,
+    0px 30px 25px orange, 0px 60px 40px orange, 0px 34px 30px darkorange,
+    0px 36px 35px red, 0px 40px 50px red, 0px 60px 40px red, 0px 80px 40px red,
+    0px 80px 40px red, 0px 120px 60px red, 0px 150px 80px black,
+    0px 160px 80px black, 0px 200px 100px black, 0px 150px 100px black,
+    0px 100px 100px black, 0px 220px 100px black, inset 0px 330px 50px white;
+  transform-origin: center bottom;
+  animation: flame 111ms ease infinite;
+}
+
+@keyframes flame {
+  50% {
+    box-shadow: 0px 0px 12px white, 0px 2px 12px white, 0px 0px 20px white,
+      0px 2px 10px skyblue, 0px 0px 15px lightyellow, 0px 0px 20px yellow,
+      0px 0px 25px orange, 0px 0px 40px orange, 0px 4px 30px darkorange,
+      0px 6px 35px red, 0px 0px 50px red, 0px 0px 40px red, 0px 0px 40px red,
+      0px 0px 40px red, 0px 20px 60px red, 0px 50px 80px black,
+      0px 60px 80px black, 0px 00px 100px black, 0px 50px 100px black,
+      0px 10px 100px black, 0px 20px 100px black, inset 0px 330px 50px white;
   }
 }

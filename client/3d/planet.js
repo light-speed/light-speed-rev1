@@ -2,14 +2,35 @@ import loadingManager from './loadingManager'
 
 export let earth
 
+
+// var cubeGeometry = new THREE.BoxGeometry(3000, 3000, 3000)
+// var cubeMaterial = new THREE.MeshBasicMaterial({
+//   color: 0x003500,
+//   opacity: 0,
+//   side: THREE.DoubleSide,
+//   transparent: true
+// })
+// var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+
+// cube.position.set(2000, -1000, -2000)
+// cube.name = 'cube'
+
 export default (scene) => {
   //Add Planet
   var Planet = function() {
     var planetObj = new THREE.Object3D()
     planetObj.name = 'EARTH'
-    // Speed of motion and rotation
 
-    var radius = 4000
+    // this.hitbox = cube
+    // scene.add(this.hitbox)
+    // planetObj.add(this.hitbox)
+
+
+
+
+
+    // Speed of motion and rotation
+    var radius = 1500
     var geometry = new THREE.SphereBufferGeometry(radius, 100, 50)
     var materialNormalMap = new THREE.MeshPhongMaterial({
       specular: 0x333333,
@@ -31,10 +52,11 @@ export default (scene) => {
     planetObj.rotation.y = 0
     planetObj.rotation.z = 0.41
 
-    planetObj.position.set(5000, -1000, -8000)
+    planetObj.position.set(2000, -1000, -2000)
 
-    this.hitbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    this.hitbox.setFromObject(meshPlanet)
+    this.sphereBBox = new THREE.Sphere(
+      planetObj.position,
+      radius)
 
     this.getMesh = function() {
       return planetObj
@@ -46,6 +68,10 @@ export default (scene) => {
 
     this.getPlanetRadius = function() {
       return radius
+    }
+
+    this.getHitbox = function() {
+      return this.hitbox
     }
 
     return this

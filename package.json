@@ -1,5 +1,5 @@
 {
-  "name": "boilermaker",
+  "name": "light-speed",
   "version": "1.0.0",
   "description": "Some boilerplate code to get you started - get shakin'!",
   "engines": {
@@ -46,7 +46,6 @@
     "history": "^4.6.3",
     "morgan": "^1.9.1",
     "passport": "^0.3.2",
-    "passport-google-oauth": "^1.0.0",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
     "prop-types": "^15.6.2",

@@ -1,34 +1,31 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {addTime} from '../store'
 
-export default class Timer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      time: 3000
-    }
-    this.addTime = this.addTime.bind(this)
-  }
+class Timer extends React.Component {
+
   componentDidMount() {
-    this.intervalID = setInterval(() => this.tick(), 10)
+    this.intervalID = setInterval(() => this.tick(), 100)
   }
+
   componentWillUnmount() {
     clearInterval(this.intervalID)
   }
+
   tick() {
-    let clock = this.state.time
-    if (clock > 0) {
-      this.setState({
-        time: clock - 1
-      })
+    let clock = this.props.game.gameTime
+    if (clock > 0 && this.props.game.ongoing) {
+      this.props.addTime(-100, false)
     }
   }
-  addTime(extraTime) {
-    let clock = this.state.time
-    this.setState({
-      time: clock + extraTime
-    })
-  }
+
   render() {
-    return <div>{(this.state.time / 100).toFixed(2)}s</div>
+    let displayTime = (this.props.game.gameTime / 1000).toFixed(1)
+    if (displayTime < 0.1) displayTime = 0
+    return <div>{displayTime}s</div>
   }
 }
+
+const mapState = ({game}) => ({game})
+
+export default connect(mapState, {addTime} )(Timer)

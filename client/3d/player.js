@@ -1,7 +1,6 @@
 import loadingManager from './loadingManager'
 
 // Player Collision Wrapper Cube
-
 var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
 var cubeMaterial = new THREE.MeshBasicMaterial({
   color: 0x003500,
@@ -16,6 +15,9 @@ cube.name = 'cube'
 
 export var mesh, mixer
 var Player = function(scene) {
+  let horseTrigger = false
+  let shipTrigger = true
+  
   let spaceship = null
   this.mesh = new THREE.Object3D()
   this.loaded = false
@@ -26,14 +28,6 @@ var Player = function(scene) {
   this.canShoot = 0
 
   this.mesh.add(this.hitbox)
-
-  var onProgress = function(xhr) {
-    if (xhr.lengthComputable) {
-      var percentComplete = xhr.loaded / xhr.total * 100
-      // console.log(Math.round(percentComplete, 2) + '% downloaded')
-    }
-  }
-  var onError = function() {}
 
   var keyLight = new THREE.DirectionalLight(
     new THREE.Color('hsl(30, 100%, 75%)'),
@@ -57,37 +51,14 @@ var Player = function(scene) {
   scene.add(fillLight)
   scene.add(backLight)
 
-  // new THREE.MTLLoader(loadingManager)
-  //   // .setPath('../public/models/')
-  //   .load('models/DevShipT.mtl', function(materials) {
-  //     materials.preload()
-  //     new THREE.OBJLoader(loadingManager)
-  //       .setMaterials(materials)
-  //       // .setPath('../public/models/')
-  //       .load(
-  //         'models/DevShipTß.obj',
-  //         function(mesh) {
-  //           mesh.scale.set(3, 3, 3)
-  //           mesh.rotation.set(0, Math.PI, 0)
-  //           // mesh.position.set(0, -5, 0);
-  //           spaceship = mesh
-
-  //           self.player = spaceship
-  //           self.mesh.add(self.player)
-  //           self.loaded = true
-  //         },
-  //         onProgress,
-  //         onError
-  //       )
-  //   })
+ 
 
 new THREE.GLTFLoader(loadingManager)
 				.load( "models/Horse.glb", function( gltf ) {
-				// .load( "models/DevShipA.gltf", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
+          mesh.visible = horseTrigger; // horse visibility
           console.log(gltf)
           mesh.scale.set( .1, .1, .1 );
-          // mesh.scale.set( 5, 5, 5 );
           mesh.rotation.set(0, Math.PI, 0)
 
           scene.add( mesh );
@@ -98,20 +69,29 @@ new THREE.GLTFLoader(loadingManager)
           self.loaded = true
           mixer = new THREE.AnimationMixer( self.player );
 					mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
-					// mixer = new THREE.AnimationMixer( mesh );
-          // mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
         } );
-//         var prevTime = Date.now();
-//         if ( mixer ) {
-// 					var time = Date.now();
-// 					mixer.update( ( time - prevTime ) * 0.001 );
-// 					prevTime = time;
-// 				}
 
-  // this.update = function() {
-  //   this.hitbox.setFromObject(spaceship)
-  // }
   
+  new THREE.MTLLoader(loadingManager).load('models/DevShipT.mtl', function(
+    materials
+  ) {
+    materials.preload()
+    new THREE.OBJLoader(loadingManager)
+      .setMaterials(materials)
+
+      .load('models/DevShipT.obj', function(mesh) {
+        mesh.visible = shipTrigger; // ship visibility
+        mesh.scale.set(3, 3, 3)
+        mesh.rotation.set(0, Math.PI, 0)
+
+        spaceship = mesh
+
+        self.player = spaceship
+        self.mesh.add(self.player)
+        self.loaded = true
+      })
+  })
+
   this.getHitbox = function() {
     return this.hitbox
   }
@@ -130,7 +110,7 @@ export default (scene, camera, renderer) => {
   // camera.position.set(0, 45, 90) // <-- this is relative to the player's position
   camera.position.set(0, 45, 90) // <-- this is relative to the player's position
   scene.add(player.getMesh())
-  
+
   controls = new THREE.FlyControls(
     camera,
     player.getMesh(),
