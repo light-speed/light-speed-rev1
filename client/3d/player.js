@@ -15,11 +15,21 @@ cube.name = 'cube'
 export var mesh, mixer
 
 var Player = function(scene) {
-
+  this.activeMesh = 'ship'
   let spaceship = null
   this.mesh = new THREE.Object3D()
   this.loaded = false
   const self = this
+
+  const getChild = function(name) {
+    return self.getMesh().children.filter(child => child.name === name)[0]
+  }
+
+  this.changeModel = function(name) {
+    getChild(this.activeMesh).visible = false
+    this.activeMesh = name
+    getChild(name).visible = true
+  }
 
   this.hitbox = cube
   scene.add(this.hitbox)
@@ -61,6 +71,7 @@ new THREE.GLTFLoader(loadingManager)
           scene.add( mesh );
           spaceship = mesh
 
+          mesh.name = 'horse'
           self.player = spaceship
           self.mesh.add(self.player)
           self.loaded = true
@@ -80,6 +91,7 @@ new THREE.GLTFLoader(loadingManager)
         mesh.visible = true; // ship visibility
         mesh.scale.set(7, 7, 7)
         mesh.rotation.set(0, Math.PI, 0)
+        mesh.name = 'ship'
         spaceship = mesh
         self.player = spaceship
         self.mesh.add(self.player)
