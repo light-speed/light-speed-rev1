@@ -1,4 +1,3 @@
-
 THREE.FlyControls = function(camera, object, domElement) {
   this.object = object
 
