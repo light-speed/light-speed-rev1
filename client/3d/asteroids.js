@@ -213,5 +213,5 @@ export default scene => {
     new Asteroid(4),
     new Asteroid(5),
   ]
-  addAsteroid(scene)
+  // addAsteroid(scene)
 }
