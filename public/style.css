@@ -116,7 +116,7 @@ form div {
   margin-left: -13%;
 }
 
-#alert {
+#HUDalert {
   display: flex;
   color: rgb(0, 218, 213);
   font-size: 1vw;
