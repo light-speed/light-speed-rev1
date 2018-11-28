@@ -164,6 +164,7 @@ export default function generateWorld() {
     emitter.addBehaviour(
       new Proton.CrossZone(new Proton.ScreenZone(camera, renderer), 'dead')
     )
+    emitter.addBehaviour(new Proton.RandomDrift(10, 10, 10, .05));
 
     // emitter.addBehaviour(new Proton.Force(0, 0, -20))
     // emitter.addBehaviour(new Proton.Attraction({
