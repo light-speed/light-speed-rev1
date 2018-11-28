@@ -225,6 +225,7 @@ export default function generateWorld() {
   const turnTheShipIntoAHorse = () => {
     player.getMesh().children[4].visible = false
     player.getMesh().children[5].visible = true
+    console.log('turn me into a horse please')
   }
 
   const shipToHorse = once(turnTheShipIntoAHorse)
