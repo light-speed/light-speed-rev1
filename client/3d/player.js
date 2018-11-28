@@ -55,7 +55,7 @@ new THREE.GLTFLoader(loadingManager)
 				.load( "models/Horse.glb", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
           mesh.visible = false
-          mesh.scale.set( .4, .4, .4 );
+          mesh.scale.set( .2, .2, .2 );
           mesh.rotation.set(0, Math.PI, 0)
 
           scene.add( mesh );
@@ -78,7 +78,7 @@ new THREE.GLTFLoader(loadingManager)
 
       .load('models/DevShipT.obj', function(mesh) {
         mesh.visible = true; // ship visibility
-        mesh.scale.set(3, 3, 3)
+        mesh.scale.set(7, 7, 7)
         mesh.rotation.set(0, Math.PI, 0)
         spaceship = mesh
         self.player = spaceship
