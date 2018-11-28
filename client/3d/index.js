@@ -207,19 +207,35 @@ export default function generateWorld() {
     }
   }
 
+  const once = func => {
+    let ran = 0
+    return function(x) {
+      if (ran < 1) {
+        func()
+        ran++
+      }
+    }
+  }
+
+  const turnTheShipIntoAHorse = () => {
+    player.getMesh().children[4].visible = false
+    player.getMesh().children[3].visible = true
+  }
+
+  const shipToHorse = once(turnTheShipIntoAHorse)
+
   function render() {
     // console.log(store.getState().game.score)
-    if (store.getState().game.score === 2000) {
-      player.getMesh().children[4].visible = false
-      player.getMesh().children[3].visible = true
+    if (store.getState().game.score >= 2000) {
+      shipToHorse()
     }
 
 
-      if ( mixer ) {
-        var time = Date.now();
-        mixer.update( ( time - prevTime ) * 0.001 );
-        prevTime = time;
-      }
+    if ( mixer ) {
+      var time = Date.now();
+      mixer.update( ( time - prevTime ) * 0.001 );
+      prevTime = time;
+    }
 
     // proton.update();
     // animateEmitter()
