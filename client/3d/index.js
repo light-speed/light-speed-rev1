@@ -103,6 +103,7 @@ export default function generateWorld() {
   //Positioning/Adding
   ring.getMesh().position.set(-100, 0, -500)
   player.getMesh().add(camera)
+  // camera.lookAt(player.getMesh().position)
   player.getMesh().lookAt(100, 0, 500)
   ring.getMesh().lookAt(player.getMesh().position)
 
@@ -317,7 +318,7 @@ export default function generateWorld() {
           var playerPos = player.getMesh().position
 
           const shotMaterial = new THREE.MeshPhongMaterial({
-            color: 0xffa500
+            color: 0xC0C0C0
           })
 
           const shot = new THREE.Mesh(
