@@ -159,7 +159,7 @@ export default function generateWorld() {
     emitter.addInitialize(new Proton.Mass(1))
     emitter.addInitialize(new Proton.Life(2))
     emitter.addInitialize(new Proton.Body(createSprite()))
-    emitter.addInitialize(new Proton.Radius(20))
+    emitter.addInitialize(new Proton.Radius(16.8))
     // emitter.addInitialize(new Proton.V(200, new Proton.Vector3D(0, 0, -1), 0))
 
     // emitter.addBehaviour(new Proton.Alpha(1, 0))
@@ -239,7 +239,6 @@ export default function generateWorld() {
 
     if (proton && controls.pressed[83] === true){
       proton.update()
-
 
       emitter1.p.x = -100000
       emitter1.p.y = player.getMesh().position.y
@@ -328,7 +327,7 @@ export default function generateWorld() {
             // opacity: 0.5
           })
 
-          console.log('controls', controls)
+          console.log('player', player)
 
           const shot = new THREE.Mesh(
             new THREE.SphereGeometry(3, 16, 16),
@@ -366,7 +365,8 @@ export default function generateWorld() {
           // add to scene, array, and set the delay to 10 frames
           shots.push(shot)
           scene.add(shot)
-          player.canShoot = 10
+          player.canShoot = 20
+          console.log('player.canShoot', player.canShoot)
           break
         default:
       }

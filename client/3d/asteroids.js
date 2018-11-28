@@ -48,7 +48,7 @@ export var Asteroid = function(rockType, scene) {
       }
     })
 
-    obj.scale.set(30, 30, 30)
+    obj.scale.set(50, 50, 50)
     self.asteroidMesh = obj
     self.mesh.add(obj)
 

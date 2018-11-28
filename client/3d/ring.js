@@ -10,7 +10,7 @@ export let ring
 
 const {camera} = configureRenderer()
 const Ring = function(scene) {
-  var geometry = new THREE.TorusGeometry(60, 2, 20, 100)
+  var geometry = new THREE.TorusGeometry(80, 4, 20, 100)
   var material = new THREE.MeshBasicMaterial({
     color: 0x7dd2d8,
     side: THREE.DoubleSide
