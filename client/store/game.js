@@ -107,6 +107,7 @@ export default function(state = initState, action) {
         gameTime: 0
       }
     case ADD_POINTS:
+      // if (state.score - action.amount < 0) action.amount = 0
       return {...state, score: state.score + action.amount}
     case GET_SCORES:
       return {...state, topScores: [...action.scores]}

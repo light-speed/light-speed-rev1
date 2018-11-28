@@ -127,7 +127,6 @@ export default function generateWorld() {
     proton.addEmitter(emitter2)
     proton.addRender(new Proton.SpriteRender(scene))
 
-    console.log('proton', proton)
   }
 
   // player.getMesh().add(proton)
@@ -161,7 +160,7 @@ export default function generateWorld() {
 
     emitter.addBehaviour(new Proton.Alpha(0.8, 0))
     emitter.addBehaviour(new Proton.Color(color1, color2))
-    emitter.addBehaviour(new Proton.Scale(1, 0.5))
+    emitter.addBehaviour(new Proton.Scale(.97, 0.48))
     emitter.addBehaviour(
       new Proton.CrossZone(new Proton.ScreenZone(camera, renderer), 'dead')
     )
@@ -190,7 +189,6 @@ export default function generateWorld() {
       fog: true
     })
 
-    console.log('material', material)
     return new THREE.Sprite(material)
   }
 
@@ -241,6 +239,7 @@ export default function generateWorld() {
       emitter1.p.z = player.getMesh().position.z
     }
     if (
+      controls.moveState.forward === 15 &&
       proton &&
       controls.pressed[83] !== true &&
       controls.pressed[87] === true
@@ -358,7 +357,6 @@ export default function generateWorld() {
           // shot.position.set(0, 5, 30)
           shot.position.set(playerPos.x, playerPos.y, playerPos.z)
 
-          console.log('player', player)
 
           // set the velocity of the bullet
           shot.velocity = new THREE.Vector3(
@@ -387,7 +385,6 @@ export default function generateWorld() {
           shots.push(shot)
           scene.add(shot)
           player.canShoot = 20
-          console.log('player.canShoot', player.canShoot)
           break
         default:
       }
@@ -398,7 +395,7 @@ export default function generateWorld() {
 
   onEsc = event => {
     if (event.which === 27 && isGameOver !== true) {
-      isPaused ? controls.lock() : controls.unlock()
+      // isPaused ? controls.lock() : controls.unlock()
       isPaused ? socket.emit('unpause-game') : socket.emit('pause-game')
       store.dispatch(toggleOngoing())
       isPaused = !isPaused
