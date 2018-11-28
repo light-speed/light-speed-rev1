@@ -8,6 +8,9 @@ module.exports = class GameInstance {
     this.ongoing = false
     this.score = 0
     this.userId = userId
+    this.lastPointGain = new Date()
+    this.cheating = false
+    this.suspiscion = 0
   }
 
   pause() {
@@ -25,8 +28,14 @@ module.exports = class GameInstance {
   }
 
   addPoints(amount) {
-    if (amount > 100) amount = 0
+    if (new Date - new Date(this.lastPointGain) < 212) {
+      this.suspiscion++
+    }
+
+    if (amount > 100) this.cheating = true
+    
     this.score += amount
+    this.lastPointGain = new Date()
   }
 
   addTime(timeMs) {
@@ -40,6 +49,8 @@ module.exports = class GameInstance {
   }
 
   end() {
+    if (this.suspiscion > 10) this.cheating = true
+    if (this.cheating) this.score = 0
     this.gameTimeMs = 0
     this.ongoing = false
     Game.create({

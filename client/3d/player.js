@@ -13,7 +13,7 @@ var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 // cube.position.set(0, 0, 0)
 cube.name = 'cube'
 
-export var mesh, mixer
+export var mesh, mixer1, mixer2
 
 var Player = function(scene) {
   this.activeMesh = 'ship'
@@ -61,12 +61,13 @@ var Player = function(scene) {
   scene.add(backLight)
 
 
+  this.player2 = null
 
 new THREE.GLTFLoader(loadingManager)
 				.load( "models/Horse.glb", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
           mesh.visible = false
-          mesh.scale.set( .2, .2, .2 );
+          mesh.scale.set( .25, .25, .25 );
           mesh.rotation.set(0, Math.PI, 0)
 
           scene.add( mesh );
@@ -76,8 +77,26 @@ new THREE.GLTFLoader(loadingManager)
           self.player = spaceship
           self.mesh.add(self.player)
           self.loaded = true
-          mixer = new THREE.AnimationMixer( self.player );
-					mixer.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
+          mixer1 = new THREE.AnimationMixer( self.player );
+					mixer1.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
+        } );
+
+new THREE.GLTFLoader(loadingManager)
+				.load( "models/Flamingo.glb", function( gltf ) {
+          mesh = gltf.scene.children[ 0 ];
+          mesh.visible = false
+          mesh.scale.set( .4, .4, .4 );
+          mesh.rotation.set(0, Math.PI, 0)
+
+          scene.add( mesh );
+          spaceship = mesh
+
+          mesh.name = 'flamingo'
+          self.player2 = spaceship
+          self.mesh.add(self.player2)
+          self.loaded = true
+          mixer2 = new THREE.AnimationMixer( self.player2 );
+					mixer2.clipAction( gltf.animations[ 0 ] ).setDuration( 1 ).play();
         } );
 
 
