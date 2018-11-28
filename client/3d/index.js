@@ -391,6 +391,8 @@ export default function generateWorld() {
             this.BBox.setFromObject(this)
           }
 
+          console.log(store.getState())
+
           // after 1000ms, set alive to false and remove from scene
           // setting alive to false flags our update code to remove
           // the bullet from the bullets array

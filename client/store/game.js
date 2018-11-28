@@ -24,14 +24,20 @@ const initState = {
   gameTime: 0,
   startedAt: undefined,
   socketId: undefined,
-  topScores: []
+  topScores: [],
+  color: 'blue'
 }
 
 export const setTime = time => ({type: SET_TIME, time})
 
-export const addPoints = amount => {
+export const addPoints = (amount, self=false) => async dispatch => {
+
+  let color = amount > 0
+    ? 'green' : 'red'
+  if (amount === 0) color = 'blue'
+  if(!self) setTimeout( () => dispatch(addPoints(0, true)), 300 )
   socket.emit('add-points', amount)
-  return {type: ADD_POINTS, amount}
+  dispatch( {type: ADD_POINTS, amount, color})
 }
 
 export const toggleOngoing = () => ({type: TOGGLE_ONGOING})
@@ -107,8 +113,7 @@ export default function(state = initState, action) {
         gameTime: 0
       }
     case ADD_POINTS:
-      // if (state.score - action.amount < 0) action.amount = 0
-      return {...state, score: state.score + action.amount}
+      return {...state, score: state.score + action.amount, color: action.color}
     case GET_SCORES:
       return {...state, topScores: [...action.scores]}
     default:
