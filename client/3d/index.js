@@ -226,7 +226,7 @@ export default function generateWorld() {
 
   function render() {
     console.log(typeof store.getState().game.score)
-    if (store.getState().game.score === 2000) {
+    if (store.getState().game.score >= 2000) {
       shipToHorse()
     }
 

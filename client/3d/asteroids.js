@@ -180,6 +180,7 @@ const Asteroid = function(rocktype) {
       ...asteroids.slice(this.index+1).map(a => ({...a, index: a.index - 1}))
     ]
 
+    hiddenAsteroids.push(this)
     scene.remove(this.getMesh())
     scene.remove(this.getAsteroidMesh())
     // this.asteroidMesh = undefined
