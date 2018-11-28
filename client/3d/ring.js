@@ -105,9 +105,9 @@ const Ring = function(scene) {
 
   this.ringSkyboxCollision = function() {
     if (
-      Math.abs(this.getMesh().position.x) > 9000 ||
-      Math.abs(this.getMesh().position.y) > 9000 ||
-      Math.abs(this.getMesh().position.z) > 9000
+      Math.abs(this.getMesh().position.x) > 8000 ||
+      Math.abs(this.getMesh().position.y) > 8000 ||
+      Math.abs(this.getMesh().position.z) > 8000
     ) {
       return true
     }

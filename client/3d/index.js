@@ -256,7 +256,7 @@ export default function generateWorld() {
 
 
     // console.log(typeof store.getState().game.score)
-    if (store.getState().game.score >= 2000) {
+    if (store.getState().game.score >= 100) {
       shipToHorse()
     }
 
@@ -340,6 +340,7 @@ export default function generateWorld() {
     if (player.canShoot <= 0) {
       switch (e.keyCode) {
         case 32: // Space
+          console.log('pmesh',player.getMesh())
           e.preventDefault()
           var playerPos = player.getMesh().position
 
