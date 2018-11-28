@@ -3,7 +3,7 @@ import {showInstructions} from '../utilities'
 import getDomElements from './domElements'
 import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'
-import loadPlayer, {player, controls, mixer} from './player'
+import loadPlayer, {player, controls, mixer1, mixer2} from './player'
 import loadRing, {ring} from './ring'
 import loadAsteroids, {asteroids} from './asteroids'
 import loadPlanet, {earth} from './planet'
@@ -230,6 +230,13 @@ export default function generateWorld() {
 
   const shipToHorse = once(turnTheShipIntoAHorse)
 
+  const turnTheShipIntoAFlamingo = () => {
+    player.changeModel('flamingo')
+    // console.log('turn me into a horse please')
+  }
+
+  const shipToFlamingo = once(turnTheShipIntoAFlamingo)
+
   function render() {
     if (proton && controls.pressed[83] !== true && controls.moveState.forward > 4 ) {
       proton.update()
@@ -255,16 +262,27 @@ export default function generateWorld() {
 
 
     // console.log(typeof store.getState().game.score)
-    if (store.getState().game.score >= 2000) {
+    if (store.getState().game.score >= 100) {
       shipToHorse()
     }
+    if (store.getState().game.score >= 200) {
+      shipToFlamingo()
+    }
 
 
-    if ( mixer ) {
+    if ( mixer1 ) {
       var time = Date.now();
-      mixer.update( ( time - prevTime ) * 0.001 );
+      mixer1.update( ( time - prevTime ) * 0.001 );
       prevTime = time;
     }
+
+    if ( mixer2 ) {
+      var time2 = Date.now();
+      mixer2.update( ( time2 - prevTime ) * 0.001 );
+      prevTime = time2;
+    }
+    console.log('playermeshchildren', player.getMesh().children)
+
 
     if (proton && controls.pressed[83] === true) {
       proton.update()
