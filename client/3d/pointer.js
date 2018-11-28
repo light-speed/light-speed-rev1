@@ -13,7 +13,7 @@ const Pointer = function(scene, player) {
         .setMaterials(materials)
         // .setPath('../public/models/')
         .load('models/arrow.obj', function(obj) {
-          obj.scale.set(7, 7, 7)
+          obj.scale.set(14, 14, 14)
           self.mesh.add(obj)
         })
     })

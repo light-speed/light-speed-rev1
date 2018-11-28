@@ -20,7 +20,7 @@ const Asteroid = function(rocktype) {
   // this.index = asteroids.length
   this.mesh.name = uuid++
   this.asteroidMesh = null
-  
+
   // Speed of motion and rotation
   this.mesh.velocity = Math.random() * 2 + 1
   this.mesh.vRotation = new THREE.Vector3(
@@ -28,18 +28,18 @@ const Asteroid = function(rocktype) {
     Math.random(),
     Math.random()
   )
-  
+
   this.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-  
+
   loader.load('models/rock' + rocktype + '.obj', function(obj) {
-        
+
     obj.traverse(function(child) {
         if (child instanceof THREE.Mesh) {
             child.material = rockMtl
       }
     })
 
-    obj.scale.set(30, 30, 30)
+    obj.scale.set(50, 50, 50)
     self.asteroidMesh = obj
     self.mesh.add(obj)
     self.mesh.position.set(100, 100, -10000)
