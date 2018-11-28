@@ -17,6 +17,7 @@ module.exports = (io, gameEngine) => {
     })
 
     socket.on('game-over', () => {
+      console.log('client says game over')
       gameEngine.endGame(socket.id, false)
     })
 
