@@ -1,5 +1,6 @@
 import loadingManager from './loadingManager'
-
+import store from '../store'
+import {horseTrigger, shipTrigger} from './index.js'
 // Player Collision Wrapper Cube
 var cubeGeometry = new THREE.BoxGeometry(3, 3, 3)
 var cubeMaterial = new THREE.MeshBasicMaterial({
@@ -14,9 +15,11 @@ cube.position.set(0, 0, 0)
 cube.name = 'cube'
 
 export var mesh, mixer
+
+// let horseTrigger = false
+// let shipTrigger = true
+
 var Player = function(scene) {
-  let horseTrigger = false
-  let shipTrigger = true
   
   let spaceship = null
   this.mesh = new THREE.Object3D()
@@ -57,7 +60,6 @@ new THREE.GLTFLoader(loadingManager)
 				.load( "models/Horse.glb", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
           mesh.visible = horseTrigger; // horse visibility
-          console.log(gltf)
           mesh.scale.set( .1, .1, .1 );
           mesh.rotation.set(0, Math.PI, 0)
 
