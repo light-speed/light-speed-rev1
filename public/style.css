@@ -354,7 +354,7 @@ form div {
 
 #instructions {
   width: 100%;
-  height: 100vw;
+  height: 100%;
   display: -webkit-box;
   display: -moz-box;
   display: box;
