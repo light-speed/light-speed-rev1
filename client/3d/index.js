@@ -231,7 +231,7 @@ export default function generateWorld() {
   const shipToHorse = once(turnTheShipIntoAHorse)
 
   function render() {
-    if (proton && controls.pressed[83] !== true) {
+    if (proton && controls.pressed[83] !== true && controls.moveState.forward > 4 ) {
       proton.update()
       animateEmitter1()
 
