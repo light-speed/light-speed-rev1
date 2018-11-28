@@ -3,33 +3,22 @@ import {ring} from './ring'
 import {player} from './player'
 import store, {addPoints, addTime} from '../store'
 
-export let NUM_ASTEROIDS = 0
 export let asteroids = []
+let hiddenAsteroids = []
 
-let counter = 0
-
-export default scene => {
-  //Load Asteroids
-  for (var i = 0; i < NUM_ASTEROIDS; i++) {
-    asteroids.push(new Asteroid(Math.floor(Math.random() * 5) + 1), scene)
-    // asteroids[i].name = `asteroid${i}`
-    // asteroids[i].index = i
-    scene.add(asteroids[i].getMesh())
-  }
-}
-
-var loader = new THREE.OBJLoader(loadingManager)
-
-var rockMtl = new THREE.MeshBasicMaterial({
+const loader = new THREE.OBJLoader(loadingManager)
+const rockMtl = new THREE.MeshBasicMaterial({
   map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
 })
 
-export var Asteroid = function(rockType, scene) {
+let uuid = 0
+
+const Asteroid = function(rocktype) {
   this.mesh = new THREE.Object3D()
   let self = this
   this.loaded = false
-  this.index = asteroids.length
-  this.mesh.name = counter++
+  // this.index = asteroids.length
+  this.mesh.name = uuid++
   this.asteroidMesh = null
 
   // Speed of motion and rotation
@@ -41,20 +30,19 @@ export var Asteroid = function(rockType, scene) {
   )
 
   this.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-  loader.load('models/rock' + rockType + '.obj', function(obj) {
+
+  loader.load('models/rock' + rocktype + '.obj', function(obj) {
+
     obj.traverse(function(child) {
-      if (child instanceof THREE.Mesh) {
-        child.material = rockMtl
-        console.log('rocktype', rockType)
+        if (child instanceof THREE.Mesh) {
+            child.material = rockMtl
       }
     })
 
     obj.scale.set(50, 50, 50)
     self.asteroidMesh = obj
     self.mesh.add(obj)
-
     self.mesh.position.set(100, 100, -10000)
-    self.loaded = true
     self.BBox.setFromObject(obj)
   })
 
@@ -64,11 +52,11 @@ export var Asteroid = function(rockType, scene) {
   }
 
   const once = func => {
-    let counter = 0
+    let uuid = 0
     return function(x) {
-      if (counter < 1) {
+      if (uuid < 1) {
         func()
-        counter++
+        uuid++
       }
     }
   }
@@ -77,8 +65,6 @@ export var Asteroid = function(rockType, scene) {
   this.detectPlayerCollision = function() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     cubeBBox.setFromObject(player.getHitbox())
-    // var asteroidBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    // asteroidBBox.setFromObject(this.this.mesh)
 
     if (cubeBBox.intersectsBox(self.BBox)) {
       hitDetection()
@@ -181,17 +167,51 @@ export var Asteroid = function(rockType, scene) {
     return this.asteroidMesh
   }
 
-  this.destroy = function() {
+  this.activate = function(scene) {
+    this.index = asteroids.length
+    asteroids.push(this)
+    scene.add(this.getMesh())
+    // scene.add(this.getAsteroidMesh())
+  }
+
+  this.destroy = function(scene) {
     asteroids = [
       ...asteroids.slice(0, this.index),
       ...asteroids.slice(this.index+1).map(a => ({...a, index: a.index - 1}))
     ]
 
+    hiddenAsteroids.push(this)
     scene.remove(this.getMesh())
     scene.remove(this.getAsteroidMesh())
-    this.asteroidMesh = undefined
-    this.mesh = undefined
+    // this.asteroidMesh = undefined
+    // this.mesh = undefined
   }
 
   return this
+}
+
+export const addAsteroid = (scene) => {
+  if (hiddenAsteroids.length)
+    hiddenAsteroids.shift().activate(scene)
+}
+
+export default scene => {
+  hiddenAsteroids = [
+    new Asteroid(1),
+    new Asteroid(2),
+    new Asteroid(3),
+    new Asteroid(4),
+    new Asteroid(5),
+    new Asteroid(1),
+    new Asteroid(2),
+    new Asteroid(3),
+    new Asteroid(4),
+    new Asteroid(5),
+    new Asteroid(1),
+    new Asteroid(2),
+    new Asteroid(3),
+    new Asteroid(4),
+    new Asteroid(5),
+  ]
+  addAsteroid(scene)
 }
