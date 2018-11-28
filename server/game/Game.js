@@ -49,8 +49,8 @@ module.exports = class GameInstance {
   }
 
   end() {
-    if (this.suspiscion > 10) this.cheating = true
-    if (this.cheating) this.score = 0
+    // if (this.suspiscion > 10) this.cheating = true
+    // if (this.cheating) this.score = 0
     this.gameTimeMs = 0
     this.ongoing = false
     Game.create({
