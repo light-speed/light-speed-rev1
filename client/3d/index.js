@@ -218,15 +218,15 @@ export default function generateWorld() {
   }
 
   const turnTheShipIntoAHorse = () => {
-    player.getMesh().children[4].visible = false
-    player.getMesh().children[3].visible = true
+    player.getMesh().children[3].visible = false
+    player.getMesh().children[4].visible = true
   }
 
   const shipToHorse = once(turnTheShipIntoAHorse)
 
   function render() {
-    // console.log(store.getState().game.score)
-    if (store.getState().game.score >= 2000) {
+    console.log(typeof store.getState().game.score)
+    if (store.getState().game.score === 2000) {
       shipToHorse()
     }
 
