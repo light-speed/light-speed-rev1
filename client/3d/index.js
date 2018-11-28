@@ -263,10 +263,10 @@ export default function generateWorld() {
 
 
     // console.log(typeof store.getState().game.score)
-    if (store.getState().game.score >= 5000) {
+    if (store.getState().game.score >= 4000) {
       shipToHorse()
     }
-    if (store.getState().game.score >= 7000) {
+    if (store.getState().game.score >= 2000) {
       shipToFlamingo()
     }
 
