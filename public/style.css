@@ -26,11 +26,13 @@ nav a {
 }
 
 #crosshair {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-top: -50px;
-  margin-left: -100px;
+  position: absolute;
+  top: 44vh;
+  bottom: 50vh;
+  left: 46.25vw;
+  right: 46vw;
+  width: 100px;
+  height: 100px;
 }
 
 #loading {
