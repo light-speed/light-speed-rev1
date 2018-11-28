@@ -3,7 +3,7 @@ import {player} from './player'
 import store, {addPoints, addTime} from '../store'
 import {earth} from './planet'
 import {configureRenderer} from './configure'
-import makeAsteroid, {asteroids} from './asteroids'
+import {asteroids, addAsteroid} from './asteroids'
 import {HUDalert} from './HUDalert.js'
 
 export let ring
@@ -84,9 +84,8 @@ const Ring = function(scene) {
         e.getOldZ(player.getMesh().position.z)
       })
 
-      if (asteroids.length < 15) {
-        makeAsteroid()
-      }
+      addAsteroid(scene)
+
     }
   }
 

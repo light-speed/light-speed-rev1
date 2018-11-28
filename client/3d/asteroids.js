@@ -4,68 +4,20 @@ import {player} from './player'
 import store, {addPoints, addTime} from '../store'
 
 export let asteroids = []
+let hiddenAsteroids = []
 
-
-var RockLoader = function() {
-  this.ok = 'ok'
-  var self = this
-  const loader = new THREE.OBJLoader(loadingManager)
-  // this.loader.load = this.loader.load.bind(this)
-  const rockMtl = new THREE.MeshBasicMaterial({
-    map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
-  })
-
-  let wtf = (ree) => this.ok = ree
-  wtf = wtf.bind(this)
-  
-  const loadRockType = async function(id,me) {
-    // await loader.load('models/rock' + id + '.obj', function(obj) {
-    //   console.log('obj',obj)
-    //   obj.traverse(function(child) {
-    //     if (child instanceof THREE.Mesh) 
-    //     child.material = rockMtl
-    //   })
-    //   obj.scale.set(30, 30, 30)
-    //   self[`rock${id}`] = obj
-    //   wtf('not ok')
-    // })
-    await loader.load('models/rock' + id + '.obj', ( ()=> {
-      var self = me
-      return function(obj) {
-        console.log('self',self)
-        obj.traverse(function(child) {
-          if (child instanceof THREE.Mesh) 
-          child.material = rockMtl
-        })
-        obj.scale.set(30, 30, 30)
-        self[`rock${id}`] = obj
-        self.ok = 'wtf'
-      }
-    })() )
-    console.log('reee',self[`rock${id}`])
-    console.log(this.ok)
-  }
-
-  loadRockType(1, this)
-  // console.log(this.ok)
-
-  this.cloneRandomRock = function() {
-    const id = Math.floor(Math.random() * 5) + 1
-    // const rockToClone = this[`rock${id}`]
-    const rockToClone = this['rock1']
-    // return Object.assign( Object.create( Object.getPrototypeOf(rockToClone)), rockToClone)
-  }
-}
-
-const loader = new RockLoader()
+const loader = new THREE.OBJLoader(loadingManager)
+const rockMtl = new THREE.MeshBasicMaterial({
+  map: new THREE.TextureLoader(loadingManager).load('textures/lunarrock.png')
+})
 
 let uuid = 0
 
-export var Asteroid = function(scene) {
+const Asteroid = function(rocktype) {
   this.mesh = new THREE.Object3D()
   let self = this
   this.loaded = false
-  this.index = asteroids.length
+  // this.index = asteroids.length
   this.mesh.name = uuid++
   this.asteroidMesh = null
   
@@ -79,25 +31,20 @@ export var Asteroid = function(scene) {
   
   this.BBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   
-  const rockObj = loader.cloneRandomRock()
-  this.mesh.add(rockObj)
-  this.mesh.position.set(100, 100, -10000)
-  this.BBox.setFromObject(rockObj)
-  
-      //   loader.load('models/rock' + randomRockType + '.obj', function(obj) {
+  loader.load('models/rock' + rocktype + '.obj', function(obj) {
         
-        //   obj.traverse(function(child) {
-          //     if (child instanceof THREE.Mesh) {
-            //       child.material = rockMtl
-  //     }
-  //   })
+    obj.traverse(function(child) {
+        if (child instanceof THREE.Mesh) {
+            child.material = rockMtl
+      }
+    })
 
-  //   obj.scale.set(30, 30, 30)
-  //   self.asteroidMesh = obj
-  //   self.mesh.add(obj)
-  //   self.mesh.position.set(100, 100, -10000)
-  //   self.BBox.setFromObject(obj)
-  // })
+    obj.scale.set(30, 30, 30)
+    self.asteroidMesh = obj
+    self.mesh.add(obj)
+    self.mesh.position.set(100, 100, -10000)
+    self.BBox.setFromObject(obj)
+  })
 
   const getHit = () => {
     store.dispatch(addPoints(-100))
@@ -118,8 +65,6 @@ export var Asteroid = function(scene) {
   this.detectPlayerCollision = function() {
     var cubeBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
     cubeBBox.setFromObject(player.getHitbox())
-    // var asteroidBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-    // asteroidBBox.setFromObject(this.this.mesh)
 
     if (cubeBBox.intersectsBox(self.BBox)) {
       hitDetection()
@@ -222,6 +167,13 @@ export var Asteroid = function(scene) {
     return this.asteroidMesh
   }
 
+  this.activate = function(scene) {
+    this.index = asteroids.length
+    asteroids.push(this)
+    scene.add(this.getMesh())
+    // scene.add(this.getAsteroidMesh())
+  }
+
   this.destroy = function(scene) {
     asteroids = [
       ...asteroids.slice(0, this.index),
@@ -230,16 +182,35 @@ export var Asteroid = function(scene) {
 
     scene.remove(this.getMesh())
     scene.remove(this.getAsteroidMesh())
-    this.asteroidMesh = undefined
-    this.mesh = undefined
+    // this.asteroidMesh = undefined
+    // this.mesh = undefined
   }
 
   return this
 }
 
+export const addAsteroid = (scene) => {
+  if (hiddenAsteroids.length)
+    hiddenAsteroids.shift().activate(scene)
+}
+
 export default scene => {
-  const asteroid = new Asteroid(scene)
-  asteroids.push(asteroid)
-  scene.add(asteroid.getMesh())
-  return asteroid
+  hiddenAsteroids = [
+    new Asteroid(1),
+    new Asteroid(2),
+    new Asteroid(3),
+    new Asteroid(4),
+    new Asteroid(5),
+    new Asteroid(1),
+    new Asteroid(2),
+    new Asteroid(3),
+    new Asteroid(4),
+    new Asteroid(5),
+    new Asteroid(1),
+    new Asteroid(2),
+    new Asteroid(3),
+    new Asteroid(4),
+    new Asteroid(5),
+  ]
+  addAsteroid(scene)
 }

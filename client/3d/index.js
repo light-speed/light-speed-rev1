@@ -5,7 +5,7 @@ import loadingManager, {RESOURCES_LOADED} from './loadingManager'
 import loadSkybox from './skybox'
 import loadPlayer, {player, controls} from './player'
 import loadRing, {ring} from './ring'
-import makeAsteroid, {asteroids} from './asteroids'
+import loadAsteroids, {asteroids} from './asteroids'
 import loadPlanet, {earth} from './planet'
 import store, {addPoints, endGame, addTime, toggleOngoing} from '../store'
 import loadPointer, {pointer} from './pointer'
@@ -29,8 +29,7 @@ export default function generateWorld() {
   loadPlayer(scene, camera, renderer)
   loadSkybox(scene)
   loadRing(scene)
-  makeAsteroid(scene)
-  makeAsteroid(scene)
+  loadAsteroids(scene)
   loadPlanet(scene)
   loadPointer(scene, player)
   addStars(scene)
