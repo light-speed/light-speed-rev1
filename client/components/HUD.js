@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import Timer from './Timer'
+import HUDalert from '../3d/HUDalert'
 
 export const formatScore = score =>
   `${'0'.repeat(10 - ('' + score).length)}${score}`
@@ -8,6 +9,7 @@ export const formatScore = score =>
 const HUD = ({game: {score}, user: {username}}) => {
   return (
     <div id="hudContainer">
+      <img id="hudColor" src={HUDalert('red')} />
       <div className="hudUserName">
         <h1>{username || 'Anonymous'}</h1>
       </div>

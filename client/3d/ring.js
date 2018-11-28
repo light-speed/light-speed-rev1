@@ -23,20 +23,6 @@ const Ring = function(scene) {
     return this.mesh
   }
 
-  // ring sound
-  this.ringSound = function() {
-    var listener = new THREE.AudioListener()
-    camera.add(listener)
-    var audioLoader = new THREE.AudioLoader(loadingManager)
-    var sound1 = new THREE.PositionalAudio(listener)
-    audioLoader.load('./sounds/sweep2.wav', function(buffer) {
-      sound1.setBuffer(buffer)
-      sound1.setRefDistance(20)
-      sound1.play()
-    })
-    this.mesh.add(sound1)
-  }
-
   this.move = function() {
     let prevX = this.mesh.position.x
     let prevY = this.mesh.position.y
@@ -85,7 +71,6 @@ const Ring = function(scene) {
       })
 
       addAsteroid(scene)
-
     }
   }
 
@@ -121,8 +106,8 @@ const Ring = function(scene) {
 
     if (cubeBBox.intersectsBox(ringBBox)) {
       store.dispatch(addPoints(100))
-      // this.ringSound()
       store.dispatch(addTime(3000))
+
       return true
     }
   }

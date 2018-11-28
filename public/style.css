@@ -70,7 +70,7 @@ form div {
 } */
 
 #hudContainer {
-  z-index: 1337;
+  z-index: 100;
   display: none;
   flex-direction: row;
   background: url('/images/hud.png');
@@ -81,11 +81,14 @@ form div {
   margin: 0;
   background-repeat: no-repeat;
   background-position: center;
-  /* text-align: center; */
   opacity: 0.6;
   position: absolute;
-  /* justify-content: space-around; */
 }
+
+#hudContainer img {
+  width: 100%;
+}
+
 .hudUserName {
   display: flex;
   color: #fff;
