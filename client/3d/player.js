@@ -55,7 +55,7 @@ new THREE.GLTFLoader(loadingManager)
 				.load( "models/Horse.glb", function( gltf ) {
           mesh = gltf.scene.children[ 0 ];
           mesh.visible = false
-          mesh.scale.set( .4, .4, .4 );
+          mesh.scale.set( .2, .2, .2 );
           mesh.rotation.set(0, Math.PI, 0)
 
           scene.add( mesh );
