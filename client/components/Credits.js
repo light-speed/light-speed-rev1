@@ -13,11 +13,11 @@ class Credits extends React.Component {
               <p>Episode 0</p>
               <h1>LIGHT SPEED</h1>
             </div>
-            A JavaScript story in zero gravity
-            <p>Benjamin Wagner</p>
-            <p>Dalton Saffe</p>
-            <p>Jason Hang</p>
-            <p>Haiau Duong</p>
+              <h1>A JavaScript story in zero gravity</h1>
+              <p>Benjamin Wagner</p>
+              <p>Dalton Saffe</p>
+              <p>Jason Hang</p>
+              <p>Haiau Duong</p>
           </div>
         </section>
       </div>
