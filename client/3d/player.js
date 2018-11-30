@@ -133,8 +133,8 @@ export let player, controls
 
 export default (scene, camera, renderer) => {
   player = new Player(scene)
-  player.getMesh().add(camera)
-  camera.position.set(0, 60, 150) // <-- this is relative to the player's position
+  // player.getMesh().add(camera)
+  camera.position.set(230, 600, 1000) // <-- this is relative to the player's position
   scene.add(player.getMesh())
 
   controls = new THREE.FlyControls(

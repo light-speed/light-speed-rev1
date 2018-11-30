@@ -100,6 +100,8 @@ export default function generateWorld() {
   //Positioning/Adding
   ring.getMesh().position.set(-100, 0, -500)
   player.getMesh().add(camera)
+  camera.position.set(0,10,-50)
+  camera.lookAt(player.getMesh().position)
   player.getMesh().lookAt(100, 0, 500)
   ring.getMesh().lookAt(player.getMesh().position)
 

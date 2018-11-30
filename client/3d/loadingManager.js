@@ -14,6 +14,7 @@ loadingManager.onProgress = () => {
 loadingManager.onLoad = function() {
   console.log(`there are ${resources} loaded resources`)
   RESOURCES_LOADED = true
+
   LOADING_SCREEN.style.display = 'none'
   if (HUD1) HUD1.style.display = 'flex'
   if (HUD2) HUD2.style.display = 'flex'
