@@ -317,6 +317,7 @@ form div {
 }
 
 .star-wars {
+  width: 100%;
   display: flex;
   justify-content: center;
   position: relative;
@@ -329,14 +330,14 @@ form div {
   letter-spacing: 6px;
   line-height: 150%;
   perspective: 400px;
-  text-align: justify;
+  text-align: center;
 }
 
 .crawl {
   position: relative;
   top: 99999px;
   transform-origin: 50% 100%;
-  animation: crawl 60s linear;
+  animation: crawl 40s linear;
 }
 
 .crawl > .title {
