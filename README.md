@@ -4,6 +4,8 @@ Light Speed is a space flight simulation where points are accumulated as players
 
 Team Members: Benjamin Wagner, Haiau Dong, Dalton Saffe, Jason Hang 
 
+http://light-speed.space/
+
 https://youtu.be/XHA_7Z4Cw2g
 
 Screenshots
