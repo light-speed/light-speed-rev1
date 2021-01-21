@@ -58,7 +58,7 @@
     "redux-logger": "^2.8.1",
     "redux-thunk": "^2.3.0",
     "sequelize": "^5.3.4",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.4.0",
     "three.proton.js": "^0.1.5"
   },
   "devDependencies": {
